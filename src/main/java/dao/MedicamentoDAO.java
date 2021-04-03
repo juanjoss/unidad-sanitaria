@@ -12,7 +12,7 @@ import model.Medicamento;
 public class MedicamentoDAO {
 
     public List<Medicamento> selectAll() {
-        String query = "SELECT nombre, stock, fechaVencimiento FROM medicamento";
+        String query = "SELECT * FROM medicamento";
 
         try (Connection con = SQLiteDAO.getConn().open()) {
             List<Medicamento> medicamentos = con
@@ -50,10 +50,10 @@ public class MedicamentoDAO {
         }
     }
     
-    public void updateXNombre(String name, Medicamento med) {
+    public void update(Medicamento med) {
         String query = "UPDATE medicamento "
                 + "SET nombre = :nombre, stock = :stock, fechaVencimiento = :fechaVencimiento "
-                + "WHERE nombre = :nombre";
+                + "WHERE id = :id";
         
         try (Connection con = SQLiteDAO.getConn().open()) {
             con.createQuery(query).bind(med).executeUpdate();

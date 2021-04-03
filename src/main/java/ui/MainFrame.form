@@ -50,13 +50,9 @@
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="searchBar" min="-2" pref="374" max="-2" attributes="0"/>
                       </Group>
+                      <Component id="borrarButton" alignment="0" min="-2" pref="96" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace pref="749" max="32767" attributes="0"/>
-                  <Component id="borrarButton" min="-2" pref="96" max="-2" attributes="0"/>
-                  <EmptySpace pref="172" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -106,7 +102,8 @@
                   <Connection code="new java.awt.Font(&quot;Dialog&quot;, 0, 18)" type="code"/>
                 </Property>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="3" rowCount="0">
+                  <Table columnCount="4" rowCount="0">
+                    <Column editable="false" title="Id" type="java.lang.Integer"/>
                     <Column editable="true" title="Nombre" type="java.lang.String"/>
                     <Column editable="true" title="Stock" type="java.lang.Integer"/>
                     <Column editable="true" title="Fecha de Vencimiento" type="java.lang.String"/>
@@ -116,17 +113,22 @@
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                   <TableColumnModel selectionModel="0">
                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title value="Nombre"/>
+                      <Title/>
                       <Editor/>
                       <Renderer/>
                     </Column>
                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title value="Stock"/>
+                      <Title/>
                       <Editor/>
                       <Renderer/>
                     </Column>
                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                      <Title value="Fecha de Vencimiento"/>
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                      <Title/>
                       <Editor/>
                       <Renderer/>
                     </Column>

@@ -30,13 +30,17 @@ public class MainFrame extends javax.swing.JFrame {
                 Medicamento newMed = new Medicamento();
                 MedicamentoDAO medDAO = new MedicamentoDAO();
                 
-                Object medName = medTable.getModel().getValueAt(evt.getFirstRow(), 0);
-                Object medStock = medTable.getModel().getValueAt(evt.getFirstRow(), 1);
-                Object medExpDate = medTable.getModel().getValueAt(evt.getFirstRow(), 2);
+                Object idMed = medTable.getModel().getValueAt(evt.getFirstRow(), 0);
+                Object medName = medTable.getModel().getValueAt(evt.getFirstRow(), 1);
+                Object medStock = medTable.getModel().getValueAt(evt.getFirstRow(), 2);
+                Object medExpDate = medTable.getModel().getValueAt(evt.getFirstRow(), 3);
                 
+                newMed.setId((int) idMed);
                 newMed.setNombre((String) medName);
                 newMed.setStock((int) medStock);
                 newMed.setFechaVencimiento((String) medExpDate);
+
+                medDAO.update(newMed);
             }
         });
     }
@@ -73,15 +77,22 @@ public class MainFrame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nombre", "Stock", "Fecha de Vencimiento"
+                "Id", "Nombre", "Stock", "Fecha de Vencimiento"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         medTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
@@ -96,12 +107,15 @@ public class MainFrame extends javax.swing.JFrame {
         if(meds != null) {
             meds.forEach(m -> {
                 model.addRow(new Object[]{
+                    m.getId(),
                     m.getNombre(),
                     m.getStock(),
                     m.getFechaVencimiento()
                 });
             });
         }
+        medTable.removeColumn(medTable.getColumnModel().getColumn(0));
+
         /** centrado de las columnas */
         DefaultTableCellRenderer centerRndr = new DefaultTableCellRenderer();
         centerRndr.setHorizontalAlignment(JLabel.CENTER);
@@ -124,11 +138,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         /** evento para la actualizacion de filas */
         scrollPane.setViewportView(medTable);
-        if (medTable.getColumnModel().getColumnCount() > 0) {
-            medTable.getColumnModel().getColumn(0).setHeaderValue("Nombre");
-            medTable.getColumnModel().getColumn(1).setHeaderValue("Stock");
-            medTable.getColumnModel().getColumn(2).setHeaderValue("Fecha de Vencimiento");
-        }
 
         borrarButton.setText("BORRAR");
         borrarButton.addActionListener(new java.awt.event.ActionListener() {
@@ -153,12 +162,9 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(mainPanelLayout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(borrarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
-                .addContainerGap(749, Short.MAX_VALUE)
-                .addComponent(borrarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(172, Short.MAX_VALUE))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

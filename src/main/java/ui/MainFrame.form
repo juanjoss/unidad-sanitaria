@@ -18,7 +18,7 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
-    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,-103,0,0,3,32"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,-103,0,0,3,-7"/>
   </AuxValues>
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
@@ -42,30 +42,37 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <EmptySpace pref="141" max="32767" attributes="0"/>
-                  <Component id="searchBar" min="-2" pref="374" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
-                  <Component id="searchBtn" min="-2" pref="105" max="-2" attributes="0"/>
-                  <EmptySpace pref="128" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="scrollPane" alignment="0" min="-2" pref="845" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="jLabel1" min="-2" pref="271" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="searchBar" min="-2" pref="374" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace max="32767" attributes="0"/>
-                  <Component id="scrollPane" min="-2" pref="694" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="749" max="32767" attributes="0"/>
+                  <Component id="borrarButton" min="-2" pref="96" max="-2" attributes="0"/>
+                  <EmptySpace pref="172" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace pref="40" max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="searchBtn" min="-2" pref="46" max="-2" attributes="0"/>
-                      <Component id="searchBar" min="-2" pref="45" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="searchBar" alignment="3" min="-2" pref="45" max="-2" attributes="0"/>
+                      <Component id="jLabel1" alignment="3" max="32767" attributes="0"/>
                   </Group>
+                  <EmptySpace type="unrelated" max="32767" attributes="0"/>
+                  <Component id="scrollPane" min="-2" pref="409" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="32767" attributes="0"/>
-                  <Component id="scrollPane" min="-2" pref="373" max="-2" attributes="0"/>
-                  <EmptySpace pref="123" max="32767" attributes="0"/>
+                  <Component id="borrarButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="52" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -77,6 +84,9 @@
               <Font name="Cascadia Code" size="18" style="0"/>
             </Property>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="searchBar.getDocument().addDocumentListener(new DocumentListener() {&#xa;    @Override&#xa;    public void insertUpdate(DocumentEvent e) {&#xa;        String text = searchBar.getText();&#xa;&#xa;        if (text.trim().length() == 0) {&#xa;            rowSorter.setRowFilter(null);&#xa;        } else {&#xa;            rowSorter.setRowFilter(RowFilter.regexFilter(&quot;(?i)&quot; + text));&#xa;        }&#xa;    }&#xa;&#xa;    @Override&#xa;    public void removeUpdate(DocumentEvent e) {&#xa;        String text = searchBar.getText();&#xa;&#xa;        if (text.trim().length() == 0) {&#xa;            rowSorter.setRowFilter(null);&#xa;        } else {&#xa;            rowSorter.setRowFilter(RowFilter.regexFilter(&quot;(?i)&quot; + text));&#xa;        }&#xa;    }&#xa;&#xa;    @Override&#xa;    public void changedUpdate(DocumentEvent e) {&#xa;        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);&#xa;    }&#xa;});"/>
+          </AuxValues>
         </Component>
         <Container class="javax.swing.JScrollPane" name="scrollPane">
           <AuxValues>
@@ -134,21 +144,30 @@
                 </Property>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="/** centrado de las columnas */&#xa;DefaultTableCellRenderer centerRndr = new DefaultTableCellRenderer();&#xa;centerRndr.setHorizontalAlignment(JLabel.CENTER);&#xa;medTable.getColumnModel().getColumns().asIterator().forEachRemaining(c -&gt; {&#xa;    c.setCellRenderer(centerRndr);&#xa;});&#xa;&#xa;//** tama&#xf1;o de la fila del header */&#xa;medTable.getTableHeader().setPreferredSize(new Dimension(50, 50));&#xa;&#xa;//** centrado del header */&#xa;JLabel header = (JLabel) medTable.getTableHeader().getDefaultRenderer();&#xa;header.setHorizontalAlignment(JLabel.CENTER);"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="/** centrado de las columnas */&#xa;DefaultTableCellRenderer centerRndr = new DefaultTableCellRenderer();&#xa;centerRndr.setHorizontalAlignment(JLabel.CENTER);&#xa;&#xa;Enumeration&lt;TableColumn&gt; colModel = medTable.getColumnModel().getColumns();&#xa;while(colModel.hasMoreElements()) {&#xa;    colModel.nextElement().setCellRenderer(centerRndr);&#xa;}&#xa;&#xa;/** tama&#xf1;o de la fila del header */&#xa;medTable.getTableHeader().setPreferredSize(new Dimension(50, 50));&#xa;&#xa;/** centrado del header */&#xa;JLabel header = (JLabel) medTable.getTableHeader().getDefaultRenderer();&#xa;header.setHorizontalAlignment(JLabel.CENTER);&#xa;&#xa;/** buscador para la barra de busqueda */&#xa;TableRowSorter&lt;TableModel&gt; rowSorter = new TableRowSorter&lt;&gt;(medTable.getModel());&#xa;medTable.setRowSorter(rowSorter);&#xa;&#xa;/** evento para la actualizacion de filas */"/>
               </AuxValues>
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JButton" name="searchBtn">
+        <Component class="javax.swing.JButton" name="borrarButton">
           <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Dialog" size="18" style="0"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Buscar"/>
+            <Property name="text" type="java.lang.String" value="BORRAR"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="searchBtnActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="borrarButtonActionPerformed"/>
           </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel1">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Dialog" size="16" style="0"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="0" green="0" red="0" type="rgb"/>
+            </Property>
+            <Property name="horizontalAlignment" type="int" value="0"/>
+            <Property name="text" type="java.lang.String" value="Ingrese un medicamento para buscar:"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>
@@ -170,7 +189,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                   <Component id="addMedBtn" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="654" max="32767" attributes="0"/>
+                  <EmptySpace pref="871" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -189,6 +208,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Agregar Medicamento"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addMedBtnActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

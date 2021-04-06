@@ -1,23 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ui;
 
 import javax.swing.JOptionPane;
 import dao.MedicamentoDAO;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import model.Medicamento;
 
-/**
- *
- * @author diane
- */
 public class AddMedFrame extends javax.swing.JFrame {
 
-    /**
-     * Creates new form addMedFrame
-     */
     public AddMedFrame() {
         initComponents();
     }
@@ -37,19 +28,29 @@ public class AddMedFrame extends javax.swing.JFrame {
         fechaVLabel = new javax.swing.JLabel();
         nombreTextField = new javax.swing.JTextField();
         stockTextField = new javax.swing.JTextField();
-        fechaVTextField = new javax.swing.JTextField();
         addBtn = new javax.swing.JButton();
         cancelarButton = new javax.swing.JButton();
+        selectFechaV = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setName("addFrame"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(800, 600));
 
-        nombreLabel.setText("Nombre");
+        jPanel1.setBackground(new java.awt.Color(255, 255, 204));
 
-        stockLabel.setText("Stock");
+        nombreLabel.setBackground(new java.awt.Color(0, 0, 0));
+        nombreLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        nombreLabel.setForeground(new java.awt.Color(0, 0, 0));
+        nombreLabel.setText("Nombre:");
 
-        fechaVLabel.setText("Fecha de vencimiento");
+        stockLabel.setBackground(new java.awt.Color(0, 0, 0));
+        stockLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        stockLabel.setForeground(new java.awt.Color(0, 0, 0));
+        stockLabel.setText("Stock:");
+
+        fechaVLabel.setBackground(new java.awt.Color(0, 0, 0));
+        fechaVLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        fechaVLabel.setForeground(new java.awt.Color(0, 0, 0));
+        fechaVLabel.setText("Fecha de Vencimiento:");
 
         nombreTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -57,80 +58,81 @@ public class AddMedFrame extends javax.swing.JFrame {
             }
         });
 
-        fechaVTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fechaVTextFieldActionPerformed(evt);
-            }
-        });
+        stockTextField.setText("0");
 
-        addBtn.setText("AGREGAR");
+        addBtn.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        addBtn.setText("Agregar");
         addBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addBtnActionPerformed(evt);
             }
         });
 
-        cancelarButton.setText("CANCELAR");
+        cancelarButton.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        cancelarButton.setText("Cerrar");
         cancelarButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelarButtonActionPerformed(evt);
             }
         });
 
+        selectFechaV.setBackground(new java.awt.Color(255, 255, 204));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(66, 66, 66)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(nombreLabel)
-                        .addGap(221, 221, 221))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(fechaVLabel)
-                            .addComponent(stockLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(nombreTextField)
-                    .addComponent(stockTextField)
-                    .addComponent(fechaVTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE))
-                .addGap(252, 252, 252))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(336, 336, 336)
-                .addComponent(addBtn)
-                .addGap(37, 37, 37)
-                .addComponent(cancelarButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(addBtn)
+                        .addGap(37, 37, 37)
+                        .addComponent(cancelarButton))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap(132, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(nombreLabel)
+                            .addComponent(stockLabel)
+                            .addComponent(fechaVLabel))
+                        .addGap(18, 30, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(nombreTextField)
+                            .addComponent(stockTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(selectFechaV, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(130, 130, 130))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(54, 54, 54)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(nombreLabel)
-                    .addComponent(nombreTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(55, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(nombreTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(nombreLabel))
                 .addGap(24, 24, 24)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(stockLabel)
-                    .addComponent(stockTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(stockTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(stockLabel))
+                .addGap(26, 26, 26)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(fechaVLabel)
-                    .addComponent(fechaVTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(63, 63, 63)
+                    .addComponent(selectFechaV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addBtn)
                     .addComponent(cancelarButton))
-                .addContainerGap(339, Short.MAX_VALUE))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
+
+        Calendar calendario = new GregorianCalendar();
+        selectFechaV.setCalendar(calendario);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -144,37 +146,48 @@ public class AddMedFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_nombreTextFieldActionPerformed
 
-    private void fechaVTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fechaVTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_fechaVTextFieldActionPerformed
-
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
         String nombre = nombreTextField.getText();
         int stock = Integer.parseInt(stockTextField.getText());
-        String fechaVencimiento = fechaVTextField.getText();
 
-        int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estas seguro que deseas guardar este medicamento?", "Confirmación", JOptionPane.YES_NO_OPTION);
+        SimpleDateFormat fechaFormato = new SimpleDateFormat("dd/MM/yyyy");
+        String fechaVencimiento = fechaFormato.format(selectFechaV.getDate());
+        System.out.println(fechaVencimiento);
+        /* En las líneas 116 y 117 van a ver que se setea la fecha al JDateChooser (con la fecha actual), esto es porque no puede ser null... Al dejarlo vacío y apretar en Aceptar salta una excepción. */
+        /* Si se les ocurre otra opción, bienvenida sea*/
+        if (!nombre.equals("") && !fechaVencimiento.equals("")) {
+            int confirmacion = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea guardar este medicamento?", "Confirmación", JOptionPane.YES_NO_OPTION);
 
-        if (JOptionPane.YES_OPTION == confirmacion) {
-            MedicamentoDAO medDAO = new MedicamentoDAO();
-            Medicamento med = new Medicamento();
+            if (JOptionPane.YES_OPTION == confirmacion) {
+                MedicamentoDAO medDAO = new MedicamentoDAO();
+                Medicamento med = new Medicamento();
 
-            med.setNombre(nombre);
-            med.setStock(stock);
-            med.setFechaVencimiento(fechaVencimiento);
+                med.setNombre(nombre);
+                med.setStock(stock);
+                med.setFechaVencimiento(fechaVencimiento);
 
-            medDAO.insert(med);
+                medDAO.insert(med);
 
-            System.out.println("Medicamento guardado");
+                System.out.println("Medicamento guardado");
 
-            MainFrame p = new MainFrame();
-            p.setVisible(true);
-            p.pack();
-            p.setLocationRelativeTo(null);
-            p.setDefaultCloseOperation(p.EXIT_ON_CLOSE);
-            this.dispose();
+                /* Si el usuario quiere seguir agregando medicamentos, capaz le he incómodo el salir y volver a hacer click en Agregar Medicamento */
+                /* Otra opción puede ser mostrar un mensaje de éxito y que no salga de la ventana actual para que siga agregando medicamentos. Lo dejo en duda! */
+                JOptionPane.showMessageDialog(this, "¡El medicamento se ha guardado exitosamente!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                nombreTextField.setText("");
+                stockTextField.setText("0");
+                selectFechaV.setCalendar(new GregorianCalendar());
+
+                /*MainFrame p = new MainFrame();
+                p.setVisible(true);
+                p.pack();
+                p.setLocationRelativeTo(null);
+                p.setDefaultCloseOperation(p.EXIT_ON_CLOSE);
+                this.dispose();*/
+            } else {
+                System.out.println("No se agregó el medicamento");
+            }
         } else {
-            System.out.println("No se agregó el medicamento");
+            JOptionPane.showMessageDialog(this, "¡Los campos Nombre y/o Fecha de vencimiento están vacíos!", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_addBtnActionPerformed
 
@@ -227,10 +240,10 @@ public class AddMedFrame extends javax.swing.JFrame {
     private javax.swing.JButton addBtn;
     private javax.swing.JButton cancelarButton;
     private javax.swing.JLabel fechaVLabel;
-    private javax.swing.JTextField fechaVTextField;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel nombreLabel;
     private javax.swing.JTextField nombreTextField;
+    private com.toedter.calendar.JDateChooser selectFechaV;
     private javax.swing.JLabel stockLabel;
     private javax.swing.JTextField stockTextField;
     // End of variables declaration//GEN-END:variables

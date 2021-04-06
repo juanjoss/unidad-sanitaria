@@ -5,10 +5,6 @@ import org.sql2o.Connection;
 import java.util.List;
 import model.Medicamento;
 
-/**
- *
- * @author Juan Josserand
- */
 public class MedicamentoDAO {
 
     public List<Medicamento> selectAll() {
@@ -27,9 +23,8 @@ public class MedicamentoDAO {
         return null;
     }
     
-    //Si NOMBRE no es UNIQUE tenemos que controlar que no esté en la tabla
     public void insert(Medicamento med) {
-        String query = "INSERT INTO medicamento (nombre, stock, fechaVencimiento) VALUES (:nombre, :stock, :fechaVencimiento);";
+        String query = "INSERT INTO medicamento (nombre, stock, fechaVencimiento) VALUES (:nombre, :stock, :fechaVencimiento)";
 
         try (Connection con = SQLiteDAO.getConn().open()) {
             con.createQuery(query).bind(med).executeUpdate();
@@ -38,12 +33,12 @@ public class MedicamentoDAO {
             System.out.println(e);
         }
     }
-    //Eliminamos por nombre (hay que ver si modificamos la bd y ponemos UNIQUE a la columna NOMBRE)
-    public void deleteXNombre(String nombre) {
-        String query = "DELETE FROM medicamento WHERE nombre = :nombre;";
+    
+    public void deleteXId(int id) {
+        String query = "DELETE FROM medicamento WHERE id = :id";
 
         try (Connection con = SQLiteDAO.getConn().open()) {
-            con.createQuery(query).addParameter("nombre", nombre).executeUpdate();
+            con.createQuery(query).addParameter("id", id).executeUpdate();
             System.out.println("Medicamento eliminado");
         } catch (Exception e) {
             System.out.println(e);

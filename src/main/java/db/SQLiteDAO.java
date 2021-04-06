@@ -2,10 +2,6 @@ package db;
 
 import org.sql2o.Sql2o;
 
-/**
- *
- * @author Juan Josserand
- */
 public class SQLiteDAO {
 
     private static Sql2o sql2o;

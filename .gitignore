@@ -41,3 +41,6 @@ buildNumber.properties
 .project
 .settings
 .vscode
+
+# Base de datos
+unidad-sanitaria.db

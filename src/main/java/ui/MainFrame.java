@@ -19,30 +19,8 @@ import model.Medicamento;
 
 public class MainFrame extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Principal
-     */
     public MainFrame() {
         initComponents();
-
-        medTable.getModel().addTableModelListener((TableModelEvent evt) -> {
-            if (evt.getType() == TableModelEvent.UPDATE && evt.getColumn() != TableModelEvent.ALL_COLUMNS) {
-                Medicamento newMed = new Medicamento();
-                MedicamentoDAO medDAO = new MedicamentoDAO();
-                
-                Object idMed = medTable.getModel().getValueAt(evt.getFirstRow(), 0);
-                Object medName = medTable.getModel().getValueAt(evt.getFirstRow(), 1);
-                Object medStock = medTable.getModel().getValueAt(evt.getFirstRow(), 2);
-                Object medExpDate = medTable.getModel().getValueAt(evt.getFirstRow(), 3);
-                
-                newMed.setId((int) idMed);
-                newMed.setNombre((String) medName);
-                newMed.setStock((int) medStock);
-                newMed.setFechaVencimiento((String) medExpDate);
-
-                medDAO.update(newMed);
-            }
-        });
     }
 
     /**
@@ -54,24 +32,44 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jTabbedPane1 = new javax.swing.JTabbedPane();
         mainPanel = new javax.swing.JPanel();
         searchBar = new javax.swing.JTextField();
         scrollPane = new javax.swing.JScrollPane();
         medTable = new javax.swing.JTable();
-        borrarButton = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        menuPanel = new javax.swing.JPanel();
+        searchBarLabel = new javax.swing.JLabel();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        jCheckBox2 = new javax.swing.JCheckBox();
+        jPanel2 = new javax.swing.JPanel();
         addMedBtn = new javax.swing.JButton();
+        borrarButton = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(1200, 600));
+        setPreferredSize(new java.awt.Dimension(1366, 768));
+
+        jTabbedPane1.setBackground(new java.awt.Color(255, 255, 221));
+        jTabbedPane1.setForeground(new java.awt.Color(0, 0, 0));
+        jTabbedPane1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jTabbedPane1.setFont(new java.awt.Font("Cascadia Code", 0, 18)); // NOI18N
+        jTabbedPane1.setMinimumSize(new java.awt.Dimension(1200, 600));
+        jTabbedPane1.setName(""); // NOI18N
+        jTabbedPane1.setOpaque(true);
+        jTabbedPane1.setPreferredSize(new java.awt.Dimension(1366, 768));
 
         mainPanel.setBackground(new java.awt.Color(255, 255, 204));
         mainPanel.setPreferredSize(new java.awt.Dimension(800, 600));
 
         searchBar.setFont(new java.awt.Font("Cascadia Code", 0, 18)); // NOI18N
+        searchBar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchBarActionPerformed(evt);
+            }
+        });
 
         medTable.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        medTable.setFont(new java.awt.Font("Dialog", 0, 18));
+        medTable.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
         medTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -106,7 +104,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         if(meds != null) {
             meds.forEach(m -> {
-                model.addRow(new Object[]{
+                model.addRow(new Object[] {
                     m.getId(),
                     m.getNombre(),
                     m.getStock(),
@@ -115,7 +113,7 @@ public class MainFrame extends javax.swing.JFrame {
             });
         }
         medTable.removeColumn(medTable.getColumnModel().getColumn(0));
-
+        //JOptionPane.showMessageDialog(null, "Hay poco stock de...");
         /** centrado de las columnas */
         DefaultTableCellRenderer centerRndr = new DefaultTableCellRenderer();
         centerRndr.setHorizontalAlignment(JLabel.CENTER);
@@ -137,19 +135,91 @@ public class MainFrame extends javax.swing.JFrame {
         medTable.setRowSorter(rowSorter);
 
         /** evento para la actualizacion de filas */
-        scrollPane.setViewportView(medTable);
+        medTable.getModel().addTableModelListener((TableModelEvent evt) -> {
+            if (evt.getType() == TableModelEvent.UPDATE && evt.getColumn() != TableModelEvent.ALL_COLUMNS) {
+                Medicamento newMed = new Medicamento();
 
-        borrarButton.setText("BORRAR");
+                Object idMed = medTable.getModel().getValueAt(evt.getFirstRow(), 0);
+                Object medName = medTable.getModel().getValueAt(evt.getFirstRow(), 1);
+                Object medStock = medTable.getModel().getValueAt(evt.getFirstRow(), 2);
+                Object medExpDate = medTable.getModel().getValueAt(evt.getFirstRow(), 3);
+
+                newMed.setId((int) idMed);
+                newMed.setNombre((String) medName);
+                newMed.setStock((int) medStock);
+                newMed.setFechaVencimiento((String) medExpDate);
+
+                medDAO.update(newMed);
+            }
+        });
+        scrollPane.setViewportView(medTable);
+        if (medTable.getColumnModel().getColumnCount() > 0) {
+            medTable.getColumnModel().getColumn(0).setResizable(false);
+        }
+
+        searchBarLabel.setFont(new java.awt.Font("Cascadia Code", 0, 16)); // NOI18N
+        searchBarLabel.setForeground(new java.awt.Color(0, 0, 0));
+        searchBarLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        searchBarLabel.setText("Ingrese un medicamento para buscar:");
+
+        jCheckBox1.setBackground(new java.awt.Color(255, 255, 204));
+        jCheckBox1.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
+        jCheckBox1.setForeground(new java.awt.Color(0, 0, 0));
+        jCheckBox1.setText("Solo medicamentos con poco stock");
+        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox1ActionPerformed(evt);
+            }
+        });
+
+        jCheckBox2.setBackground(new java.awt.Color(255, 255, 204));
+        jCheckBox2.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
+        jCheckBox2.setForeground(new java.awt.Color(0, 0, 0));
+        jCheckBox2.setText("Solo medicamentos en rango de vencimiento");
+        jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox2ActionPerformed(evt);
+            }
+        });
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 204));
+
+        addMedBtn.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
+        addMedBtn.setText("Agregar Medicamento");
+        addMedBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addMedBtnActionPerformed(evt);
+            }
+        });
+
+        borrarButton.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
+        borrarButton.setText("Borrar Medicamento");
         borrarButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 borrarButtonActionPerformed(evt);
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 0, 16)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Ingrese un medicamento para buscar:");
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(addMedBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
+                    .addComponent(borrarButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(43, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(125, Short.MAX_VALUE)
+                .addComponent(addMedBtn)
+                .addGap(32, 32, 32)
+                .addComponent(borrarButton)
+                .addContainerGap(318, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
@@ -158,26 +228,37 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 845, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 844, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jCheckBox1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jCheckBox2))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
+                        .addComponent(searchBarLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(borrarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(43, 43, 43)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanelLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, Short.MAX_VALUE)
-                .addComponent(borrarButton)
-                .addContainerGap(52, Short.MAX_VALUE))
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, mainPanelLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(searchBarLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jCheckBox1)
+                            .addComponent(jCheckBox2))
+                        .addGap(12, 12, 12)
+                        .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(214, Short.MAX_VALUE))
         );
 
         searchBar.getDocument().addDocumentListener(new DocumentListener() {
@@ -209,35 +290,24 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        getContentPane().add(mainPanel, java.awt.BorderLayout.CENTER);
+        jTabbedPane1.addTab("Inicio", mainPanel);
 
-        menuPanel.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 204));
 
-        addMedBtn.setText("Agregar Medicamento");
-        addMedBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addMedBtnActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout menuPanelLayout = new javax.swing.GroupLayout(menuPanel);
-        menuPanel.setLayout(menuPanelLayout);
-        menuPanelLayout.setHorizontalGroup(
-            menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(menuPanelLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(addMedBtn)
-                .addContainerGap(871, Short.MAX_VALUE))
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1364, Short.MAX_VALUE)
         );
-        menuPanelLayout.setVerticalGroup(
-            menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(menuPanelLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(addMedBtn)
-                .addContainerGap(21, Short.MAX_VALUE))
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 736, Short.MAX_VALUE)
         );
 
-        getContentPane().add(menuPanel, java.awt.BorderLayout.PAGE_START);
+        jTabbedPane1.addTab("Texto", jPanel1);
+
+        getContentPane().add(jTabbedPane1, java.awt.BorderLayout.PAGE_START);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -252,6 +322,16 @@ public class MainFrame extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_addMedBtnActionPerformed
 
+    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
+        // TODO add your handling code here:
+        System.out.println("CB2");
+    }//GEN-LAST:event_jCheckBox2ActionPerformed
+
+    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+        // TODO add your handling code here:
+        System.out.println("CB1");
+    }//GEN-LAST:event_jCheckBox1ActionPerformed
+
     private void borrarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarButtonActionPerformed
         if (medTable.getSelectedRow() != -1) {
             DefaultTableModel model = (DefaultTableModel) medTable.getModel();
@@ -261,15 +341,20 @@ public class MainFrame extends javax.swing.JFrame {
             if (JOptionPane.YES_OPTION == confirmacion) {
                 int column = 0;
                 int row = medTable.getSelectedRow();
-                String nombreMed = model.getValueAt(row, column).toString();
+                int id = (int) model.getValueAt(row, column);
+                System.out.println(id);
                 MedicamentoDAO medDAO = new MedicamentoDAO();
-                medDAO.deleteXNombre(nombreMed);
+                medDAO.deleteXId(id);
                 model.removeRow(medTable.getSelectedRow());
             } else {
                 System.out.println("No se borró el medicamento");
             }
         }
     }//GEN-LAST:event_borrarButtonActionPerformed
+
+    private void searchBarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchBarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -308,11 +393,15 @@ public class MainFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addMedBtn;
     private javax.swing.JButton borrarButton;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox jCheckBox2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JTable medTable;
-    private javax.swing.JPanel menuPanel;
     private javax.swing.JScrollPane scrollPane;
     private javax.swing.JTextField searchBar;
+    private javax.swing.JLabel searchBarLabel;
     // End of variables declaration//GEN-END:variables
 }

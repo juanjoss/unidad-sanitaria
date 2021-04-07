@@ -10,7 +10,7 @@ public class SQLiteDAO {
         if (sql2o == null) {
             sql2o = new Sql2o("jdbc:sqlite:./unidad_sanitaria.db", null, null);
         }
-        
+
         return sql2o;
     }
 }

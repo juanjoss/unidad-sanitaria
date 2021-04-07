@@ -2,8 +2,8 @@ package ui;
 
 import javax.swing.JOptionPane;
 import dao.MedicamentoDAO;
+import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 import model.Medicamento;
 
@@ -33,7 +33,9 @@ public class AddMedFrame extends javax.swing.JFrame {
         selectFechaV = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setAlwaysOnTop(true);
         setName("addFrame"); // NOI18N
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 204));
 
@@ -51,12 +53,6 @@ public class AddMedFrame extends javax.swing.JFrame {
         fechaVLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
         fechaVLabel.setForeground(new java.awt.Color(0, 0, 0));
         fechaVLabel.setText("Fecha de Vencimiento:");
-
-        nombreTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nombreTextFieldActionPerformed(evt);
-            }
-        });
 
         stockTextField.setText("0");
 
@@ -125,8 +121,7 @@ public class AddMedFrame extends javax.swing.JFrame {
                 .addContainerGap(39, Short.MAX_VALUE))
         );
 
-        Calendar calendario = new GregorianCalendar();
-        selectFechaV.setCalendar(calendario);
+        selectFechaV.setCalendar(new GregorianCalendar());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -142,19 +137,13 @@ public class AddMedFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void nombreTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombreTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_nombreTextFieldActionPerformed
-
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
         String nombre = nombreTextField.getText();
         int stock = Integer.parseInt(stockTextField.getText());
 
-        SimpleDateFormat fechaFormato = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat fechaFormato = new SimpleDateFormat("yyyy-mm-dd");
         String fechaVencimiento = fechaFormato.format(selectFechaV.getDate());
-        System.out.println(fechaVencimiento);
-        /* En las líneas 116 y 117 van a ver que se setea la fecha al JDateChooser (con la fecha actual), esto es porque no puede ser null... Al dejarlo vacío y apretar en Aceptar salta una excepción. */
-        /* Si se les ocurre otra opción, bienvenida sea*/
+
         if (!nombre.equals("") && !fechaVencimiento.equals("")) {
             int confirmacion = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea guardar este medicamento?", "Confirmación", JOptionPane.YES_NO_OPTION);
 
@@ -168,23 +157,10 @@ public class AddMedFrame extends javax.swing.JFrame {
 
                 medDAO.insert(med);
 
-                System.out.println("Medicamento guardado");
-
-                /* Si el usuario quiere seguir agregando medicamentos, capaz le he incómodo el salir y volver a hacer click en Agregar Medicamento */
-                /* Otra opción puede ser mostrar un mensaje de éxito y que no salga de la ventana actual para que siga agregando medicamentos. Lo dejo en duda! */
                 JOptionPane.showMessageDialog(this, "¡El medicamento se ha guardado exitosamente!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 nombreTextField.setText("");
                 stockTextField.setText("0");
                 selectFechaV.setCalendar(new GregorianCalendar());
-
-                /*MainFrame p = new MainFrame();
-                p.setVisible(true);
-                p.pack();
-                p.setLocationRelativeTo(null);
-                p.setDefaultCloseOperation(p.EXIT_ON_CLOSE);
-                this.dispose();*/
-            } else {
-                System.out.println("No se agregó el medicamento");
             }
         } else {
             JOptionPane.showMessageDialog(this, "¡Los campos Nombre y/o Fecha de vencimiento están vacíos!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -199,42 +175,6 @@ public class AddMedFrame extends javax.swing.JFrame {
         p.setDefaultCloseOperation(p.EXIT_ON_CLOSE);
         this.dispose();
     }//GEN-LAST:event_cancelarButtonActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddMedFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddMedFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddMedFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddMedFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new AddMedFrame().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addBtn;

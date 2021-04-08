@@ -2,7 +2,6 @@ package ui;
 
 import javax.swing.JOptionPane;
 import dao.MedicamentoDAO;
-import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import model.Medicamento;

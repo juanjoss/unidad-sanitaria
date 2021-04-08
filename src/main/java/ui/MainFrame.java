@@ -81,7 +81,7 @@ public class MainFrame extends javax.swing.JFrame {
                 }
             }
         });
-        
+
         checkAlerts();
     }
 
@@ -404,7 +404,7 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         resetTableModel();
     }//GEN-LAST:event_resetTableBtnActionPerformed
-    
+
     /**
      * Checkbox solo stock bajo (5 unidades o menos).
      */
@@ -441,7 +441,7 @@ public class MainFrame extends javax.swing.JFrame {
         p.setDefaultCloseOperation(p.DO_NOTHING_ON_CLOSE);
         this.dispose();
     }//GEN-LAST:event_addMedBtnActionPerformed
-    
+
     /**
      * Checkbox solo vencimientos en rango de 15 dias.
      */
@@ -475,7 +475,7 @@ public class MainFrame extends javax.swing.JFrame {
             resetTableModel();
         }
     }//GEN-LAST:event_CBExpDateActionPerformed
-    
+
     /**
      * Checkbox solo stock bajo (5 unidades o menos).
      */
@@ -519,33 +519,31 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void checkAlerts() {
         MedicamentoDAO medDAO = new MedicamentoDAO();
-        
+
         List<Medicamento> medsWithLowStock = medDAO.medsWithLowStock();
         List<Medicamento> medsInExpRange = medDAO.medsInExpRange();
-        
-        if(medsWithLowStock != null) {
-            if(medsWithLowStock.size() > 0) {
+
+        if (medsWithLowStock != null) {
+            if (medsWithLowStock.size() > 0) {
                 medStockAlert.setText("Hay medicamentos con poco stock!");
                 medStockAlert.setDisabledTextColor(Color.red);
-            }
-            else {
+            } else {
                 medStockAlert.setText("No hay medicamentos con poco stock");
                 medStockAlert.setDisabledTextColor(Color.green);
             }
         }
-        
-        if(medsInExpRange != null) {
-            if(medsInExpRange.size() > 0) {
+
+        if (medsInExpRange != null) {
+            if (medsInExpRange.size() > 0) {
                 medExpAlert.setText("Hay medicamentos en rango de vencimiento!");
                 medExpAlert.setDisabledTextColor(Color.red);
-            }
-            else {
+            } else {
                 medExpAlert.setText("No hay vencimientos cercanos");
                 medExpAlert.setDisabledTextColor(Color.green);
             }
         }
     }
-    
+
     /**
      * Cargando la tabla desde la BD (trae todos los medicamentos).
      */

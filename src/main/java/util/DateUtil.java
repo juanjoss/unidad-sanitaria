@@ -46,7 +46,7 @@ public class DateUtil {
      */
     public static boolean isValidDate(String date, String format) {
         boolean valid;
-        
+
         try {
             LocalDate.parse(date, DateTimeFormatter.ofPattern(format)
                     .withResolverStyle(ResolverStyle.STRICT)

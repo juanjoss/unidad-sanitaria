@@ -62,8 +62,7 @@ public class MedicamentoDAO {
     public List<Medicamento> medsInExpRange() {
         String query = "SELECT *\n"
                 + "FROM medicamento \n"
-                + "WHERE (julianday(fechaVencimiento) - julianday('now')) >= 0 \n"
-                + "	AND (julianday(fechaVencimiento) - julianday('now')) <= 15";
+                + "WHERE (julianday(fechaVencimiento) - julianday('now')) <= 15";
 
         try (Connection con = SQLiteDAO.getConn().open()) {
             List<Medicamento> medicamentos = con

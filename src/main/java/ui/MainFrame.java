@@ -1,11 +1,13 @@
 package ui;
 
 import dao.MedicamentoDAO;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.util.Enumeration;
 import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -75,9 +77,12 @@ public class MainFrame extends javax.swing.JFrame {
                     );
 
                     medDAO.update(newMed);
+                    checkAlerts();
                 }
             }
         });
+        
+        checkAlerts();
     }
 
     /**
@@ -101,13 +106,16 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         addMedBtn = new javax.swing.JButton();
         borrarButton = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        medStockAlert = new javax.swing.JTextField();
+        expAlertLbl = new javax.swing.JLabel();
+        stockAlertLbl = new javax.swing.JLabel();
+        medExpAlert = new javax.swing.JTextField();
         resetTableBtn = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMinimumSize(new java.awt.Dimension(1200, 600));
-        setResizable(false);
 
         jTabbedPane1.setBackground(new java.awt.Color(255, 255, 221));
         jTabbedPane1.setForeground(new java.awt.Color(0, 0, 0));
@@ -120,7 +128,6 @@ public class MainFrame extends javax.swing.JFrame {
         jTabbedPane1.setPreferredSize(new java.awt.Dimension(1366, 768));
 
         mainPanel.setBackground(new java.awt.Color(255, 255, 204));
-        mainPanel.setPreferredSize(new java.awt.Dimension(800, 600));
 
         searchBar.setFont(new java.awt.Font("Cascadia Code", 0, 18)); // NOI18N
 
@@ -220,16 +227,76 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        jPanel3.setBackground(new java.awt.Color(255, 255, 204));
+
+        medStockAlert.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
+        medStockAlert.setForeground(new java.awt.Color(255, 0, 0));
+        medStockAlert.setDisabledTextColor(new java.awt.Color(153, 255, 153));
+        medStockAlert.setEnabled(false);
+
+        expAlertLbl.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
+        expAlertLbl.setForeground(new java.awt.Color(0, 0, 0));
+        expAlertLbl.setText("Estado de Vencimientos:");
+
+        stockAlertLbl.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
+        stockAlertLbl.setForeground(new java.awt.Color(0, 0, 0));
+        stockAlertLbl.setText("Estado del Stock:");
+
+        medExpAlert.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
+        medExpAlert.setForeground(new java.awt.Color(255, 51, 51));
+        medExpAlert.setDisabledTextColor(new java.awt.Color(153, 255, 153));
+        medExpAlert.setEnabled(false);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(medExpAlert)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(0, 42, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(stockAlertLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(expAlertLbl, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE))
+                        .addGap(59, 59, 59))
+                    .addComponent(medStockAlert))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(stockAlertLbl)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addComponent(medStockAlert, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
+                .addComponent(expAlertLbl)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(medExpAlert, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(16, Short.MAX_VALUE))
+        );
+
+        medStockAlert.setHorizontalAlignment(JTextField.CENTER);
+        expAlertLbl.setHorizontalAlignment(JLabel.CENTER);
+        stockAlertLbl.setHorizontalAlignment(JLabel.CENTER);
+        medExpAlert.setHorizontalAlignment(JTextField.CENTER);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(addMedBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
+                    .addComponent(addMedBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(borrarButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(40, 40, 40))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -238,7 +305,9 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(addMedBtn)
                 .addGap(32, 32, 32)
                 .addComponent(borrarButton)
-                .addContainerGap(294, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(63, Short.MAX_VALUE))
         );
 
         resetTableBtn.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
@@ -254,7 +323,7 @@ public class MainFrame extends javax.swing.JFrame {
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanelLayout.createSequentialGroup()
-                .addContainerGap(97, Short.MAX_VALUE)
+                .addContainerGap(51, Short.MAX_VALUE)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(mainPanelLayout.createSequentialGroup()
                         .addComponent(searchBarLabel)
@@ -267,9 +336,9 @@ public class MainFrame extends javax.swing.JFrame {
                         .addComponent(CBExpDate)
                         .addGap(12, 12, 12)
                         .addComponent(resetTableBtn)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(98, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -322,21 +391,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Inicio", mainPanel);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 204));
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1364, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 736, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("Texto", jPanel1);
-
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.PAGE_START);
 
         pack();
@@ -350,49 +404,48 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         resetTableModel();
     }//GEN-LAST:event_resetTableBtnActionPerformed
-
+    
     /**
-     * Cargando la tabla desde la BD (trae todos los medicamentos).
+     * Checkbox solo stock bajo (5 unidades o menos).
      */
-    private void resetTableModel() {
-        DefaultTableModel model = (DefaultTableModel) medTable.getModel();
-        MedicamentoDAO medDAO = new MedicamentoDAO();
-        List<Medicamento> meds = medDAO.selectAll();
+    private void borrarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarButtonActionPerformed
+        // TODO add your handling code here:
+        if (medTable.getSelectedRow() != -1) {
+            DefaultTableModel model = (DefaultTableModel) medTable.getModel();
 
-        if (meds != null) {
-            model.setNumRows(0);
+            int confirmacion = JOptionPane.showConfirmDialog(
+                    mainPanel,
+                    "¿Está seguro que desea borrar ese medicamento?",
+                    "Confirmación",
+                    JOptionPane.YES_NO_OPTION
+            );
 
-            meds.forEach(m -> {
-                model.addRow(
-                        new Object[]{
-                            m.getId(),
-                            m.getNombre(),
-                            m.getStock(),
-                            DateUtil.formatDate(
-                                    m.getFechaVencimiento(),
-                                    "yyyy-mm-dd",
-                                    "dd/mm/yyyy"
-                            )
-                        });
-            });
+            if (JOptionPane.YES_OPTION == confirmacion) {
+                int column = 0;
+                int row = medTable.getSelectedRow();
+                int id = (int) model.getValueAt(row, column);
+
+                MedicamentoDAO medDAO = new MedicamentoDAO();
+                medDAO.deleteXId(id);
+                model.removeRow(medTable.getSelectedRow());
+            }
         }
-        CBLowStock.setSelected(false);
-        CBExpDate.setSelected(false);
-    }
+    }//GEN-LAST:event_borrarButtonActionPerformed
 
-    private void addMedBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_addMedBtnActionPerformed
+    private void addMedBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMedBtnActionPerformed
+        // TODO add your handling code here:
         AddMedFrame p = new AddMedFrame();
         p.setVisible(true);
         p.pack();
         p.setLocationRelativeTo(null);
         p.setDefaultCloseOperation(p.DO_NOTHING_ON_CLOSE);
         this.dispose();
-    }// GEN-LAST:event_addMedBtnActionPerformed
-
+    }//GEN-LAST:event_addMedBtnActionPerformed
+    
     /**
      * Checkbox solo vencimientos en rango de 15 dias.
      */
-    private void CBExpDateActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_CBExpDateActionPerformed
+    private void CBExpDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CBExpDateActionPerformed
         // TODO add your handling code here:
         if (CBExpDate.isSelected()) {
             MedicamentoDAO medDAO = new MedicamentoDAO();
@@ -421,12 +474,12 @@ public class MainFrame extends javax.swing.JFrame {
         } else {
             resetTableModel();
         }
-    }// GEN-LAST:event_CBExpDateActionPerformed
-
+    }//GEN-LAST:event_CBExpDateActionPerformed
+    
     /**
      * Checkbox solo stock bajo (5 unidades o menos).
      */
-    private void CBLowStockActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_CBLowStockActionPerformed
+    private void CBLowStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CBLowStockActionPerformed
         // TODO add your handling code here:
         DefaultTableModel model = (DefaultTableModel) medTable.getModel();
         MedicamentoDAO medDAO = new MedicamentoDAO();
@@ -462,30 +515,65 @@ public class MainFrame extends javax.swing.JFrame {
         } else {
             resetTableModel();
         }
-    }// GEN-LAST:event_CBLowStockActionPerformed
+    }//GEN-LAST:event_CBLowStockActionPerformed
 
-    private void borrarButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_borrarButtonActionPerformed
-        if (medTable.getSelectedRow() != -1) {
-            DefaultTableModel model = (DefaultTableModel) medTable.getModel();
-
-            int confirmacion = JOptionPane.showConfirmDialog(
-                    mainPanel,
-                    "¿Está seguro que desea borrar ese medicamento?",
-                    "Confirmación",
-                    JOptionPane.YES_NO_OPTION
-            );
-
-            if (JOptionPane.YES_OPTION == confirmacion) {
-                int column = 0;
-                int row = medTable.getSelectedRow();
-                int id = (int) model.getValueAt(row, column);
-
-                MedicamentoDAO medDAO = new MedicamentoDAO();
-                medDAO.deleteXId(id);
-                model.removeRow(medTable.getSelectedRow());
+    private void checkAlerts() {
+        MedicamentoDAO medDAO = new MedicamentoDAO();
+        
+        List<Medicamento> medsWithLowStock = medDAO.medsWithLowStock();
+        List<Medicamento> medsInExpRange = medDAO.medsInExpRange();
+        
+        if(medsWithLowStock != null) {
+            if(medsWithLowStock.size() > 0) {
+                medStockAlert.setText("Hay medicamentos con poco stock!");
+                medStockAlert.setDisabledTextColor(Color.red);
+            }
+            else {
+                medStockAlert.setText("No hay medicamentos con poco stock");
+                medStockAlert.setDisabledTextColor(Color.green);
             }
         }
-    }// GEN-LAST:event_borrarButtonActionPerformed
+        
+        if(medsInExpRange != null) {
+            if(medsInExpRange.size() > 0) {
+                medExpAlert.setText("Hay medicamentos en rango de vencimiento!");
+                medExpAlert.setDisabledTextColor(Color.red);
+            }
+            else {
+                medExpAlert.setText("No hay vencimientos cercanos");
+                medExpAlert.setDisabledTextColor(Color.green);
+            }
+        }
+    }
+    
+    /**
+     * Cargando la tabla desde la BD (trae todos los medicamentos).
+     */
+    private void resetTableModel() {
+        DefaultTableModel model = (DefaultTableModel) medTable.getModel();
+        MedicamentoDAO medDAO = new MedicamentoDAO();
+        List<Medicamento> meds = medDAO.selectAll();
+
+        if (meds != null) {
+            model.setNumRows(0);
+
+            meds.forEach(m -> {
+                model.addRow(
+                        new Object[]{
+                            m.getId(),
+                            m.getNombre(),
+                            m.getStock(),
+                            DateUtil.formatDate(
+                                    m.getFechaVencimiento(),
+                                    "yyyy-mm-dd",
+                                    "dd/mm/yyyy"
+                            )
+                        });
+            });
+        }
+        CBLowStock.setSelected(false);
+        CBExpDate.setSelected(false);
+    }
 
     public static void main(String args[]) {
         try {
@@ -516,14 +604,18 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JCheckBox CBLowStock;
     javax.swing.JButton addMedBtn;
     javax.swing.JButton borrarButton;
-    javax.swing.JPanel jPanel1;
+    javax.swing.JLabel expAlertLbl;
     javax.swing.JPanel jPanel2;
+    javax.swing.JPanel jPanel3;
     javax.swing.JTabbedPane jTabbedPane1;
     javax.swing.JPanel mainPanel;
+    javax.swing.JTextField medExpAlert;
+    javax.swing.JTextField medStockAlert;
     javax.swing.JTable medTable;
     javax.swing.JButton resetTableBtn;
     javax.swing.JScrollPane scrollPane;
     javax.swing.JTextField searchBar;
     javax.swing.JLabel searchBarLabel;
+    javax.swing.JLabel stockAlertLbl;
     // End of variables declaration//GEN-END:variables
 }

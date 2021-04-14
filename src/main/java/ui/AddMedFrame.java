@@ -140,7 +140,7 @@ public class AddMedFrame extends javax.swing.JFrame {
         String nombre = nombreTextField.getText();
         int stock = Integer.parseInt(stockTextField.getText());
 
-        SimpleDateFormat fechaFormato = new SimpleDateFormat("yyyy-mm-dd");
+        SimpleDateFormat fechaFormato = new SimpleDateFormat("yyyy-MM-dd");
         String fechaVencimiento = fechaFormato.format(selectFechaV.getDate());
 
         if (!nombre.equals("") && !fechaVencimiento.equals("")) {

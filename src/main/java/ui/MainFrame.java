@@ -428,6 +428,8 @@ public class MainFrame extends javax.swing.JFrame {
                 MedicamentoDAO medDAO = new MedicamentoDAO();
                 medDAO.deleteXId(id);
                 model.removeRow(medTable.getSelectedRow());
+                
+                checkAlerts();
             }
         }
     }//GEN-LAST:event_borrarButtonActionPerformed

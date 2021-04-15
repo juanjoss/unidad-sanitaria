@@ -90,9 +90,9 @@
                           </Group>
                           <Component id="scrollPane" min="-2" pref="923" max="-2" attributes="0"/>
                           <Group type="102" attributes="0">
-                              <Component id="CBLowStock" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbLowStock" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="CBExpDate" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbExpDate" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                               <Component id="resetTableBtn" min="-2" max="-2" attributes="0"/>
                           </Group>
@@ -117,8 +117,8 @@
                       </Group>
                       <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="CBLowStock" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="CBExpDate" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbLowStock" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbExpDate" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="resetTableBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
@@ -218,7 +218,7 @@
                 <Property name="text" type="java.lang.String" value="Ingrese un medicamento para buscar:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="CBLowStock">
+            <Component class="javax.swing.JCheckBox" name="cbLowStock">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="cc" green="ff" red="ff" type="rgb"/>
@@ -232,10 +232,10 @@
                 <Property name="text" type="java.lang.String" value="Solo medicamentos con poco stock"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CBLowStockActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbLowStockActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="CBExpDate">
+            <Component class="javax.swing.JCheckBox" name="cbExpDate">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="cc" green="ff" red="ff" type="rgb"/>
@@ -249,7 +249,7 @@
                 <Property name="text" type="java.lang.String" value="Solo medicamentos en rango de vencimiento"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CBExpDateActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbExpDateActionPerformed"/>
               </Events>
             </Component>
             <Container class="javax.swing.JPanel" name="jPanel2">

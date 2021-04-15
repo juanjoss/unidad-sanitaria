@@ -52,17 +52,32 @@ public class MainFrame extends javax.swing.JFrame {
                 Medicamento prevMed = medDAO.getMedicamento(idMed);
 
                 if (medName.equals("")) {
-                    JOptionPane.showMessageDialog(this, "¡El campo Nombre está vacío!", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "¡El campo Nombre está vacío!",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
                     model.setValueAt(prevMed.getNombre(), evt.getFirstRow(), 1);
                 } else if (medStock < 0) {
-                    JOptionPane.showMessageDialog(this, "¡El campo Stock no puede ser menor que cero!", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "¡El campo Stock no puede ser menor que cero!",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
                     model.setValueAt(prevMed.getStock(), evt.getFirstRow(), 2);
                 } else if (!DateUtil.isValidDate(medExpDate, "d/M/uuuu")) {
                     /**
                      * El formato "d/M/uuuu" tiene que ser asi por la
                      * implementacion del validador
                      */
-                    JOptionPane.showMessageDialog(this, "¡El campo Fecha de Vencimiento no corresponde a una fecha valida!", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "¡El campo Fecha de Vencimiento no corresponde a una fecha valida!",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
                     model.setValueAt(prevMed.getFechaVencimiento(), evt.getFirstRow(), 3);
                 } else {
                     newMed.setId(idMed);
@@ -101,8 +116,8 @@ public class MainFrame extends javax.swing.JFrame {
         scrollPane = new javax.swing.JScrollPane();
         medTable = new javax.swing.JTable();
         searchBarLabel = new javax.swing.JLabel();
-        CBLowStock = new javax.swing.JCheckBox();
-        CBExpDate = new javax.swing.JCheckBox();
+        cbLowStock = new javax.swing.JCheckBox();
+        cbExpDate = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         addMedBtn = new javax.swing.JButton();
         borrarButton = new javax.swing.JButton();
@@ -189,23 +204,23 @@ public class MainFrame extends javax.swing.JFrame {
         searchBarLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         searchBarLabel.setText("Ingrese un medicamento para buscar:");
 
-        CBLowStock.setBackground(new java.awt.Color(255, 255, 204));
-        CBLowStock.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
-        CBLowStock.setForeground(new java.awt.Color(0, 0, 0));
-        CBLowStock.setText("Solo medicamentos con poco stock");
-        CBLowStock.addActionListener(new java.awt.event.ActionListener() {
+        cbLowStock.setBackground(new java.awt.Color(255, 255, 204));
+        cbLowStock.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
+        cbLowStock.setForeground(new java.awt.Color(0, 0, 0));
+        cbLowStock.setText("Solo medicamentos con poco stock");
+        cbLowStock.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CBLowStockActionPerformed(evt);
+                cbLowStockActionPerformed(evt);
             }
         });
 
-        CBExpDate.setBackground(new java.awt.Color(255, 255, 204));
-        CBExpDate.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
-        CBExpDate.setForeground(new java.awt.Color(0, 0, 0));
-        CBExpDate.setText("Solo medicamentos en rango de vencimiento");
-        CBExpDate.addActionListener(new java.awt.event.ActionListener() {
+        cbExpDate.setBackground(new java.awt.Color(255, 255, 204));
+        cbExpDate.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
+        cbExpDate.setForeground(new java.awt.Color(0, 0, 0));
+        cbExpDate.setText("Solo medicamentos en rango de vencimiento");
+        cbExpDate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CBExpDateActionPerformed(evt);
+                cbExpDateActionPerformed(evt);
             }
         });
 
@@ -331,9 +346,9 @@ public class MainFrame extends javax.swing.JFrame {
                         .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 923, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addComponent(CBLowStock)
+                        .addComponent(cbLowStock)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(CBExpDate)
+                        .addComponent(cbExpDate)
                         .addGap(12, 12, 12)
                         .addComponent(resetTableBtn)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
@@ -352,8 +367,8 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(searchBarLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(50, 50, 50)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(CBLowStock)
-                    .addComponent(CBExpDate)
+                    .addComponent(cbLowStock)
+                    .addComponent(cbExpDate)
                     .addComponent(resetTableBtn))
                 .addGap(12, 12, 12)
                 .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 484, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -398,7 +413,7 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * Boton para restaurar tabla.
+     * Restaura la tabla de medicamentos.
      */
     private void resetTableBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetTableBtnActionPerformed
         // TODO add your handling code here:
@@ -406,7 +421,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_resetTableBtnActionPerformed
 
     /**
-     * Checkbox solo stock bajo (5 unidades o menos).
+     * Evento para el boton de eliminar medicamento.
      */
     private void borrarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarButtonActionPerformed
         // TODO add your handling code here:
@@ -433,7 +448,10 @@ public class MainFrame extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_borrarButtonActionPerformed
-
+    
+    /**
+     * Evento para el boton de agregar medicamento.
+     */
     private void addMedBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMedBtnActionPerformed
         // TODO add your handling code here:
         AddMedFrame p = new AddMedFrame();
@@ -445,11 +463,11 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_addMedBtnActionPerformed
 
     /**
-     * Checkbox solo vencimientos en rango de 15 dias.
+     * Checkbox para filtrar en la tabla solo vencimientos en rango de 15 dias.
      */
-    private void CBExpDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CBExpDateActionPerformed
+    private void cbExpDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbExpDateActionPerformed
         // TODO add your handling code here:
-        if (CBExpDate.isSelected()) {
+        if (cbExpDate.isSelected()) {
             MedicamentoDAO medDAO = new MedicamentoDAO();
             List<Medicamento> meds = medDAO.medsInExpRange();
 
@@ -471,22 +489,22 @@ public class MainFrame extends javax.swing.JFrame {
                             });
                 });
 
-                CBLowStock.setSelected(false);
+                cbLowStock.setSelected(false);
             }
         } else {
             resetTableModel();
         }
-    }//GEN-LAST:event_CBExpDateActionPerformed
+    }//GEN-LAST:event_cbExpDateActionPerformed
 
     /**
-     * Checkbox solo stock bajo (5 unidades o menos).
+     * Checkbox para filtrar en la tabla solo stock bajo (5 unidades o menos).
      */
-    private void CBLowStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CBLowStockActionPerformed
+    private void cbLowStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbLowStockActionPerformed
         // TODO add your handling code here:
         DefaultTableModel model = (DefaultTableModel) medTable.getModel();
         MedicamentoDAO medDAO = new MedicamentoDAO();
 
-        if (CBLowStock.isSelected()) {
+        if (cbLowStock.isSelected()) {
             List<Medicamento> meds = medDAO.medsWithLowStock();
 
             model.setRowCount(0);
@@ -506,19 +524,16 @@ public class MainFrame extends javax.swing.JFrame {
                             });
                 });
 
-                CBExpDate.setSelected(false);
+                cbExpDate.setSelected(false);
             }
-
-            /**
-             * TableRowSorter<TableModel> rowSorter = (TableRowSorter)
-             * medTable.getRowSorter();
-             * rowSorter.setRowFilter(RowFilter.regexFilter("^[0-5]{1}$"));
-             */
         } else {
             resetTableModel();
         }
-    }//GEN-LAST:event_CBLowStockActionPerformed
-
+    }//GEN-LAST:event_cbLowStockActionPerformed
+    
+    /**
+     * Checkeo de alertas por bajo stock y vencimientos.
+     */
     private void checkAlerts() {
         MedicamentoDAO medDAO = new MedicamentoDAO();
 
@@ -547,7 +562,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     /**
-     * Cargando la tabla desde la BD (trae todos los medicamentos).
+     * Restaura la tabla de medicamentos.
      */
     private void resetTableModel() {
         DefaultTableModel model = (DefaultTableModel) medTable.getModel();
@@ -571,8 +586,8 @@ public class MainFrame extends javax.swing.JFrame {
                         });
             });
         }
-        CBLowStock.setSelected(false);
-        CBExpDate.setSelected(false);
+        cbLowStock.setSelected(false);
+        cbExpDate.setSelected(false);
     }
 
     public static void main(String args[]) {
@@ -600,10 +615,10 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    javax.swing.JCheckBox CBExpDate;
-    javax.swing.JCheckBox CBLowStock;
     javax.swing.JButton addMedBtn;
     javax.swing.JButton borrarButton;
+    javax.swing.JCheckBox cbExpDate;
+    javax.swing.JCheckBox cbLowStock;
     javax.swing.JLabel expAlertLbl;
     javax.swing.JPanel jPanel2;
     javax.swing.JPanel jPanel3;

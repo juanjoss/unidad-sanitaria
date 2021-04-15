@@ -135,7 +135,10 @@ public class AddMedFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * Evento para agregar un medicamento.
+     */
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
         String nombre = nombreTextField.getText();
         int stock = Integer.parseInt(stockTextField.getText());
@@ -144,7 +147,12 @@ public class AddMedFrame extends javax.swing.JFrame {
         String fechaVencimiento = fechaFormato.format(selectFechaV.getDate());
 
         if (!nombre.equals("") && !fechaVencimiento.equals("")) {
-            int confirmacion = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea guardar este medicamento?", "Confirmación", JOptionPane.YES_NO_OPTION);
+            int confirmacion = JOptionPane.showConfirmDialog(
+                    this,
+                    "¿Está seguro que desea guardar este medicamento?",
+                    "Confirmación",
+                    JOptionPane.YES_NO_OPTION
+            );
 
             if (JOptionPane.YES_OPTION == confirmacion) {
                 MedicamentoDAO medDAO = new MedicamentoDAO();
@@ -156,16 +164,29 @@ public class AddMedFrame extends javax.swing.JFrame {
 
                 medDAO.insert(med);
 
-                JOptionPane.showMessageDialog(this, "¡El medicamento se ha guardado exitosamente!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(
+                        this,
+                        "¡El medicamento se ha guardado exitosamente!",
+                        "Éxito",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
                 nombreTextField.setText("");
                 stockTextField.setText("0");
                 selectFechaV.setCalendar(new GregorianCalendar());
             }
         } else {
-            JOptionPane.showMessageDialog(this, "¡Los campos Nombre y/o Fecha de vencimiento están vacíos!", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(
+                    this,
+                    "¡Los campos Nombre y/o Fecha de vencimiento están vacíos!",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
         }
     }//GEN-LAST:event_addBtnActionPerformed
-
+    
+    /**
+     * Evento para cerrar la ventana.
+     */
     private void cancelarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarButtonActionPerformed
         MainFrame p = new MainFrame();
         p.setVisible(true);

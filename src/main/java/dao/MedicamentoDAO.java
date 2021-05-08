@@ -14,7 +14,8 @@ public class MedicamentoDAO {
      * @return A {@code List<Medicameto>}.
      */
     public List<Medicamento> selectAll() {
-        String query = "SELECT * FROM medicamento";
+        String query = "SELECT medicamento.id, medicamento.nombre, stock, fechaVencimiento, laboratorio, dosis, "
+                + "presentacion.nombre as 'presentacion' FROM medicamento JOIN presentacion ON medicamento.presentacion = presentacion.id;";
 
         try (Connection con = SQLiteDAO.getConn().open()) {
             List<Medicamento> medicamentos = con

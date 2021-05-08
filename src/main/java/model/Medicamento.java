@@ -9,4 +9,7 @@ public class Medicamento {
     private String nombre;
     private int stock;
     private String fechaVencimiento;
+    private String laboratorio;
+    private String dosis;
+    private String presentacion;
 }

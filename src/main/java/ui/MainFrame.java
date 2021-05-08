@@ -1,10 +1,12 @@
 package ui;
 
+import dao.EquipoMedicoDAO;
 import dao.MedicamentoDAO;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.Enumeration;
 import java.util.List;
+import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -17,8 +19,16 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import model.EquipoMedico;
 import model.Medicamento;
 import util.DateUtil;
+import org.apache.commons.validator.routines.EmailValidator;
+import org.simplejavamail.api.email.Email;
+import org.simplejavamail.api.mailer.AsyncResponse;
+import org.simplejavamail.api.mailer.Mailer;
+import org.simplejavamail.api.mailer.config.TransportStrategy;
+import org.simplejavamail.email.EmailBuilder;
+import org.simplejavamail.mailer.MailerBuilder;
 
 public class MainFrame extends javax.swing.JFrame {
 
@@ -127,6 +137,22 @@ public class MainFrame extends javax.swing.JFrame {
         stockAlertLbl = new javax.swing.JLabel();
         medExpAlert = new javax.swing.JTextField();
         resetTableBtn = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        missingsList = new javax.swing.JList<>();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        jScrollPane2 = new javax.swing.JScrollPane();
+        solicitudeList = new javax.swing.JList<>();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        toTF = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        fromTF = new javax.swing.JTextField();
+        sendSolBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -406,6 +432,122 @@ public class MainFrame extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Inicio", mainPanel);
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 204));
+
+        DefaultListModel mlModel = new DefaultListModel();
+        missingsList.setModel(mlModel);
+        jScrollPane1.setViewportView(missingsList);
+
+        DefaultListModel slModel = new DefaultListModel();
+        solicitudeList.setModel(slModel);
+        jScrollPane2.setViewportView(solicitudeList);
+
+        jLabel1.setText("Medicamentos y Equipo Médico Faltante:");
+
+        jLabel2.setText("Para pedir:");
+
+        jButton1.setText("Agregar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Quitar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Enviar a:");
+
+        jLabel4.setText("Enviar desde:");
+
+        sendSolBtn.setText("Enviar Solicitud");
+        sendSolBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sendSolBtnActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(222, 222, 222)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(453, 453, 453)
+                                .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(245, 245, 245))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel1))
+                                .addGap(118, 118, 118)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(80, 80, 80)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(toTF, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4)
+                                    .addComponent(fromTF, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(130, 130, 130)
+                                .addComponent(sendSolBtn)))))
+                .addContainerGap(384, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(93, 93, 93)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(toTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel4)
+                                .addGap(18, 18, 18)
+                                .addComponent(fromTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(sendSolBtn))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(209, 209, 209)
+                        .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(325, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Solicitud de Medicamentos", jPanel1);
+
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.PAGE_START);
 
         pack();
@@ -530,12 +672,67 @@ public class MainFrame extends javax.swing.JFrame {
             resetTableModel();
         }
     }//GEN-LAST:event_cbLowStockActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        List<String> selValues = missingsList.getSelectedValuesList();
+        
+        if(selValues.size() > 0) {
+            DefaultListModel slModel = (DefaultListModel) solicitudeList.getModel();
+            DefaultListModel mlModel = (DefaultListModel) missingsList.getModel();
+            selValues.forEach(e -> {
+                slModel.addElement(e);
+                mlModel.removeElement(e);
+            });
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        List<String> selValues = solicitudeList.getSelectedValuesList();
+        
+        if(selValues.size() > 0) {
+            DefaultListModel slModel = (DefaultListModel) solicitudeList.getModel();
+            DefaultListModel mlModel = (DefaultListModel) missingsList.getModel();
+            selValues.forEach(e -> {
+                mlModel.addElement(e);
+                slModel.removeElement(e);
+            });
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void sendSolBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendSolBtnActionPerformed
+        // TODO add your handling code here:
+        String toEmail = toTF.getText();
+        String fromEmail = fromTF.getText();
+        EmailValidator ev = EmailValidator.getInstance();
+        DefaultListModel model = (DefaultListModel) solicitudeList.getModel();
+        
+        if(ev.isValid(toEmail) && ev.isValid(fromEmail)) {
+            Email email = EmailBuilder.startingBlank()
+                .from("From", fromEmail)
+                .to("To", toEmail)
+                .withSubject("Prueba")
+                .withPlainText(model.toString())
+                .buildEmail();
+            
+            String pass = JOptionPane.showInputDialog("Ingrese contraseña: ");
+
+            MailerBuilder
+                .withSMTPServer("smtp.office365.com", 587, fromEmail, pass)
+                .withTransportStrategy(TransportStrategy.SMTP_TLS)
+                .withDebugLogging(true)
+                .buildMailer()
+                .sendMail(email);
+        }
+    }//GEN-LAST:event_sendSolBtnActionPerformed
     
     /**
      * Checkeo de alertas por bajo stock y vencimientos.
      */
     private void checkAlerts() {
         MedicamentoDAO medDAO = new MedicamentoDAO();
+        EquipoMedicoDAO medEqDAO = new EquipoMedicoDAO();
 
         List<Medicamento> medsWithLowStock = medDAO.medsWithLowStock();
         List<Medicamento> medsInExpRange = medDAO.medsInExpRange();
@@ -544,6 +741,11 @@ public class MainFrame extends javax.swing.JFrame {
             if (medsWithLowStock.size() > 0) {
                 medStockAlert.setText("Hay medicamentos con poco stock!");
                 medStockAlert.setDisabledTextColor(Color.red);
+                
+                medsWithLowStock.forEach(m -> {
+                    DefaultListModel model = (DefaultListModel) missingsList.getModel();
+                    model.addElement(m.getNombre());
+                });
             } else {
                 medStockAlert.setText("No hay medicamentos con poco stock");
                 medStockAlert.setDisabledTextColor(Color.green);
@@ -554,9 +756,25 @@ public class MainFrame extends javax.swing.JFrame {
             if (medsInExpRange.size() > 0) {
                 medExpAlert.setText("Hay medicamentos en rango de vencimiento!");
                 medExpAlert.setDisabledTextColor(Color.red);
+                
+                medsInExpRange.forEach(m -> {
+                    DefaultListModel model = (DefaultListModel) missingsList.getModel();
+                    model.addElement(m.getNombre());
+                });
             } else {
                 medExpAlert.setText("No hay vencimientos cercanos");
                 medExpAlert.setDisabledTextColor(Color.green);
+            }
+        }
+        
+        List<EquipoMedico> medEqWithLowStock = medEqDAO.medEqWithLowStock();
+        
+        if(medEqWithLowStock != null) {
+            if(medEqWithLowStock.size() > 0) {
+                medEqWithLowStock.forEach(me -> {
+                    DefaultListModel model = (DefaultListModel) missingsList.getModel();
+                    model.addElement(me.getNombre());
+                });
             }
         }
     }
@@ -620,17 +838,33 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JCheckBox cbExpDate;
     javax.swing.JCheckBox cbLowStock;
     javax.swing.JLabel expAlertLbl;
+    javax.swing.Box.Filler filler1;
+    javax.swing.Box.Filler filler2;
+    javax.swing.JTextField fromTF;
+    javax.swing.JButton jButton1;
+    javax.swing.JButton jButton2;
+    javax.swing.JLabel jLabel1;
+    javax.swing.JLabel jLabel2;
+    javax.swing.JLabel jLabel3;
+    javax.swing.JLabel jLabel4;
+    javax.swing.JPanel jPanel1;
     javax.swing.JPanel jPanel2;
     javax.swing.JPanel jPanel3;
+    javax.swing.JScrollPane jScrollPane1;
+    javax.swing.JScrollPane jScrollPane2;
     javax.swing.JTabbedPane jTabbedPane1;
     javax.swing.JPanel mainPanel;
     javax.swing.JTextField medExpAlert;
     javax.swing.JTextField medStockAlert;
     javax.swing.JTable medTable;
+    javax.swing.JList<String> missingsList;
     javax.swing.JButton resetTableBtn;
     javax.swing.JScrollPane scrollPane;
     javax.swing.JTextField searchBar;
     javax.swing.JLabel searchBarLabel;
+    javax.swing.JButton sendSolBtn;
+    javax.swing.JList<String> solicitudeList;
     javax.swing.JLabel stockAlertLbl;
+    javax.swing.JTextField toTF;
     // End of variables declaration//GEN-END:variables
 }

@@ -179,14 +179,14 @@ public class MainFrame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Id", "Nombre", "Stock", "Fecha de Vencimiento"
+                "Id", "Nombre", "Stock", "Fecha de Vencimiento", "Dosis", "Laboratorio"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, true, true
+                false, true, true, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -541,7 +541,7 @@ public class MainFrame extends javax.swing.JFrame {
                         .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(325, Short.MAX_VALUE))
         );
@@ -800,7 +800,9 @@ public class MainFrame extends javax.swing.JFrame {
                                     m.getFechaVencimiento(),
                                     "yyyy-mm-dd",
                                     "dd/mm/yyyy"
-                            )
+                            ),
+                            m.getDosis(),
+                            m.getPresentacion()
                         });
             });
         }

@@ -15,13 +15,12 @@ public class MedicamentoDAO {
      */
     public List<Medicamento> selectAll() {
         String query = "SELECT medicamento.id, medicamento.nombre, stock, fechaVencimiento, laboratorio, dosis, "
-                + "presentacion.nombre as 'presentacion' FROM medicamento JOIN presentacion ON medicamento.presentacion = presentacion.id;";
+                + "presentacion.nombre as 'presentacion' FROM medicamento JOIN presentacion ON medicamento.id_presentacion = presentacion.id;";
 
         try (Connection con = SQLiteDAO.getConn().open()) {
             List<Medicamento> medicamentos = con
                     .createQuery(query)
                     .executeAndFetch(Medicamento.class);
-
             return medicamentos;
         } catch (Exception e) {
             System.out.println(e);

@@ -627,7 +627,9 @@ public class MainFrame extends javax.swing.JFrame {
                                         m.getFechaVencimiento(),
                                         "yyyy-mm-dd",
                                         "dd/mm/yyyy"
-                                )
+                                ),
+                                m.getDosis(),
+                                m.getPresentacion()
                             });
                 });
 
@@ -662,7 +664,9 @@ public class MainFrame extends javax.swing.JFrame {
                                         m.getFechaVencimiento(),
                                         "yyyy-mm-dd",
                                         "dd/mm/yyyy"
-                                )
+                                ),
+                                m.getDosis(),
+                                m.getPresentacion()
                             });
                 });
 

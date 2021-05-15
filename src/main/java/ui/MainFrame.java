@@ -160,6 +160,7 @@ public class MainFrame extends javax.swing.JFrame {
         stockAlertLbl = new javax.swing.JLabel();
         medExpAlert = new javax.swing.JTextField();
         resetTableBtn = new javax.swing.JButton();
+        filterComboBox = new javax.swing.JComboBox<>();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         missingsList = new javax.swing.JList<>();
@@ -202,14 +203,14 @@ public class MainFrame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Id", "Nombre", "Stock", "Fecha de Vencimiento", "Dosis", "Laboratorio"
+                "Id", "Nombre", "Stock", "Fecha de Vencimiento", "Dosis", "Presentacion", "Laboratorio"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, true, true, true, true
+                false, true, true, true, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -241,7 +242,7 @@ public class MainFrame extends javax.swing.JFrame {
         header.setHorizontalAlignment(JLabel.CENTER);
 
         /** buscador para la barra de busqueda */
-        TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(medTable.getModel());
+        rowSorter = new TableRowSorter<>(medTable.getModel());
         medTable.setRowSorter(rowSorter);
         scrollPane.setViewportView(medTable);
         if (medTable.getColumnModel().getColumnCount() > 0) {
@@ -382,6 +383,13 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        filterComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Por Nombre", "Por Dosis", "Por Laboratorio", "Por Presentación" }));
+        filterComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                filterComboBoxItemStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
@@ -392,7 +400,9 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(mainPanelLayout.createSequentialGroup()
                         .addComponent(searchBarLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(filterComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 923, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(mainPanelLayout.createSequentialGroup()
                         .addComponent(cbLowStock)
@@ -413,7 +423,8 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(20, 20, 20)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(searchBarLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(searchBarLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(filterComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(50, 50, 50)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbLowStock)
@@ -427,13 +438,7 @@ public class MainFrame extends javax.swing.JFrame {
         searchBar.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                String text = searchBar.getText();
-
-                if (text.trim().length() == 0) {
-                    rowSorter.setRowFilter(null);
-                } else {
-                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
-                }
+                filterTable();
             }
 
             @Override
@@ -684,7 +689,8 @@ public class MainFrame extends javax.swing.JFrame {
                                         "dd/mm/yyyy"
                                 ),
                                 m.getDosis(),
-                                m.getPresentacion()
+                                m.getPresentacion(),
+                                m.getLaboratorio()
                             });
                 });
 
@@ -721,7 +727,8 @@ public class MainFrame extends javax.swing.JFrame {
                                         "dd/mm/yyyy"
                                 ),
                                 m.getDosis(),
-                                m.getPresentacion()
+                                m.getPresentacion(),
+                                m.getLaboratorio()
                             });
                 });
 
@@ -829,7 +836,29 @@ public class MainFrame extends javax.swing.JFrame {
             );
         }
     }//GEN-LAST:event_sendSolBtnActionPerformed
+
+    private void filterComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_filterComboBoxItemStateChanged
+        filterTable();
+    }//GEN-LAST:event_filterComboBoxItemStateChanged
     
+    private void filterTable() {
+        String text = searchBar.getText();
+        int indexSearch = 0;
+        
+        switch (filterComboBox.getSelectedItem().toString()) {
+            case "Por Nombre": indexSearch = 1; break;
+            case "Por Dosis": indexSearch = 4; break;
+            case "Por Presentación": indexSearch = 5; break;
+            case "Por Laboratorio": indexSearch = 6; break;
+            default: indexSearch = 0; break;
+        }
+
+        if (text.trim().length() == 0) {
+            rowSorter.setRowFilter(null);
+        } else {
+            rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text, indexSearch));
+        }
+    }
     /**
      * Checkeo de alertas por bajo stock y vencimientos.
      */
@@ -919,7 +948,8 @@ public class MainFrame extends javax.swing.JFrame {
                                     "dd/mm/yyyy"
                             ),
                             m.getDosis(),
-                            m.getPresentacion()
+                            m.getPresentacion(),
+                            m.getLaboratorio()
                         });
             });
         }
@@ -962,6 +992,7 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JLabel expAlertLbl;
     javax.swing.Box.Filler filler1;
     javax.swing.Box.Filler filler2;
+    javax.swing.JComboBox<String> filterComboBox;
     javax.swing.JTextField fromTF;
     javax.swing.JLabel fromTFLabel;
     javax.swing.JPanel jPanel1;
@@ -987,5 +1018,6 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JLabel stockAlertLbl;
     javax.swing.JTextField toTF;
     javax.swing.JLabel toTFLabel;
+    TableRowSorter<TableModel> rowSorter;
     // End of variables declaration//GEN-END:variables
 }

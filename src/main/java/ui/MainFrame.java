@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.util.Enumeration;
 import java.util.List;
+import javax.mail.AuthenticationFailedException;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -55,6 +56,8 @@ public class MainFrame extends javax.swing.JFrame {
                 String medName = (String) model.getValueAt(evt.getFirstRow(), 1);
                 int medStock = (int) model.getValueAt(evt.getFirstRow(), 2);
                 String medExpDate = (String) model.getValueAt(evt.getFirstRow(), 3);
+                String medDosis = (String) model.getValueAt(evt.getFirstRow(), 4);
+                String medPres = (String) model.getValueAt(evt.getFirstRow(), 5);
 
                 /**
                  * Controles de los nuevos datos
@@ -89,7 +92,25 @@ public class MainFrame extends javax.swing.JFrame {
                             JOptionPane.ERROR_MESSAGE
                     );
                     model.setValueAt(prevMed.getFechaVencimiento(), evt.getFirstRow(), 3);
-                } else {
+                } else if (medDosis.equals("")) {
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "¡El campo Dosis está vacío!",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                    model.setValueAt(prevMed.getDosis(), evt.getFirstRow(), 4);
+                } 
+                else if (medPres.equals("")) {
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "¡El campo Presentación está vacío!",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                    model.setValueAt(prevMed.getPresentacion(), evt.getFirstRow(), 5);
+                }
+                else {
                     newMed.setId(idMed);
                     newMed.setNombre(medName);
                     newMed.setStock(medStock);
@@ -100,6 +121,8 @@ public class MainFrame extends javax.swing.JFrame {
                                     "yyyy-mm-dd"
                             )
                     );
+                    newMed.setDosis(medDosis);
+                    newMed.setPresentacion(medPres);
 
                     medDAO.update(newMed);
                     checkAlerts();
@@ -144,13 +167,13 @@ public class MainFrame extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         solicitudeList = new javax.swing.JList<>();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        mlLabel = new javax.swing.JLabel();
+        slLabel = new javax.swing.JLabel();
+        addToSLBtn = new javax.swing.JButton();
+        removeFromSLBtn = new javax.swing.JButton();
         toTF = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        toTFLabel = new javax.swing.JLabel();
+        fromTFLabel = new javax.swing.JLabel();
         fromTF = new javax.swing.JTextField();
         sendSolBtn = new javax.swing.JButton();
 
@@ -436,34 +459,58 @@ public class MainFrame extends javax.swing.JFrame {
 
         DefaultListModel mlModel = new DefaultListModel();
         missingsList.setModel(mlModel);
+        missingsList.setFont(new java.awt.Font("Cascadia Code", 0, 18)); // NOI18N
+        missingsList.setForeground(new java.awt.Color(0, 0, 0));
         jScrollPane1.setViewportView(missingsList);
 
         DefaultListModel slModel = new DefaultListModel();
         solicitudeList.setModel(slModel);
+        solicitudeList.setFont(new java.awt.Font("Cascadia Code", 0, 18)); // NOI18N
+        solicitudeList.setForeground(new java.awt.Color(0, 0, 0));
         jScrollPane2.setViewportView(solicitudeList);
 
-        jLabel1.setText("Medicamentos y Equipo Médico Faltante:");
+        mlLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        mlLabel.setForeground(new java.awt.Color(0, 0, 0));
+        mlLabel.setText("Medicamentos y Equipo Médico Faltante:");
 
-        jLabel2.setText("Para pedir:");
+        slLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        slLabel.setForeground(new java.awt.Color(0, 0, 0));
+        slLabel.setText("Para pedir:");
 
-        jButton1.setText("Agregar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        addToSLBtn.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        addToSLBtn.setForeground(new java.awt.Color(0, 0, 0));
+        addToSLBtn.setText("Agregar");
+        addToSLBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                addToSLBtnActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Quitar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        removeFromSLBtn.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        removeFromSLBtn.setForeground(new java.awt.Color(0, 0, 0));
+        removeFromSLBtn.setText("Quitar");
+        removeFromSLBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                removeFromSLBtnActionPerformed(evt);
             }
         });
 
-        jLabel3.setText("Enviar a:");
+        toTF.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        toTF.setForeground(new java.awt.Color(0, 0, 0));
 
-        jLabel4.setText("Enviar desde:");
+        toTFLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        toTFLabel.setForeground(new java.awt.Color(0, 0, 0));
+        toTFLabel.setText("Enviar a:");
 
+        fromTFLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        fromTFLabel.setForeground(new java.awt.Color(0, 0, 0));
+        fromTFLabel.setText("Enviar desde:");
+
+        fromTF.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        fromTF.setForeground(new java.awt.Color(0, 0, 0));
+
+        sendSolBtn.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        sendSolBtn.setForeground(new java.awt.Color(0, 0, 0));
         sendSolBtn.setText("Enviar Solicitud");
         sendSolBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -476,74 +523,82 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(51, 51, 51)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(mlLabel)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(43, 43, 43)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(222, 222, 222)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(55, 55, 55)
+                        .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(slLabel))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(202, 202, 202))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(453, 453, 453)
-                                .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(245, 245, 245))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel1))
-                                .addGap(118, 118, 118)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(fromTF, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(111, 111, 111)
+                                        .addComponent(fromTFLabel))
+                                    .addComponent(toTF, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(80, 80, 80)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(toTF, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4)
-                                    .addComponent(fromTF, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(131, 131, 131)
+                                .addComponent(toTFLabel))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(130, 130, 130)
-                                .addComponent(sendSolBtn)))))
-                .addContainerGap(384, Short.MAX_VALUE))
+                                .addGap(92, 92, 92)
+                                .addComponent(sendSolBtn)))
+                        .addContainerGap(189, Short.MAX_VALUE))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(261, 261, 261)
+                .addComponent(addToSLBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(291, 291, 291)
+                .addComponent(removeFromSLBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(93, 93, 93)
+                        .addGap(53, 53, 53)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane1)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(toTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel4)
-                                .addGap(18, 18, 18)
-                                .addComponent(fromTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(sendSolBtn))))
+                            .addComponent(mlLabel)
+                            .addComponent(slLabel))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(addToSLBtn)
+                            .addComponent(removeFromSLBtn)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(209, 209, 209)
-                        .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(325, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(113, 113, 113)
+                                .addComponent(toTFLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(toTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(43, 43, 43)
+                                .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(63, 63, 63)
+                                .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(fromTFLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(fromTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(53, 53, 53)
+                        .addComponent(sendSolBtn)))
+                .addContainerGap(255, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Solicitud de Medicamentos", jPanel1);
@@ -677,33 +732,39 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cbLowStockActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void addToSLBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addToSLBtnActionPerformed
         // TODO add your handling code here:
         List<String> selValues = missingsList.getSelectedValuesList();
         
         if(selValues.size() > 0) {
             DefaultListModel slModel = (DefaultListModel) solicitudeList.getModel();
             DefaultListModel mlModel = (DefaultListModel) missingsList.getModel();
+            
             selValues.forEach(e -> {
-                slModel.addElement(e);
-                mlModel.removeElement(e);
+                if(!slModel.contains(e)) {
+                    slModel.addElement(e);
+                    mlModel.removeElement(e);
+                }
             });
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_addToSLBtnActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void removeFromSLBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeFromSLBtnActionPerformed
         // TODO add your handling code here:
         List<String> selValues = solicitudeList.getSelectedValuesList();
         
         if(selValues.size() > 0) {
             DefaultListModel slModel = (DefaultListModel) solicitudeList.getModel();
             DefaultListModel mlModel = (DefaultListModel) missingsList.getModel();
+            
             selValues.forEach(e -> {
-                mlModel.addElement(e);
-                slModel.removeElement(e);
+                if(!mlModel.contains(e)) {
+                    mlModel.addElement(e);
+                    slModel.removeElement(e);
+                }
             });
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_removeFromSLBtnActionPerformed
 
     private void sendSolBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendSolBtnActionPerformed
         // TODO add your handling code here:
@@ -721,13 +782,51 @@ public class MainFrame extends javax.swing.JFrame {
                 .buildEmail();
             
             String pass = JOptionPane.showInputDialog("Ingrese contraseña: ");
+            
+            while(pass.equals("")) {
+                pass = JOptionPane.showInputDialog("Ingrese contraseña: ");
+            }
 
-            MailerBuilder
+            Mailer mailer = MailerBuilder
                 .withSMTPServer("smtp.office365.com", 587, fromEmail, pass)
                 .withTransportStrategy(TransportStrategy.SMTP_TLS)
                 .withDebugLogging(true)
-                .buildMailer()
-                .sendMail(email);
+                .async()
+                .buildMailer();
+            
+            AsyncResponse res = mailer.sendMail(email, true);
+            
+            if(res != null) {
+                res.onSuccess(() -> {
+                    model.removeAllElements();
+                    
+                    JOptionPane.showMessageDialog(
+                                this,
+                                "El email con la solicitud se ha enviado exitosamente.",
+                                "Information",
+                                JOptionPane.INFORMATION_MESSAGE
+                        );
+                });
+
+                res.onException(e -> {
+                    if(e.getCause().getClass().equals(AuthenticationFailedException.class)) {
+                        JOptionPane.showMessageDialog(
+                                this,
+                                "La contraseña para el email " + fromEmail + " es incorrecta. Por favor intente de nuevo.",
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE
+                        );
+                    }
+                });
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Debe rellenar el email de envío y recepción para realizar una solicitud.",
+                    "Warning",
+                    JOptionPane.WARNING_MESSAGE
+            );
         }
     }//GEN-LAST:event_sendSolBtnActionPerformed
     
@@ -740,6 +839,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         List<Medicamento> medsWithLowStock = medDAO.medsWithLowStock();
         List<Medicamento> medsInExpRange = medDAO.medsInExpRange();
+        
+        DefaultListModel mlModel = (DefaultListModel) missingsList.getModel();
+        DefaultListModel slModel = (DefaultListModel) solicitudeList.getModel();
+        
+        mlModel.removeAllElements();
 
         if (medsWithLowStock != null) {
             if (medsWithLowStock.size() > 0) {
@@ -747,8 +851,9 @@ public class MainFrame extends javax.swing.JFrame {
                 medStockAlert.setDisabledTextColor(Color.red);
                 
                 medsWithLowStock.forEach(m -> {
-                    DefaultListModel model = (DefaultListModel) missingsList.getModel();
-                    model.addElement(m.getNombre());
+                    if(!mlModel.contains(m)) {
+                        mlModel.addElement(m.getNombre());
+                    }
                 });
             } else {
                 medStockAlert.setText("No hay medicamentos con poco stock");
@@ -762,8 +867,9 @@ public class MainFrame extends javax.swing.JFrame {
                 medExpAlert.setDisabledTextColor(Color.red);
                 
                 medsInExpRange.forEach(m -> {
-                    DefaultListModel model = (DefaultListModel) missingsList.getModel();
-                    model.addElement(m.getNombre());
+                    if(!mlModel.contains(m)) {
+                        mlModel.addElement(m.getNombre());
+                    }
                 });
             } else {
                 medExpAlert.setText("No hay vencimientos cercanos");
@@ -776,11 +882,18 @@ public class MainFrame extends javax.swing.JFrame {
         if(medEqWithLowStock != null) {
             if(medEqWithLowStock.size() > 0) {
                 medEqWithLowStock.forEach(me -> {
-                    DefaultListModel model = (DefaultListModel) missingsList.getModel();
-                    model.addElement(me.getNombre());
+                    if(!mlModel.contains(me)) {
+                        mlModel.addElement(me.getNombre());
+                    }
                 });
             }
         }
+        
+        slModel.elements().asIterator().forEachRemaining(e -> {
+            if(!mlModel.contains(e)) {
+                slModel.removeElement(e);
+            }
+        });
     }
 
     /**
@@ -810,6 +923,8 @@ public class MainFrame extends javax.swing.JFrame {
                         });
             });
         }
+        
+        medTable.getRowSorter().setSortKeys(null);
         cbLowStock.setSelected(false);
         cbExpDate.setSelected(false);
     }
@@ -840,6 +955,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JButton addMedBtn;
+    javax.swing.JButton addToSLBtn;
     javax.swing.JButton borrarButton;
     javax.swing.JCheckBox cbExpDate;
     javax.swing.JCheckBox cbLowStock;
@@ -847,12 +963,7 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.Box.Filler filler1;
     javax.swing.Box.Filler filler2;
     javax.swing.JTextField fromTF;
-    javax.swing.JButton jButton1;
-    javax.swing.JButton jButton2;
-    javax.swing.JLabel jLabel1;
-    javax.swing.JLabel jLabel2;
-    javax.swing.JLabel jLabel3;
-    javax.swing.JLabel jLabel4;
+    javax.swing.JLabel fromTFLabel;
     javax.swing.JPanel jPanel1;
     javax.swing.JPanel jPanel2;
     javax.swing.JPanel jPanel3;
@@ -864,13 +975,17 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JTextField medStockAlert;
     javax.swing.JTable medTable;
     javax.swing.JList<String> missingsList;
+    javax.swing.JLabel mlLabel;
+    javax.swing.JButton removeFromSLBtn;
     javax.swing.JButton resetTableBtn;
     javax.swing.JScrollPane scrollPane;
     javax.swing.JTextField searchBar;
     javax.swing.JLabel searchBarLabel;
     javax.swing.JButton sendSolBtn;
+    javax.swing.JLabel slLabel;
     javax.swing.JList<String> solicitudeList;
     javax.swing.JLabel stockAlertLbl;
     javax.swing.JTextField toTF;
+    javax.swing.JLabel toTFLabel;
     // End of variables declaration//GEN-END:variables
 }

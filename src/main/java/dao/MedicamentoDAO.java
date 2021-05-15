@@ -36,7 +36,8 @@ public class MedicamentoDAO {
      * @return A {@code Medicameto}.
      */
     public Medicamento getMedicamento(int id) {
-        String query = "SELECT * FROM medicamento WHERE id = :id";
+        String query = "SELECT id, nombre, stock, fechaVencimiento, laboratorio, dosis, id_presentacion AS 'presentacion' "
+                + "FROM medicamento WHERE id = :id";
 
         try (Connection con = SQLiteDAO.getConn().open()) {
             Medicamento med = con
@@ -66,7 +67,8 @@ public class MedicamentoDAO {
      * @return A {@code List<Medicameto>}.
      */
     public List<Medicamento> medsWithLowStock() {
-        String query = "SELECT * FROM medicamento WHERE stock <= 5";
+        String query = "SELECT id, nombre, stock, fechaVencimiento, laboratorio, dosis, id_presentacion AS 'presentacion'"
+                + "FROM medicamento WHERE stock <= 5";
 
         try (Connection con = SQLiteDAO.getConn().open()) {
             List<Medicamento> medicamentos = con
@@ -87,9 +89,8 @@ public class MedicamentoDAO {
      * @return A {@code List<Medicameto>}.
      */
     public List<Medicamento> medsInExpRange() {
-        String query = "SELECT *\n"
-                + "FROM medicamento \n"
-                + "WHERE (julianday(fechaVencimiento) - julianday('now')) <= 15";
+        String query = "SELECT id, nombre, stock, fechaVencimiento, laboratorio, dosis, id_presentacion AS 'presentacion' "
+                + "FROM medicamento WHERE (julianday(fechaVencimiento) - julianday('now')) <= 15";
 
         try (Connection con = SQLiteDAO.getConn().open()) {
             List<Medicamento> medicamentos = con
@@ -110,8 +111,8 @@ public class MedicamentoDAO {
      * @param med A {@code Medicamento} el medicamento a insertar.
      */
     public void insert(Medicamento med) {
-        String query = "INSERT INTO medicamento (nombre, stock, fechaVencimiento) "
-                + "VALUES (:nombre, :stock, :fechaVencimiento)";
+        String query = "INSERT INTO medicamento (nombre, stock, fechaVencimiento, laboratorio, dosis, id_presentacion) "
+                + "VALUES (:nombre, :stock, :fechaVencimiento, 'Pfizer', '600 ml', 1)";
 
         try (Connection con = SQLiteDAO.getConn().open()) {
             con.createQuery(query).bind(med).executeUpdate();
@@ -141,12 +142,22 @@ public class MedicamentoDAO {
      * @param med A {@code Medicameto} el medicamento a actualizar.
      */
     public void update(Medicamento med) {
-        String query = "UPDATE medicamento "
-                + "SET nombre = :nombre, stock = :stock, fechaVencimiento = :fechaVencimiento "
-                + "WHERE id = :id";
-
+        String query1 = "SELECT id FROM presentacion WHERE nombre = :presName";
+        
         try (Connection con = SQLiteDAO.getConn().open()) {
-            con.createQuery(query).bind(med).executeUpdate();
+            Integer medPresId = con
+                    .createQuery(query1)
+                    .addParameter("presName", med.getPresentacion())
+                    .executeAndFetchFirst(Integer.class);
+            
+            if(medPresId != null) {
+                String query2 = "UPDATE medicamento "
+                        + "SET nombre = :nombre, stock = :stock, fechaVencimiento = :fechaVencimiento, "
+                        + "laboratorio = :laboratorio, dosis = :dosis, id_presentacion = " + medPresId
+                        + " WHERE id = :id";
+
+                con.createQuery(query2).bind(med).executeUpdate();
+            }
         } catch (Exception e) {
             System.out.println(e);
         }

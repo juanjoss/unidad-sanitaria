@@ -4,12 +4,21 @@ import dao.EquipoMedicoDAO;
 import dao.MedicamentoDAO;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Vector;
+import java.util.logging.Logger;
 import javax.mail.AuthenticationFailedException;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.event.DocumentEvent;
@@ -37,6 +46,8 @@ public class MainFrame extends javax.swing.JFrame {
         initComponents();
 
         DefaultTableModel model = (DefaultTableModel) medTable.getModel();
+        DefaultTableModel stModel = (DefaultTableModel) solicitudeTable.getModel();
+        
         MedicamentoDAO medDAO = new MedicamentoDAO();
 
         /**
@@ -129,6 +140,18 @@ public class MainFrame extends javax.swing.JFrame {
                 }
             }
         });
+        
+        stModel.addTableModelListener((TableModelEvent evt) -> {
+            if (evt.getType() == TableModelEvent.UPDATE && evt.getColumn() != TableModelEvent.ALL_COLUMNS) {
+                float valueChanged = Float.parseFloat(
+                        String.valueOf(stModel.getValueAt(evt.getFirstRow(), evt.getColumn()))
+                );
+                
+                if(valueChanged < 0) {
+                    stModel.setValueAt(0, evt.getFirstRow(), evt.getColumn());
+                }
+            }
+        });
 
         checkAlerts();
     }
@@ -164,18 +187,23 @@ public class MainFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         missingsList = new javax.swing.JList<>();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        jScrollPane2 = new javax.swing.JScrollPane();
-        solicitudeList = new javax.swing.JList<>();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         mlLabel = new javax.swing.JLabel();
         slLabel = new javax.swing.JLabel();
         addToSLBtn = new javax.swing.JButton();
-        removeFromSLBtn = new javax.swing.JButton();
+        removeFromSTBtn = new javax.swing.JButton();
         toTF = new javax.swing.JTextField();
         toTFLabel = new javax.swing.JLabel();
         fromTFLabel = new javax.swing.JLabel();
         fromTF = new javax.swing.JTextField();
         sendSolBtn = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        solicitudeTable = new javax.swing.JTable();
+        emailSubject = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        emailComment = new javax.swing.JTextPane();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -461,13 +489,9 @@ public class MainFrame extends javax.swing.JFrame {
         missingsList.setModel(mlModel);
         missingsList.setFont(new java.awt.Font("Cascadia Code", 0, 18)); // NOI18N
         missingsList.setForeground(new java.awt.Color(0, 0, 0));
+        DefaultListCellRenderer mlCellRenderer = (DefaultListCellRenderer) missingsList.getCellRenderer();
+        mlCellRenderer.setHorizontalAlignment(JLabel.CENTER);
         jScrollPane1.setViewportView(missingsList);
-
-        DefaultListModel slModel = new DefaultListModel();
-        solicitudeList.setModel(slModel);
-        solicitudeList.setFont(new java.awt.Font("Cascadia Code", 0, 18)); // NOI18N
-        solicitudeList.setForeground(new java.awt.Color(0, 0, 0));
-        jScrollPane2.setViewportView(solicitudeList);
 
         mlLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
         mlLabel.setForeground(new java.awt.Color(0, 0, 0));
@@ -475,7 +499,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         slLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
         slLabel.setForeground(new java.awt.Color(0, 0, 0));
-        slLabel.setText("Para pedir:");
+        slLabel.setText("Lista de Pedidos:");
 
         addToSLBtn.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
         addToSLBtn.setForeground(new java.awt.Color(0, 0, 0));
@@ -486,17 +510,19 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        removeFromSLBtn.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        removeFromSLBtn.setForeground(new java.awt.Color(0, 0, 0));
-        removeFromSLBtn.setText("Quitar");
-        removeFromSLBtn.addActionListener(new java.awt.event.ActionListener() {
+        removeFromSTBtn.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        removeFromSTBtn.setForeground(new java.awt.Color(0, 0, 0));
+        removeFromSTBtn.setText("Quitar");
+        removeFromSTBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                removeFromSLBtnActionPerformed(evt);
+                removeFromSTBtnActionPerformed(evt);
             }
         });
 
         toTF.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
         toTF.setForeground(new java.awt.Color(0, 0, 0));
+        toTF.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        toTF.setText("fuatojfj@gmail.com");
 
         toTFLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
         toTFLabel.setForeground(new java.awt.Color(0, 0, 0));
@@ -508,6 +534,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         fromTF.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
         fromTF.setForeground(new java.awt.Color(0, 0, 0));
+        fromTF.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        fromTF.setText("fuato1@hotmail.com");
 
         sendSolBtn.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
         sendSolBtn.setForeground(new java.awt.Color(0, 0, 0));
@@ -518,87 +546,171 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        solicitudeTable.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        solicitudeTable.setForeground(new java.awt.Color(0, 0, 0));
+        solicitudeTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Nombre", "mg", "Comprimidos", "Cantidad"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Float.class, java.lang.Float.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, true, true, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        solicitudeTable.setRowHeight(32);
+        solicitudeTable.getTableHeader().setReorderingAllowed(false);
+        /** centrado de las columnas */
+        Enumeration<TableColumn> solTableColModel = solicitudeTable.getColumnModel().getColumns();
+        while(solTableColModel.hasMoreElements()) {
+            solTableColModel.nextElement().setCellRenderer(centerRndr);
+        }
+
+        /** tamaño de la fila del header */
+        solicitudeTable.getTableHeader().setPreferredSize(new Dimension(50, 50));
+
+        /** centrado del header */
+        JLabel header2 = (JLabel) solicitudeTable.getTableHeader().getDefaultRenderer();
+        header2.setHorizontalAlignment(JLabel.CENTER);
+        jScrollPane3.setViewportView(solicitudeTable);
+        if (solicitudeTable.getColumnModel().getColumnCount() > 0) {
+            solicitudeTable.getColumnModel().getColumn(0).setResizable(false);
+            solicitudeTable.getColumnModel().getColumn(1).setResizable(false);
+            solicitudeTable.getColumnModel().getColumn(2).setResizable(false);
+            solicitudeTable.getColumnModel().getColumn(3).setResizable(false);
+        }
+
+        emailSubject.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        emailSubject.setForeground(new java.awt.Color(0, 0, 0));
+
+        jLabel1.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setText("Asunto:");
+
+        emailComment.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        emailComment.setForeground(new java.awt.Color(0, 0, 0));
+        jScrollPane2.setViewportView(emailComment);
+
+        jLabel2.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("Comentario:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(51, 51, 51)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(mlLabel)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(43, 43, 43)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(55, 55, 55)
-                        .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(slLabel))
+                        .addGap(35, 35, 35)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 619, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(mlLabel)
+                        .addGap(260, 260, 260)
+                        .addComponent(slLabel)
+                        .addGap(90, 90, 90)
+                        .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 164, Short.MAX_VALUE)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(202, 202, 202))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane2)
+                            .addComponent(fromTF, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(fromTF, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(111, 111, 111)
-                                        .addComponent(fromTFLabel))
-                                    .addComponent(toTF, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(111, 111, 111)
+                                .addComponent(fromTFLabel))
+                            .addComponent(toTF, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(131, 131, 131)
+                                .addGap(125, 125, 125)
                                 .addComponent(toTFLabel))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(92, 92, 92)
-                                .addComponent(sendSolBtn)))
-                        .addContainerGap(189, Short.MAX_VALUE))))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(261, 261, 261)
+                            .addComponent(emailSubject))
+                        .addGap(25, 25, 25))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(sendSolBtn)
+                        .addGap(110, 110, 110))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(152, 152, 152))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(139, 139, 139))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(191, 191, 191)
                 .addComponent(addToSLBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(291, 291, 291)
-                .addComponent(removeFromSLBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(removeFromSTBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(402, 402, 402))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(210, 210, 210)
+                .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(53, 53, 53)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(mlLabel)
-                            .addComponent(slLabel))
-                        .addGap(18, 18, 18)
+                        .addGap(63, 63, 63)
+                        .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(7, 7, 7))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(addToSLBtn)
-                            .addComponent(removeFromSLBtn)))
+                            .addComponent(slLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(mlLabel, javax.swing.GroupLayout.Alignment.TRAILING))))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(113, 113, 113)
-                                .addComponent(toTFLabel)
+                                .addGap(40, 40, 40)
+                                .addComponent(toTFLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(toTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(43, 43, 43)
-                                .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(fromTFLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(fromTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(11, 11, 11)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(emailSubject, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(11, 11, 11)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(sendSolBtn))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(63, 63, 63)
-                                .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(fromTFLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(fromTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(53, 53, 53)
-                        .addComponent(sendSolBtn)))
-                .addContainerGap(255, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE))))
+                        .addGap(18, 18, 18)
+                        .addComponent(addToSLBtn)
+                        .addGap(253, 253, 253))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(removeFromSTBtn)
+                        .addGap(250, 250, 250))))
         );
 
         jTabbedPane1.addTab("Solicitud de Medicamentos", jPanel1);
@@ -737,87 +849,145 @@ public class MainFrame extends javax.swing.JFrame {
         List<String> selValues = missingsList.getSelectedValuesList();
         
         if(selValues.size() > 0) {
-            DefaultListModel slModel = (DefaultListModel) solicitudeList.getModel();
+            DefaultTableModel stModel = (DefaultTableModel) solicitudeTable.getModel();
             DefaultListModel mlModel = (DefaultListModel) missingsList.getModel();
             
             selValues.forEach(e -> {
-                if(!slModel.contains(e)) {
-                    slModel.addElement(e);
+                if(!contains(solicitudeTable, e)) {
+                    stModel.addRow(new Object[]{ e, 0, 0, 0 });
                     mlModel.removeElement(e);
                 }
             });
         }
     }//GEN-LAST:event_addToSLBtnActionPerformed
 
-    private void removeFromSLBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeFromSLBtnActionPerformed
+    private void removeFromSTBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeFromSTBtnActionPerformed
         // TODO add your handling code here:
-        List<String> selValues = solicitudeList.getSelectedValuesList();
+        int[] selValues = solicitudeTable.getSelectedRows();
         
-        if(selValues.size() > 0) {
-            DefaultListModel slModel = (DefaultListModel) solicitudeList.getModel();
+        if(selValues.length > 0) {
+            DefaultTableModel stModel = (DefaultTableModel) solicitudeTable.getModel();
             DefaultListModel mlModel = (DefaultListModel) missingsList.getModel();
             
-            selValues.forEach(e -> {
-                if(!mlModel.contains(e)) {
-                    mlModel.addElement(e);
-                    slModel.removeElement(e);
+            for (int i = selValues.length - 1; i >= 0; i--) {
+                if(!mlModel.contains(stModel.getValueAt(selValues[i], 0))) {
+                    mlModel.addElement(stModel.getValueAt(selValues[i], 0));
+                    stModel.removeRow(selValues[i]);
                 }
-            });
+            }
         }
-    }//GEN-LAST:event_removeFromSLBtnActionPerformed
+    }//GEN-LAST:event_removeFromSTBtnActionPerformed
 
     private void sendSolBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendSolBtnActionPerformed
         // TODO add your handling code here:
         String toEmail = toTF.getText();
         String fromEmail = fromTF.getText();
+        String emailSub = emailSubject.getText();
+        String emailCmt = emailComment.getText();
+        
         EmailValidator ev = EmailValidator.getInstance();
-        DefaultListModel model = (DefaultListModel) solicitudeList.getModel();
+        DefaultTableModel model = (DefaultTableModel) solicitudeTable.getModel();
         
         if(ev.isValid(toEmail) && ev.isValid(fromEmail)) {
-            Email email = EmailBuilder.startingBlank()
-                .from("From", fromEmail)
-                .to("To", toEmail)
-                .withSubject("Prueba")
-                .withPlainText(model.toString())
-                .buildEmail();
-            
-            String pass = JOptionPane.showInputDialog("Ingrese contraseña: ");
-            
-            while(pass.equals("")) {
-                pass = JOptionPane.showInputDialog("Ingrese contraseña: ");
-            }
-
-            Mailer mailer = MailerBuilder
-                .withSMTPServer("smtp.office365.com", 587, fromEmail, pass)
-                .withTransportStrategy(TransportStrategy.SMTP_TLS)
-                .withDebugLogging(true)
-                .async()
-                .buildMailer();
-            
-            AsyncResponse res = mailer.sendMail(email, true);
-            
-            if(res != null) {
-                res.onSuccess(() -> {
-                    model.removeAllElements();
+            try {
+                try (BufferedWriter bw = new BufferedWriter(new FileWriter(".\\table.html", false))) {
+                    bw.write("<html>");
+                    bw.write("<body style='max-width: 500px; margin: auto;'>");
+                    bw.write("<h6>" + emailCmt + "</h6>");
                     
-                    JOptionPane.showMessageDialog(
-                                this,
-                                "El email con la solicitud se ha enviado exitosamente.",
-                                "Information",
-                                JOptionPane.INFORMATION_MESSAGE
-                        );
-                });
-
-                res.onException(e -> {
-                    if(e.getCause().getClass().equals(AuthenticationFailedException.class)) {
-                        JOptionPane.showMessageDialog(
-                                this,
-                                "La contraseña para el email " + fromEmail + " es incorrecta. Por favor intente de nuevo.",
-                                "Error",
-                                JOptionPane.ERROR_MESSAGE
-                        );
+                    bw.write("<table>");
+                    
+                    bw.write("<tr>");
+                    for(int c = 0; c < model.getColumnCount(); ++c) {
+                        bw.write("<th style='text-align: center;'>");
+                        bw.write(model.getColumnName(c));
+                        bw.write("</th>");
                     }
-                });
+                    bw.write("</tr>");
+                    
+                    for(int r = 0; r < model.getRowCount(); ++r) {
+                        bw.write("<tr>");
+                        
+                        for(int c = 0; c < model.getColumnCount(); ++c) {
+                            bw.write("<td style='text-align: center;'>");
+                            bw.write(model.getValueAt(r, c).toString());
+                            bw.write("</td>");
+                        }
+                        
+                        bw.write("</tr>");
+                    }
+                    bw.write("</table>");
+                    bw.write("</body>");
+                    bw.write("</html>");
+                }
+            } catch (IOException ex) {
+                System.out.println(ex);
+            }
+            
+            try {
+                File html = new File(".\\table.html");
+                
+                Email email = EmailBuilder.startingBlank()
+                    .from("Salita Colonia Seré", fromEmail)
+                    .to("To", toEmail)
+                    .withSubject(emailSub)
+                    .withHTMLText(html)
+                    .buildEmail();
+
+                JPasswordField passField = new JPasswordField();
+                String[] options = new String[]{"OK", "Cancelar"};
+                int op = JOptionPane.showOptionDialog(
+                        null, 
+                        passField, 
+                        "Ingrese contraseña: ", 
+                        JOptionPane.NO_OPTION, 
+                        JOptionPane.PLAIN_MESSAGE, 
+                        null, 
+                        options,
+                        options[1]
+                );
+
+                if(op == 0) {
+                    String password = new String(passField.getPassword());
+
+                    if(!password.equals("")) {
+                        Mailer mailer = MailerBuilder
+                            .withSMTPServer("smtp.office365.com", 587, fromEmail, password)
+                            .withTransportStrategy(TransportStrategy.SMTP_TLS)
+                            .withDebugLogging(true)
+                            .async()
+                            .buildMailer();
+
+                        AsyncResponse res = mailer.sendMail(email, true);
+
+                        if(res != null) {
+                            res.onSuccess(() -> {
+                                solicitudeTable.removeAll();
+
+                                JOptionPane.showMessageDialog(
+                                            this,
+                                            "El email con la solicitud se ha enviado exitosamente.",
+                                            "Information",
+                                            JOptionPane.INFORMATION_MESSAGE
+                                    );
+                            });
+
+                            res.onException(e -> {
+                                if(e.getCause().getClass().equals(AuthenticationFailedException.class)) {
+                                    JOptionPane.showMessageDialog(
+                                            this,
+                                            "La contraseña para el email " + fromEmail + " es incorrecta. Por favor intente de nuevo.",
+                                            "Error",
+                                            JOptionPane.ERROR_MESSAGE
+                                    );
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+            catch(Exception e) {
+                System.out.println(e);
             }
         }
         else {
@@ -830,6 +1000,19 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_sendSolBtnActionPerformed
     
+    private boolean contains(JTable table, String value) {
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        Vector<Vector> rows = model.getDataVector();
+        
+        for (int i = 0; i < rows.size(); i++) {
+            if(rows.get(i).get(0).equals(value)) {
+               return true;
+            }
+        }
+        
+        return false;
+    }
+    
     /**
      * Checkeo de alertas por bajo stock y vencimientos.
      */
@@ -841,7 +1024,7 @@ public class MainFrame extends javax.swing.JFrame {
         List<Medicamento> medsInExpRange = medDAO.medsInExpRange();
         
         DefaultListModel mlModel = (DefaultListModel) missingsList.getModel();
-        DefaultListModel slModel = (DefaultListModel) solicitudeList.getModel();
+        DefaultTableModel stModel = (DefaultTableModel) solicitudeTable.getModel();
         
         mlModel.removeAllElements();
 
@@ -851,9 +1034,7 @@ public class MainFrame extends javax.swing.JFrame {
                 medStockAlert.setDisabledTextColor(Color.red);
                 
                 medsWithLowStock.forEach(m -> {
-                    if(!mlModel.contains(m)) {
-                        mlModel.addElement(m.getNombre());
-                    }
+                    mlModel.addElement(m.getNombre());
                 });
             } else {
                 medStockAlert.setText("No hay medicamentos con poco stock");
@@ -867,9 +1048,7 @@ public class MainFrame extends javax.swing.JFrame {
                 medExpAlert.setDisabledTextColor(Color.red);
                 
                 medsInExpRange.forEach(m -> {
-                    if(!mlModel.contains(m)) {
-                        mlModel.addElement(m.getNombre());
-                    }
+                    mlModel.addElement(m.getNombre());
                 });
             } else {
                 medExpAlert.setText("No hay vencimientos cercanos");
@@ -882,18 +1061,23 @@ public class MainFrame extends javax.swing.JFrame {
         if(medEqWithLowStock != null) {
             if(medEqWithLowStock.size() > 0) {
                 medEqWithLowStock.forEach(me -> {
-                    if(!mlModel.contains(me)) {
-                        mlModel.addElement(me.getNombre());
-                    }
+                    mlModel.addElement(me.getNombre());
                 });
             }
         }
         
-        slModel.elements().asIterator().forEachRemaining(e -> {
+        Vector<Vector> rows = stModel.getDataVector();
+        
+        for (int i = 0; i < rows.size(); i++) {
+            Object e = rows.get(i).get(0);
+            
             if(!mlModel.contains(e)) {
-                slModel.removeElement(e);
+               stModel.removeRow(i);
             }
-        });
+            else {
+                mlModel.removeElement(e);
+            }
+        }
     }
 
     /**
@@ -959,16 +1143,21 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JButton borrarButton;
     javax.swing.JCheckBox cbExpDate;
     javax.swing.JCheckBox cbLowStock;
+    javax.swing.JTextPane emailComment;
+    javax.swing.JTextField emailSubject;
     javax.swing.JLabel expAlertLbl;
     javax.swing.Box.Filler filler1;
     javax.swing.Box.Filler filler2;
     javax.swing.JTextField fromTF;
     javax.swing.JLabel fromTFLabel;
+    javax.swing.JLabel jLabel1;
+    javax.swing.JLabel jLabel2;
     javax.swing.JPanel jPanel1;
     javax.swing.JPanel jPanel2;
     javax.swing.JPanel jPanel3;
     javax.swing.JScrollPane jScrollPane1;
     javax.swing.JScrollPane jScrollPane2;
+    javax.swing.JScrollPane jScrollPane3;
     javax.swing.JTabbedPane jTabbedPane1;
     javax.swing.JPanel mainPanel;
     javax.swing.JTextField medExpAlert;
@@ -976,14 +1165,14 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JTable medTable;
     javax.swing.JList<String> missingsList;
     javax.swing.JLabel mlLabel;
-    javax.swing.JButton removeFromSLBtn;
+    javax.swing.JButton removeFromSTBtn;
     javax.swing.JButton resetTableBtn;
     javax.swing.JScrollPane scrollPane;
     javax.swing.JTextField searchBar;
     javax.swing.JLabel searchBarLabel;
     javax.swing.JButton sendSolBtn;
     javax.swing.JLabel slLabel;
-    javax.swing.JList<String> solicitudeList;
+    javax.swing.JTable solicitudeTable;
     javax.swing.JLabel stockAlertLbl;
     javax.swing.JTextField toTF;
     javax.swing.JLabel toTFLabel;

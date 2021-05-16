@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
-import java.util.logging.Logger;
 import javax.mail.AuthenticationFailedException;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
@@ -183,6 +182,7 @@ public class MainFrame extends javax.swing.JFrame {
         stockAlertLbl = new javax.swing.JLabel();
         medExpAlert = new javax.swing.JTextField();
         resetTableBtn = new javax.swing.JButton();
+        filterComboBox = new javax.swing.JComboBox<>();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         missingsList = new javax.swing.JList<>();
@@ -230,14 +230,14 @@ public class MainFrame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Id", "Nombre", "Stock", "Fecha de Vencimiento", "Dosis", "Laboratorio"
+                "Id", "Nombre", "Stock", "Fecha de Vencimiento", "Dosis", "Presentacion", "Laboratorio"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, true, true, true, true
+                false, true, true, true, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -269,7 +269,7 @@ public class MainFrame extends javax.swing.JFrame {
         header.setHorizontalAlignment(JLabel.CENTER);
 
         /** buscador para la barra de busqueda */
-        TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(medTable.getModel());
+        rowSorter = new TableRowSorter<>(medTable.getModel());
         medTable.setRowSorter(rowSorter);
         scrollPane.setViewportView(medTable);
         if (medTable.getColumnModel().getColumnCount() > 0) {
@@ -403,10 +403,19 @@ public class MainFrame extends javax.swing.JFrame {
         );
 
         resetTableBtn.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
-        resetTableBtn.setText("Reiniciar Tabla");
+        resetTableBtn.setText("Quitar Filtros");
         resetTableBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 resetTableBtnActionPerformed(evt);
+            }
+        });
+
+        filterComboBox.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
+        filterComboBox.setForeground(new java.awt.Color(0, 0, 0));
+        filterComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Por Nombre", "Por Dosis", "Por Laboratorio", "Por Presentación" }));
+        filterComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                filterComboBoxItemStateChanged(evt);
             }
         });
 
@@ -420,7 +429,9 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(mainPanelLayout.createSequentialGroup()
                         .addComponent(searchBarLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(filterComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 923, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(mainPanelLayout.createSequentialGroup()
                         .addComponent(cbLowStock)
@@ -441,7 +452,8 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(20, 20, 20)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(searchBarLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(searchBarLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(filterComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(50, 50, 50)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbLowStock)
@@ -617,17 +629,17 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(35, 35, 35)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 619, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(15, 15, 15)
                         .addComponent(mlLabel)
-                        .addGap(260, 260, 260)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 248, Short.MAX_VALUE)
                         .addComponent(slLabel)
-                        .addGap(90, 90, 90)
+                        .addGap(135, 135, 135)
                         .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 164, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 187, Short.MAX_VALUE)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -796,7 +808,8 @@ public class MainFrame extends javax.swing.JFrame {
                                         "dd/mm/yyyy"
                                 ),
                                 m.getDosis(),
-                                m.getPresentacion()
+                                m.getPresentacion(),
+                                m.getLaboratorio()
                             });
                 });
 
@@ -833,7 +846,8 @@ public class MainFrame extends javax.swing.JFrame {
                                         "dd/mm/yyyy"
                                 ),
                                 m.getDosis(),
-                                m.getPresentacion()
+                                m.getPresentacion(),
+                                m.getLaboratorio()
                             });
                 });
 
@@ -984,6 +998,9 @@ public class MainFrame extends javax.swing.JFrame {
                             });
                         }
                     }
+                    else {
+                        JOptionPane.showMessageDialog(this, "Debe ingrear una contraseña para enviar el email.");
+                    }
                 }
             }
             catch(Exception e) {
@@ -999,7 +1016,18 @@ public class MainFrame extends javax.swing.JFrame {
             );
         }
     }//GEN-LAST:event_sendSolBtnActionPerformed
+
+    private void filterComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_filterComboBoxItemStateChanged
+        filterTable();
+    }//GEN-LAST:event_filterComboBoxItemStateChanged
     
+    /**
+     * Transforma un @String de formato fecha fromFormat a toFormat.
+     *
+     * @param table A {@code JTable} la tabla en la que se buscara.
+     * @param value A {@code String} el valor a buscar.
+     * @return A {@code boolean} si se encontro o no el valor.
+     */
     private boolean contains(JTable table, String value) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         Vector<Vector> rows = model.getDataVector();
@@ -1013,6 +1041,25 @@ public class MainFrame extends javax.swing.JFrame {
         return false;
     }
     
+    private void filterTable() {
+        String text = searchBar.getText();
+        int indexSearch = 0;
+        
+        switch (filterComboBox.getSelectedItem().toString()) {
+            case "Por Nombre": indexSearch = 1; break;
+            case "Por Dosis": indexSearch = 4; break;
+            case "Por Presentación": indexSearch = 5; break;
+            case "Por Laboratorio": indexSearch = 6; break;
+            default: indexSearch = 0; break;
+        }
+
+        if (text.trim().length() == 0) {
+            rowSorter.setRowFilter(null);
+        } else {
+            rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text, indexSearch));
+        }
+    }
+
     /**
      * Checkeo de alertas por bajo stock y vencimientos.
      */
@@ -1073,6 +1120,7 @@ public class MainFrame extends javax.swing.JFrame {
             
             if(!mlModel.contains(e)) {
                stModel.removeRow(i);
+               i--;
             }
             else {
                 mlModel.removeElement(e);
@@ -1103,7 +1151,8 @@ public class MainFrame extends javax.swing.JFrame {
                                     "dd/mm/yyyy"
                             ),
                             m.getDosis(),
-                            m.getPresentacion()
+                            m.getPresentacion(),
+                            m.getLaboratorio()
                         });
             });
         }
@@ -1148,6 +1197,7 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JLabel expAlertLbl;
     javax.swing.Box.Filler filler1;
     javax.swing.Box.Filler filler2;
+    javax.swing.JComboBox<String> filterComboBox;
     javax.swing.JTextField fromTF;
     javax.swing.JLabel fromTFLabel;
     javax.swing.JLabel jLabel1;
@@ -1176,5 +1226,6 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JLabel stockAlertLbl;
     javax.swing.JTextField toTF;
     javax.swing.JLabel toTFLabel;
+    TableRowSorter<TableModel> rowSorter;
     // End of variables declaration//GEN-END:variables
 }

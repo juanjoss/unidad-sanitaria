@@ -12,7 +12,7 @@ public class PresentacionDAO {
      * @return A {@code List<Presentacion>}.
      */
     public List<Presentacion> selectAll() {
-        String query = "SELECT nombre FROM presentacion";
+        String query = "SELECT * FROM presentacion";
 
         try (Connection con = SQLiteDAO.getConn().open()) {
             List<Presentacion> presentaciones = con

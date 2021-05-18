@@ -11,6 +11,7 @@ public class Medicamento {
     private String fechaVencimiento;
     private String laboratorio;
     private String dosis;
+    private int id_presentacion;
     private String presentacion;
     
     public Medicamento() {

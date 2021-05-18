@@ -100,7 +100,7 @@ public class AddMedFrame extends javax.swing.JFrame {
         dosisLabel.setText("Dosis:");
 
         PresentacionDAO pDAO = new PresentacionDAO();
-        List<Presentacion> presentaciones = pDAO.selectAll();
+        presentaciones = pDAO.selectAll();
         String[] itemsList = new String[presentaciones.size()];
         int index = 0;
         for (Presentacion p : presentaciones) {
@@ -224,6 +224,10 @@ public class AddMedFrame extends javax.swing.JFrame {
 
         SimpleDateFormat fechaFormato = new SimpleDateFormat("yyyy-MM-dd");
         String fechaVencimiento = fechaFormato.format(selectFechaV.getDate());
+
+        String laboratorio = laboratorioTextField.getText();
+        String dosis = dosisTextField.getText();
+        Presentacion presentacion = presentaciones.get(presentacionComboBox.getSelectedIndex());
         
         try {
             Date fecha1 = fechaFormato.parse(fechaVencimiento);
@@ -244,6 +248,10 @@ public class AddMedFrame extends javax.swing.JFrame {
             med.setNombre(nombre);
             med.setStock(stock);
             med.setFechaVencimiento(fechaVencimiento);
+            med.setLaboratorio(laboratorio);
+            med.setDosis(dosis);
+            med.setPresentacion(presentacion.getNombre());
+            med.setId_presentacion(presentacion.getId());
             if (!medDAO.exist(med)) {
                 if (stock >= 0) {     
                     if (fechaCorrecta) {
@@ -335,4 +343,5 @@ public class AddMedFrame extends javax.swing.JFrame {
     private javax.swing.JLabel stockLabel;
     private javax.swing.JTextField stockTextField;
     // End of variables declaration//GEN-END:variables
+    private List<Presentacion> presentaciones;
 }

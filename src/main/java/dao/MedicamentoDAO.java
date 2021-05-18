@@ -14,8 +14,8 @@ public class MedicamentoDAO {
      * @return A {@code List<Medicameto>}.
      */
     public List<Medicamento> selectAll() {
-        String query = "SELECT medicamento.id, medicamento.nombre, stock, fechaVencimiento, laboratorio, dosis, "
-                + "presentacion.nombre as 'presentacion' FROM medicamento JOIN presentacion ON medicamento.id_presentacion = presentacion.id;";
+        String query = "SELECT medicamento.id, medicamento.nombre, stock, fechaVencimiento, laboratorio, dosis, presentacion.id as 'id_presentacion',"
+                + " presentacion.nombre as 'presentacion' FROM medicamento JOIN presentacion ON medicamento.id_presentacion = presentacion.id;";
 
         try (Connection con = SQLiteDAO.getConn().open()) {
             List<Medicamento> medicamentos = con
@@ -112,7 +112,7 @@ public class MedicamentoDAO {
      */
     public void insert(Medicamento med) {
         String query = "INSERT INTO medicamento (nombre, stock, fechaVencimiento, laboratorio, dosis, id_presentacion) "
-                + "VALUES (:nombre, :stock, :fechaVencimiento, 'Pfizer', '600 ml', 1)";
+                + "VALUES (:nombre, :stock, :fechaVencimiento, :laboratorio, :dosis, :id_presentacion)";
 
         try (Connection con = SQLiteDAO.getConn().open()) {
             con.createQuery(query).bind(med).executeUpdate();

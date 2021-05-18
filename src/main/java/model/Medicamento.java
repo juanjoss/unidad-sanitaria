@@ -9,4 +9,13 @@ public class Medicamento {
     private String nombre;
     private int stock;
     private String fechaVencimiento;
+    private String laboratorio;
+    private String dosis;
+    private String presentacion;
+    
+    public Medicamento() {
+        this.laboratorio = "Pfizer";
+        this.dosis = "600 ml";
+        this.presentacion = "";
+    }
 }

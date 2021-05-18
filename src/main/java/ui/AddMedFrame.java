@@ -5,8 +5,12 @@ import dao.MedicamentoDAO;
 import dao.PresentacionDAO;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import model.Medicamento;
 import model.Presentacion;
@@ -216,12 +220,24 @@ public class AddMedFrame extends javax.swing.JFrame {
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
         String nombre = nombreTextField.getText();
         int stock = Integer.parseInt(stockTextField.getText());
+        boolean fechaCorrecta = true;
 
         SimpleDateFormat fechaFormato = new SimpleDateFormat("yyyy-MM-dd");
         String fechaVencimiento = fechaFormato.format(selectFechaV.getDate());
+        
+        try {
+            Date fecha1 = fechaFormato.parse(fechaVencimiento);
+            Date fechaSistema = new Date();
+            if (fecha1.before(fechaSistema)) {
+                fechaCorrecta = false;
+            }
+        } catch (ParseException ex) {
+            
+        }
+        
 
         if (!nombre.equals("") && !fechaVencimiento.equals("")) {
-            // verificar si ya esta cargado
+            // verificar si ya esta cargado un medicamento con el mismo nombre
             MedicamentoDAO medDAO = new MedicamentoDAO();
             Medicamento med = new Medicamento();
 
@@ -229,15 +245,35 @@ public class AddMedFrame extends javax.swing.JFrame {
             med.setStock(stock);
             med.setFechaVencimiento(fechaVencimiento);
             if (!medDAO.exist(med)) {
-                medDAO.insert(med);
-
-                JOptionPane.showMessageDialog(
+                if (stock >= 0) {     
+                    if (fechaCorrecta) {
+                        medDAO.insert(med);
+                        JOptionPane.showMessageDialog(
                         this,
                         "¡El medicamento se ha guardado exitosamente!",
                         "Éxito",
                         JOptionPane.INFORMATION_MESSAGE
-                );
-                volverMain();
+                        );
+                    volverMain();
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(
+                        this,
+                        "El medicamento ingresado esta vencido","",
+                        JOptionPane.INFORMATION_MESSAGE
+                        ); 
+                    }
+                    
+                }
+                else{
+                   JOptionPane.showMessageDialog(
+                        this,
+                        "El stock cargado es invalidó",
+                        "Éxito",
+                        JOptionPane.INFORMATION_MESSAGE
+                    ); 
+                }
+
                 
                 //nombreTextField.setText("");
                 //stockTextField.setText("0");

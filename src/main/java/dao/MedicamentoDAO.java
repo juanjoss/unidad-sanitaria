@@ -162,4 +162,22 @@ public class MedicamentoDAO {
             System.out.println(e);
         }
     }
+    public boolean exist( Medicamento med){
+        boolean var = false;
+        String query1 = "SELECT id FROM presentacion WHERE nombre = :presName";
+        try (Connection con = SQLiteDAO.getConn().open()) {
+            Integer medPresId = con
+                    .createQuery(query1)
+                    .addParameter("presName", med.getPresentacion())
+                    .executeAndFetchFirst(Integer.class);
+            
+            if(medPresId != null) {
+               var = true;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return var;
+    }
 }

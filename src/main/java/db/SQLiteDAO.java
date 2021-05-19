@@ -29,11 +29,22 @@ public class SQLiteDAO {
             +    "'id_presentacion'	INTEGER NOT NULL,"
             +    "PRIMARY KEY('id' AUTOINCREMENT),"
             +    "FOREIGN KEY('id_presentacion') REFERENCES 'presentacion'('id'));";
+            String queryDataPresentacion = "INSERT INTO presentacion(nombre) "
+            +    "SELECT 'Sin Especificar' UNION ALL "
+            +    "SELECT 'Capsulas' UNION ALL "
+            +    "SELECT 'Grajeas' UNION ALL "
+            +    "SELECT 'Jarabe' UNION ALL "
+            +    "SELECT 'Polvo' UNION ALL "
+            +    "SELECT 'Pomada' UNION ALL "
+            +    "SELECT 'Crema' UNION ALL "
+            +    "SELECT 'Inyectable' "
+            +    "WHERE NOT EXISTS (SELECT * FROM presentacion);";
             
             try {
                 sql2o.open().createQuery(queryEquipoTable).executeUpdate();
                 sql2o.open().createQuery(queryPresentacionTable).executeUpdate();
                 sql2o.open().createQuery(queryMedicamentoTable).executeUpdate();
+                sql2o.open().createQuery(queryDataPresentacion).executeUpdate();
             } catch (Exception e) {
                 System.out.println(e);
             }

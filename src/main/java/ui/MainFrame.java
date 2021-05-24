@@ -414,8 +414,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         filterComboBox.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
-        filterComboBox.setForeground(new java.awt.Color(0, 0, 0));
-        filterComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Por Nombre", "Por Dosis", "Por Laboratorio", "Por Presentación" }));
+        filterComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar...", "Por Nombre", "Por Dosis", "Por Laboratorio", "Por Presentación" }));
         filterComboBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 filterComboBoxItemStateChanged(evt);
@@ -444,7 +443,7 @@ public class MainFrame extends javax.swing.JFrame {
                         .addComponent(resetTableBtn)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1158,6 +1157,10 @@ public class MainFrame extends javax.swing.JFrame {
                         });
             });
         }
+        
+        rowSorter.setRowFilter(null);
+        filterComboBox.setSelectedIndex(0);
+        searchBar.setText("");
         
         medTable.getRowSorter().setSortKeys(null);
         cbLowStock.setSelected(false);

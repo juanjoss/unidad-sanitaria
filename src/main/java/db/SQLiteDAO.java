@@ -15,10 +15,12 @@ public class SQLiteDAO {
             +    "'id'	INTEGER NOT NULL,"
             +    "'stock'	INTEGER NOT NULL,"
             +    "PRIMARY KEY('id','nombre'));";
+            
             String queryPresentacionTable = "CREATE TABLE IF NOT EXISTS 'presentacion' ("
             +    "'id'	INTEGER NOT NULL,"
             +    "'nombre'	TEXT NOT NULL UNIQUE,"
             +    "PRIMARY KEY('id'));";
+            
             String queryMedicamentoTable = "CREATE TABLE IF NOT EXISTS 'medicamento' ("
             +    "'id'	INTEGER NOT NULL,"
             +    "'nombre'	TEXT NOT NULL,"
@@ -29,6 +31,7 @@ public class SQLiteDAO {
             +    "'id_presentacion'	INTEGER NOT NULL,"
             +    "PRIMARY KEY('id' AUTOINCREMENT),"
             +    "FOREIGN KEY('id_presentacion') REFERENCES 'presentacion'('id'));";
+            
             String queryDataPresentacion = "INSERT INTO presentacion(nombre) VALUES ('Sin Especificar');";
             
             try {

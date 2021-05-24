@@ -30,6 +30,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import model.EquipoMedico;
 import model.Medicamento;
+import org.apache.commons.text.StringEscapeUtils;
 import util.DateUtil;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.simplejavamail.api.email.Email;
@@ -40,7 +41,9 @@ import org.simplejavamail.email.EmailBuilder;
 import org.simplejavamail.mailer.MailerBuilder;
 
 public class MainFrame extends javax.swing.JFrame {
-
+    
+    TableRowSorter<TableModel> rowSorter;
+    
     public MainFrame() {
         initComponents();
 
@@ -612,6 +615,8 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Asunto:");
 
+        jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+
         emailComment.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
         emailComment.setForeground(new java.awt.Color(0, 0, 0));
         jScrollPane2.setViewportView(emailComment);
@@ -625,52 +630,38 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(mlLabel)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(addToSLBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 619, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addComponent(mlLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 248, Short.MAX_VALUE)
-                        .addComponent(slLabel)
-                        .addGap(135, 135, 135)
-                        .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 187, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 619, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(removeFromSTBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane2)
-                            .addComponent(fromTF, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(111, 111, 111)
-                                .addComponent(fromTFLabel))
-                            .addComponent(toTF, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(125, 125, 125)
-                                .addComponent(toTFLabel))
-                            .addComponent(emailSubject))
-                        .addGap(25, 25, 25))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(sendSolBtn)
-                        .addGap(110, 110, 110))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(152, 152, 152))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(139, 139, 139))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(191, 191, 191)
-                .addComponent(addToSLBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(removeFromSTBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(402, 402, 402))
+                        .addGap(47, 47, 47)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(toTFLabel)
+                            .addComponent(toTF)
+                            .addComponent(fromTFLabel)
+                            .addComponent(fromTF)
+                            .addComponent(jLabel1)
+                            .addComponent(emailSubject)
+                            .addComponent(jLabel2)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(sendSolBtn))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.CENTER, jPanel1Layout.createSequentialGroup()
+                .addGap(678, 678, 678)
+                .addComponent(slLabel)
+                .addGap(536, 536, 536))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -687,42 +678,38 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(slLabel, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(mlLabel, javax.swing.GroupLayout.Alignment.TRAILING))))
+                            .addComponent(mlLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(slLabel, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(40, 40, 40)
-                                .addComponent(toTFLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(toTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(fromTFLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(fromTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(11, 11, 11)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(emailSubject, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(11, 11, 11)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(sendSolBtn))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE))))
+                        .addGap(40, 40, 40)
+                        .addComponent(toTFLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(toTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(fromTFLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(fromTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(11, 11, 11)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(emailSubject, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(11, 11, 11)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(addToSLBtn)
-                        .addGap(253, 253, 253))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(removeFromSTBtn)
-                        .addGap(250, 250, 250))))
+                        .addComponent(sendSolBtn))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE))))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addToSLBtn)
+                    .addComponent(removeFromSTBtn))
+                .addGap(253, 253, 253))
         );
 
         jTabbedPane1.addTab("Solicitud de Medicamentos", jPanel1);
@@ -907,7 +894,7 @@ public class MainFrame extends javax.swing.JFrame {
                 try (BufferedWriter bw = new BufferedWriter(new FileWriter(".\\table.html", false))) {
                     bw.write("<html>");
                     bw.write("<body style='max-width: 500px; margin: auto;'>");
-                    bw.write("<h6>" + emailCmt + "</h6>");
+                    bw.write("<p>" + StringEscapeUtils.escapeHtml4(emailCmt) + "</p>");
                     
                     bw.write("<table>");
                     
@@ -942,7 +929,7 @@ public class MainFrame extends javax.swing.JFrame {
                 File html = new File(".\\table.html");
                 
                 Email email = EmailBuilder.startingBlank()
-                    .from("Salita Colonia Seré", fromEmail)
+                    .from("Unidad Sanitaria Colonia Seré", fromEmail)
                     .to("To", toEmail)
                     .withSubject(emailSub)
                     .withHTMLText(html)
@@ -958,44 +945,52 @@ public class MainFrame extends javax.swing.JFrame {
                         JOptionPane.PLAIN_MESSAGE, 
                         null, 
                         options,
-                        options[1]
+                        options[0]
                 );
 
                 if(op == 0) {
                     String password = new String(passField.getPassword());
-
+                    
                     if(!password.equals("")) {
-                        Mailer mailer = MailerBuilder
+                        if(!model.getDataVector().isEmpty()) {
+                            Mailer mailer = MailerBuilder
                             .withSMTPServer("smtp.office365.com", 587, fromEmail, password)
                             .withTransportStrategy(TransportStrategy.SMTP_TLS)
                             .withDebugLogging(true)
                             .async()
                             .buildMailer();
+                            
+                            AsyncResponse res = mailer.sendMail(email, true);
 
-                        AsyncResponse res = mailer.sendMail(email, true);
+                            if(res != null) {
+                                res.onSuccess(() -> {
+                                    solicitudeTable.removeAll();
 
-                        if(res != null) {
-                            res.onSuccess(() -> {
-                                solicitudeTable.removeAll();
-
-                                JOptionPane.showMessageDialog(
-                                            this,
-                                            "El email con la solicitud se ha enviado exitosamente.",
-                                            "Information",
-                                            JOptionPane.INFORMATION_MESSAGE
-                                    );
-                            });
-
-                            res.onException(e -> {
-                                if(e.getCause().getClass().equals(AuthenticationFailedException.class)) {
                                     JOptionPane.showMessageDialog(
-                                            this,
-                                            "La contraseña para el email " + fromEmail + " es incorrecta. Por favor intente de nuevo.",
-                                            "Error",
-                                            JOptionPane.ERROR_MESSAGE
-                                    );
-                                }
-                            });
+                                                this,
+                                                "El email con la solicitud se ha enviado exitosamente.",
+                                                "Information",
+                                                JOptionPane.INFORMATION_MESSAGE
+                                        );
+                                });
+
+                                res.onException(e -> {
+                                    if(e.getCause().getClass().equals(AuthenticationFailedException.class)) {
+                                        JOptionPane.showMessageDialog(
+                                                this,
+                                                "La contraseña para el email " + fromEmail + " es incorrecta. Por favor intente de nuevo.",
+                                                "Error",
+                                                JOptionPane.ERROR_MESSAGE
+                                        );
+                                    }
+                                });
+                            }
+                            else {
+                                JOptionPane.showMessageDialog(this, "Ha ocurrido un error en el envío del email.");
+                            }
+                        }
+                        else {
+                            JOptionPane.showMessageDialog(this, "La tabla para la solicitud esta vacia. Por favor cargue elementos a la tabla.");
                         }
                     }
                     else {
@@ -1068,7 +1063,14 @@ public class MainFrame extends javax.swing.JFrame {
         EquipoMedicoDAO medEqDAO = new EquipoMedicoDAO();
 
         List<Medicamento> medsWithLowStock = medDAO.medsWithLowStock();
-        List<Medicamento> medsInExpRange = medDAO.medsInExpRange();
+        List<Medicamento> medsInExpRange = (List<Medicamento>) medDAO.medsInExpRange();
+        
+        /**
+         * Para evitar las dobles entradas en la lista
+         **/
+        medsInExpRange.removeIf((e) -> {
+            return medsWithLowStock.contains(e);
+        });
         
         DefaultListModel mlModel = (DefaultListModel) missingsList.getModel();
         DefaultTableModel stModel = (DefaultTableModel) solicitudeTable.getModel();
@@ -1226,6 +1228,5 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JLabel stockAlertLbl;
     javax.swing.JTextField toTF;
     javax.swing.JLabel toTFLabel;
-    TableRowSorter<TableModel> rowSorter;
     // End of variables declaration//GEN-END:variables
 }

@@ -162,6 +162,7 @@ public class MedicamentoDAO {
             System.out.println(e);
         }
     }
+    
     public boolean exist( Medicamento med){
         boolean var = false;
         String query1 = "SELECT id FROM medicamento WHERE nombre = :nombre";

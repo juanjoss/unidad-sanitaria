@@ -13,10 +13,4 @@ public class Medicamento {
     private String dosis;
     private int id_presentacion;
     private String presentacion;
-    
-    public Medicamento() {
-        this.laboratorio = "Pfizer";
-        this.dosis = "600 ml";
-        this.presentacion = "";
-    }
 }

@@ -207,7 +207,7 @@
                     </Property>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="/** centrado de las columnas */&#xa;DefaultTableCellRenderer centerRndr = new DefaultTableCellRenderer();&#xa;centerRndr.setHorizontalAlignment(JLabel.CENTER);&#xa;&#xa;Enumeration&lt;TableColumn&gt; colModel = medTable.getColumnModel().getColumns();&#xa;while(colModel.hasMoreElements()) {&#xa;    colModel.nextElement().setCellRenderer(centerRndr);&#xa;}&#xa;&#xa;/** tama&#xf1;o de la fila del header */&#xa;medTable.getTableHeader().setPreferredSize(new Dimension(50, 50));&#xa;&#xa;/** centrado del header */&#xa;JLabel header = (JLabel) medTable.getTableHeader().getDefaultRenderer();&#xa;header.setHorizontalAlignment(JLabel.CENTER);&#xa;&#xa;/** buscador para la barra de busqueda */&#xa;TableRowSorter&lt;TableModel&gt; rowSorter = new TableRowSorter&lt;&gt;(medTable.getModel());&#xa;medTable.setRowSorter(rowSorter);"/>
+                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="/** centrado de las columnas */&#xa;DefaultTableCellRenderer centerRndr = new DefaultTableCellRenderer();&#xa;centerRndr.setHorizontalAlignment(JLabel.CENTER);&#xa;&#xa;Enumeration&lt;TableColumn&gt; colModel = medTable.getColumnModel().getColumns();&#xa;while(colModel.hasMoreElements()) {&#xa;    colModel.nextElement().setCellRenderer(centerRndr);&#xa;}&#xa;&#xa;/** tama&#xf1;o de la fila del header */&#xa;medTable.getTableHeader().setPreferredSize(new Dimension(50, 50));&#xa;&#xa;/** centrado del header */&#xa;JLabel header = (JLabel) medTable.getTableHeader().getDefaultRenderer();&#xa;header.setHorizontalAlignment(JLabel.CENTER);&#xa;&#xa;/** buscador para la barra de busqueda */&#xa;rowSorter = new TableRowSorter&lt;&gt;(medTable.getModel());&#xa;medTable.setRowSorter(rowSorter);"/>
                   </AuxValues>
                 </Component>
               </SubComponents>
@@ -485,65 +485,46 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
-                              <Component id="jScrollPane1" min="-2" pref="292" max="-2" attributes="0"/>
-                              <EmptySpace pref="18" max="32767" attributes="0"/>
-                              <Component id="jScrollPane3" min="-2" pref="619" max="-2" attributes="0"/>
-                              <EmptySpace pref="61" max="32767" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
-                              <Component id="mlLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="248" max="32767" attributes="0"/>
-                              <Component id="slLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="135" max="-2" attributes="0"/>
-                              <Component id="filler1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="187" max="32767" attributes="0"/>
-                          </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="2" attributes="0">
+                          <Component id="mlLabel" alignment="2" min="-2" max="-2" attributes="0"/>
+                          <Component id="jScrollPane1" alignment="2" min="-2" pref="292" max="-2" attributes="0"/>
+                          <Component id="addToSLBtn" alignment="2" min="-2" pref="121" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
+                          <Component id="jScrollPane3" alignment="1" min="-2" pref="619" max="-2" attributes="0"/>
+                          <Component id="removeFromSTBtn" alignment="1" min="-2" pref="104" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
                               <Component id="filler2" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jScrollPane2" max="32767" attributes="0"/>
-                                  <Component id="fromTF" alignment="0" pref="320" max="32767" attributes="0"/>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="-2" pref="111" max="-2" attributes="0"/>
-                                      <Component id="fromTFLabel" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="toTF" pref="320" max="32767" attributes="0"/>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="-2" pref="125" max="-2" attributes="0"/>
-                                      <Component id="toTFLabel" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="emailSubject" alignment="0" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="2" attributes="0">
+                                  <Component id="toTFLabel" alignment="2" min="-2" max="-2" attributes="0"/>
+                                  <Component id="toTF" alignment="2" max="32767" attributes="0"/>
+                                  <Component id="fromTFLabel" alignment="2" min="-2" max="-2" attributes="0"/>
+                                  <Component id="fromTF" alignment="2" max="32767" attributes="0"/>
+                                  <Component id="jLabel1" alignment="2" min="-2" max="-2" attributes="0"/>
+                                  <Component id="emailSubject" alignment="2" max="32767" attributes="0"/>
+                                  <Component id="jLabel2" alignment="2" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jScrollPane2" alignment="2" min="-2" pref="261" max="-2" attributes="0"/>
+                                  <Component id="sendSolBtn" alignment="2" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="sendSolBtn" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="110" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="152" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="139" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="filler1" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="-2" pref="191" max="-2" attributes="0"/>
-                      <Component id="addToSLBtn" min="-2" pref="121" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="removeFromSTBtn" min="-2" pref="104" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="402" max="-2" attributes="0"/>
+                  <Group type="102" alignment="2" attributes="0">
+                      <EmptySpace min="678" pref="678" max="-2" attributes="0"/>
+                      <Component id="slLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="536" pref="536" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -564,52 +545,46 @@
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="slLabel" alignment="1" min="-2" max="-2" attributes="0"/>
                                   <Component id="mlLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="slLabel" alignment="1" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                                      <Component id="toTFLabel" max="32767" attributes="0"/>
-                                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                                      <Component id="toTF" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                                      <Component id="fromTFLabel" max="32767" attributes="0"/>
-                                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                                      <Component id="fromTF" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-                                      <Component id="jLabel1" max="32767" attributes="0"/>
-                                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                                      <Component id="emailSubject" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-                                      <Component id="jLabel2" max="32767" attributes="0"/>
-                                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jScrollPane2" min="-2" pref="75" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                                      <Component id="sendSolBtn" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" attributes="0">
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="jScrollPane3" pref="0" max="32767" attributes="0"/>
-                                          <Component id="jScrollPane1" pref="350" max="32767" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                              </Group>
+                              <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+                              <Component id="toTFLabel" max="32767" attributes="0"/>
+                              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                              <Component id="toTF" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
+                              <Component id="fromTFLabel" max="32767" attributes="0"/>
+                              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                              <Component id="fromTF" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                              <Component id="jLabel1" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
+                              <Component id="emailSubject" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                              <Component id="jLabel2" max="32767" attributes="0"/>
+                              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                              <Component id="jScrollPane2" pref="74" max="32767" attributes="0"/>
                               <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                              <Component id="addToSLBtn" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="253" max="-2" attributes="0"/>
+                              <Component id="sendSolBtn" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="removeFromSTBtn" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="250" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="jScrollPane3" pref="0" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane1" pref="350" max="32767" attributes="0"/>
+                              </Group>
                           </Group>
                       </Group>
+                      <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="addToSLBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="removeFromSTBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="253" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -851,6 +826,12 @@
               </Properties>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+              <Properties>
+                <Property name="horizontalScrollBarPolicy" postCode="jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);"/>
+                <Property name="viewportView" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="default"/>
+                </Property>
+              </Properties>
               <AuxValues>
                 <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
               </AuxValues>

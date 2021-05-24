@@ -32,7 +32,7 @@ public class PresentacionDAO {
      * @param p {@code Presentacion} la presentacion a insertar.
      */
     public void insert(Presentacion p) {
-        String query = "INSERT INTO presentaicon (nombre) VALUES (:nombre)";
+        String query = "INSERT INTO presentacion (nombre) VALUES (:nombre)";
 
         try (Connection con = SQLiteDAO.getConn().open()) {
             con.createQuery(query).bind(p).executeUpdate();

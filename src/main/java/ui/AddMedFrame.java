@@ -317,7 +317,7 @@ public class AddMedFrame extends javax.swing.JFrame {
     }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String nombre = JOptionPane.showInputDialog("Agregar nueva presentación");
+        String nombre = JOptionPane.showInputDialog(this, "Agregar nueva presentación");
         // NO MUESTRA EL INPUT
         Presentacion newPresentacion = new Presentacion();
         newPresentacion.setNombre(nombre);

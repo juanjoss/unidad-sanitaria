@@ -99,17 +99,8 @@ public class AddMedFrame extends javax.swing.JFrame {
         dosisLabel.setForeground(new java.awt.Color(0, 0, 0));
         dosisLabel.setText("Dosis:");
 
-        PresentacionDAO pDAO = new PresentacionDAO();
-        presentaciones = pDAO.selectAll();
-        String[] itemsList = new String[presentaciones.size()];
-        int index = 0;
-        for (Presentacion p : presentaciones) {
-            itemsList[index] = (String) p.getNombre();
-            index++;
-        }
-
         presentacionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        presentacionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(itemsList));
+        loadPresentaciones(); // cargar presentaciones desde BD
 
         presentacionLabel.setBackground(new java.awt.Color(0, 0, 0));
         presentacionLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
@@ -312,6 +303,10 @@ public class AddMedFrame extends javax.swing.JFrame {
         volverMain();
     }//GEN-LAST:event_cancelarButtonActionPerformed
 
+    /**
+     * vuelve a la pagina principal
+     * @return {@code void}.
+     */
     private void volverMain(){
         MainFrame p = new MainFrame();
         p.setVisible(true);
@@ -322,8 +317,32 @@ public class AddMedFrame extends javax.swing.JFrame {
     }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        String nombre = JOptionPane.showInputDialog("Agregar nueva presentación");
+        // NO MUESTRA EL INPUT
+        Presentacion newPresentacion = new Presentacion();
+        newPresentacion.setNombre(nombre);
+        PresentacionDAO pDAO = new PresentacionDAO();
+        pDAO.insert(newPresentacion);
+        loadPresentaciones();
+        presentacionComboBox.setSelectedItem(nombre);
+
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    /**
+     * Carga presentaciones desde BD.
+     * @return {@code void}.
+     */
+    private void loadPresentaciones() {
+        PresentacionDAO pDAO = new PresentacionDAO();
+        presentaciones = pDAO.selectAll();
+        String[] itemsList = new String[presentaciones.size()];
+        int index = 0;
+        for (Presentacion p : presentaciones) {
+            itemsList[index] = (String) p.getNombre();
+            index++;
+        }
+        presentacionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(itemsList));
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addBtn;

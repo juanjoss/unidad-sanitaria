@@ -9,7 +9,7 @@ public class PresentacionDAO {
     /**
      * Retorna todos los tipos de presentacion.
      *
-     * @return A {@code List<Presentacion>}.
+     * @return {@code List<Presentacion>}.
      */
     public List<Presentacion> selectAll() {
         String query = "SELECT * FROM presentacion";
@@ -24,5 +24,20 @@ public class PresentacionDAO {
         }
 
         return null;
+    }
+
+    /**
+     * Inserta una presentacion en la BD.
+     *
+     * @param p {@code Presentacion} la presentacion a insertar.
+     */
+    public void insert(Presentacion p) {
+        String query = "INSERT INTO presentaicon (nombre) VALUES (:nombre)";
+
+        try (Connection con = SQLiteDAO.getConn().open()) {
+            con.createQuery(query).bind(p).executeUpdate();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 }

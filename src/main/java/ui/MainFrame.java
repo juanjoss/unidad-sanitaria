@@ -210,7 +210,6 @@ public class MainFrame extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(1200, 600));
 
         jTabbedPane1.setBackground(new java.awt.Color(255, 255, 221));
-        jTabbedPane1.setForeground(new java.awt.Color(0, 0, 0));
         jTabbedPane1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jTabbedPane1.setFont(new java.awt.Font("Cascadia Code", 0, 18)); // NOI18N
         jTabbedPane1.setMaximumSize(new java.awt.Dimension(1366, 768));
@@ -277,13 +276,11 @@ public class MainFrame extends javax.swing.JFrame {
         }
 
         searchBarLabel.setFont(new java.awt.Font("Cascadia Code", 0, 16)); // NOI18N
-        searchBarLabel.setForeground(new java.awt.Color(0, 0, 0));
         searchBarLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         searchBarLabel.setText("Ingrese un medicamento para buscar:");
 
         cbLowStock.setBackground(new java.awt.Color(255, 255, 204));
         cbLowStock.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
-        cbLowStock.setForeground(new java.awt.Color(0, 0, 0));
         cbLowStock.setText("Solo medicamentos con poco stock");
         cbLowStock.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -293,7 +290,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         cbExpDate.setBackground(new java.awt.Color(255, 255, 204));
         cbExpDate.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
-        cbExpDate.setForeground(new java.awt.Color(0, 0, 0));
         cbExpDate.setText("Solo medicamentos en rango de vencimiento");
         cbExpDate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -327,11 +323,9 @@ public class MainFrame extends javax.swing.JFrame {
         medStockAlert.setEnabled(false);
 
         expAlertLbl.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
-        expAlertLbl.setForeground(new java.awt.Color(0, 0, 0));
         expAlertLbl.setText("Estado de Vencimientos:");
 
         stockAlertLbl.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
-        stockAlertLbl.setForeground(new java.awt.Color(0, 0, 0));
         stockAlertLbl.setText("Estado del Stock:");
 
         medExpAlert.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
@@ -411,8 +405,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         filterComboBox.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
-        filterComboBox.setForeground(new java.awt.Color(0, 0, 0));
-        filterComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Por Nombre", "Por Dosis", "Por Laboratorio", "Por Presentación" }));
+        filterComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar...", "Por Nombre", "Por Dosis", "Por Laboratorio", "Por Presentación" }));
         filterComboBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 filterComboBoxItemStateChanged(evt);
@@ -441,7 +434,7 @@ public class MainFrame extends javax.swing.JFrame {
                         .addComponent(resetTableBtn)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -500,21 +493,17 @@ public class MainFrame extends javax.swing.JFrame {
         DefaultListModel mlModel = new DefaultListModel();
         missingsList.setModel(mlModel);
         missingsList.setFont(new java.awt.Font("Cascadia Code", 0, 18)); // NOI18N
-        missingsList.setForeground(new java.awt.Color(0, 0, 0));
         DefaultListCellRenderer mlCellRenderer = (DefaultListCellRenderer) missingsList.getCellRenderer();
         mlCellRenderer.setHorizontalAlignment(JLabel.CENTER);
         jScrollPane1.setViewportView(missingsList);
 
         mlLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        mlLabel.setForeground(new java.awt.Color(0, 0, 0));
         mlLabel.setText("Medicamentos y Equipo Médico Faltante:");
 
         slLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        slLabel.setForeground(new java.awt.Color(0, 0, 0));
         slLabel.setText("Lista de Pedidos:");
 
         addToSLBtn.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        addToSLBtn.setForeground(new java.awt.Color(0, 0, 0));
         addToSLBtn.setText("Agregar");
         addToSLBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -523,7 +512,6 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         removeFromSTBtn.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        removeFromSTBtn.setForeground(new java.awt.Color(0, 0, 0));
         removeFromSTBtn.setText("Quitar");
         removeFromSTBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -532,25 +520,20 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         toTF.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        toTF.setForeground(new java.awt.Color(0, 0, 0));
         toTF.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         toTF.setText("fuatojfj@gmail.com");
 
         toTFLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        toTFLabel.setForeground(new java.awt.Color(0, 0, 0));
         toTFLabel.setText("Enviar a:");
 
         fromTFLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        fromTFLabel.setForeground(new java.awt.Color(0, 0, 0));
         fromTFLabel.setText("Enviar desde:");
 
         fromTF.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        fromTF.setForeground(new java.awt.Color(0, 0, 0));
         fromTF.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         fromTF.setText("fuato1@hotmail.com");
 
         sendSolBtn.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        sendSolBtn.setForeground(new java.awt.Color(0, 0, 0));
         sendSolBtn.setText("Enviar Solicitud");
         sendSolBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -559,7 +542,6 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         solicitudeTable.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        solicitudeTable.setForeground(new java.awt.Color(0, 0, 0));
         solicitudeTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -606,18 +588,14 @@ public class MainFrame extends javax.swing.JFrame {
         }
 
         emailSubject.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        emailSubject.setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel1.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Asunto:");
 
         emailComment.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        emailComment.setForeground(new java.awt.Color(0, 0, 0));
         jScrollPane2.setViewportView(emailComment);
 
         jLabel2.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Comentario:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -1156,6 +1134,10 @@ public class MainFrame extends javax.swing.JFrame {
                         });
             });
         }
+        
+        rowSorter.setRowFilter(null);
+        filterComboBox.setSelectedIndex(0);
+        searchBar.setText("");
         
         medTable.getRowSorter().setSortKeys(null);
         cbLowStock.setSelected(false);

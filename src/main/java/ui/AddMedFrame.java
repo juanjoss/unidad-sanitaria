@@ -199,7 +199,18 @@ public class AddMedFrame extends javax.swing.JFrame {
      */
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
         String nombre = nombreTextField.getText();
-        int stock = Integer.parseInt(stockTextField.getText());
+        int stock =0 ;
+        try {
+            stock = Integer.parseInt(stockTextField.getText());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "el stock ingresado es invalido",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+       
 
         SimpleDateFormat fechaFormato = new SimpleDateFormat("yyyy-MM-dd");
         String fechaVencimiento = fechaFormato.format(selectFechaV.getDate());

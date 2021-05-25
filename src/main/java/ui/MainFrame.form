@@ -193,6 +193,21 @@
                           <Editor/>
                           <Renderer/>
                         </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
                       </TableColumnModel>
                     </Property>
                     <Property name="gridColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -493,9 +508,9 @@
                           <Component id="addToSLBtn" alignment="2" min="-2" pref="121" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane3" alignment="1" min="-2" pref="619" max="-2" attributes="0"/>
-                          <Component id="removeFromSTBtn" alignment="1" min="-2" pref="104" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="2" attributes="0">
+                          <Component id="slLabel" alignment="2" min="-2" max="-2" attributes="0"/>
+                          <Component id="jScrollPane3" alignment="2" min="-2" pref="619" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -521,10 +536,10 @@
                           </Group>
                       </Group>
                   </Group>
-                  <Group type="102" alignment="2" attributes="0">
-                      <EmptySpace min="678" pref="678" max="-2" attributes="0"/>
-                      <Component id="slLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="536" pref="536" max="-2" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace pref="901" max="32767" attributes="0"/>
+                      <Component id="removeFromSTBtn" min="-2" pref="104" max="-2" attributes="0"/>
+                      <EmptySpace min="359" pref="359" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -695,7 +710,6 @@
                   <Color blue="0" green="0" red="0" type="rgb"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
-                <Property name="text" type="java.lang.String" value="fuatojfj@gmail.com"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="toTFLabel">
@@ -729,7 +743,6 @@
                   <Color blue="0" green="0" red="0" type="rgb"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
-                <Property name="text" type="java.lang.String" value="fuato1@hotmail.com"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="sendSolBtn">
@@ -828,9 +841,6 @@
             <Container class="javax.swing.JScrollPane" name="jScrollPane2">
               <Properties>
                 <Property name="horizontalScrollBarPolicy" postCode="jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);"/>
-                <Property name="viewportView" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                  <ComponentRef name="default"/>
-                </Property>
               </Properties>
               <AuxValues>
                 <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>

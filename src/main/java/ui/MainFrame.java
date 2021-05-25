@@ -41,15 +41,15 @@ import org.simplejavamail.email.EmailBuilder;
 import org.simplejavamail.mailer.MailerBuilder;
 
 public class MainFrame extends javax.swing.JFrame {
-    
+
     TableRowSorter<TableModel> rowSorter;
-    
+
     public MainFrame() {
         initComponents();
 
         DefaultTableModel model = (DefaultTableModel) medTable.getModel();
         DefaultTableModel stModel = (DefaultTableModel) solicitudeTable.getModel();
-        
+
         MedicamentoDAO medDAO = new MedicamentoDAO();
 
         /**
@@ -71,6 +71,7 @@ public class MainFrame extends javax.swing.JFrame {
                 String medExpDate = (String) model.getValueAt(evt.getFirstRow(), 3);
                 String medDosis = (String) model.getValueAt(evt.getFirstRow(), 4);
                 String medPres = (String) model.getValueAt(evt.getFirstRow(), 5);
+                String medLab = (String) model.getValueAt(evt.getFirstRow(), 6);
 
                 /**
                  * Controles de los nuevos datos
@@ -84,16 +85,22 @@ public class MainFrame extends javax.swing.JFrame {
                             "Error",
                             JOptionPane.ERROR_MESSAGE
                     );
+
                     model.setValueAt(prevMed.getNombre(), evt.getFirstRow(), 1);
-                } else if (medStock < 0) {
+                }
+
+                if (medStock < 0) {
                     JOptionPane.showMessageDialog(
                             this,
                             "¡El campo Stock no puede ser menor que cero!",
                             "Error",
                             JOptionPane.ERROR_MESSAGE
                     );
+
                     model.setValueAt(prevMed.getStock(), evt.getFirstRow(), 2);
-                } else if (!DateUtil.isValidDate(medExpDate, "d/M/uuuu")) {
+                }
+
+                if (!DateUtil.isValidDate(medExpDate, "d/M/uuuu")) {
                     /**
                      * El formato "d/M/uuuu" tiene que ser asi por la
                      * implementacion del validador
@@ -104,52 +111,48 @@ public class MainFrame extends javax.swing.JFrame {
                             "Error",
                             JOptionPane.ERROR_MESSAGE
                     );
+
                     model.setValueAt(prevMed.getFechaVencimiento(), evt.getFirstRow(), 3);
-                } else if (medDosis.equals("")) {
-                    JOptionPane.showMessageDialog(
-                            this,
-                            "¡El campo Dosis está vacío!",
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE
-                    );
-                    model.setValueAt(prevMed.getDosis(), evt.getFirstRow(), 4);
-                } 
-                else if (medPres.equals("")) {
+                }
+
+                if (medPres.equals("")) {
                     JOptionPane.showMessageDialog(
                             this,
                             "¡El campo Presentación está vacío!",
                             "Error",
                             JOptionPane.ERROR_MESSAGE
                     );
+
                     model.setValueAt(prevMed.getPresentacion(), evt.getFirstRow(), 5);
                 }
-                else {
-                    newMed.setId(idMed);
-                    newMed.setNombre(medName);
-                    newMed.setStock(medStock);
-                    newMed.setFechaVencimiento(
-                            DateUtil.formatDate(
-                                    medExpDate,
-                                    "dd/mm/yyyy",
-                                    "yyyy-mm-dd"
-                            )
-                    );
-                    newMed.setDosis(medDosis);
-                    newMed.setPresentacion(medPres);
 
-                    medDAO.update(newMed);
-                    checkAlerts();
-                }
+                newMed.setId(idMed);
+                newMed.setNombre(medName);
+                newMed.setStock(medStock);
+                newMed.setFechaVencimiento(
+                        DateUtil.formatDate(
+                                medExpDate,
+                                "dd/mm/yyyy",
+                                "yyyy-mm-dd"
+                        )
+                );
+                newMed.setDosis(medDosis);
+                newMed.setPresentacion(medPres);
+                newMed.setId_presentacion(prevMed.getId_presentacion());
+                newMed.setLaboratorio(medLab);
+
+                medDAO.update(newMed);
+                checkAlerts();
             }
         });
-        
+
         stModel.addTableModelListener((TableModelEvent evt) -> {
             if (evt.getType() == TableModelEvent.UPDATE && evt.getColumn() != TableModelEvent.ALL_COLUMNS) {
                 float valueChanged = Float.parseFloat(
                         String.valueOf(stModel.getValueAt(evt.getFirstRow(), evt.getColumn()))
                 );
-                
-                if(valueChanged < 0) {
+
+                if (valueChanged < 0) {
                     stModel.setValueAt(0, evt.getFirstRow(), evt.getColumn());
                 }
             }
@@ -414,7 +417,8 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         filterComboBox.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
-        filterComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar...", "Por Nombre", "Por Dosis", "Por Laboratorio", "Por Presentación" }));
+        filterComboBox.setForeground(new java.awt.Color(0, 0, 0));
+        filterComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Por Nombre", "Por Dosis", "Por Laboratorio", "Por Presentación" }));
         filterComboBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 filterComboBoxItemStateChanged(evt);
@@ -443,7 +447,7 @@ public class MainFrame extends javax.swing.JFrame {
                         .addComponent(resetTableBtn)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -536,7 +540,6 @@ public class MainFrame extends javax.swing.JFrame {
         toTF.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
         toTF.setForeground(new java.awt.Color(0, 0, 0));
         toTF.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        toTF.setText("fuatojfj@gmail.com");
 
         toTFLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
         toTFLabel.setForeground(new java.awt.Color(0, 0, 0));
@@ -549,7 +552,6 @@ public class MainFrame extends javax.swing.JFrame {
         fromTF.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
         fromTF.setForeground(new java.awt.Color(0, 0, 0));
         fromTF.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        fromTF.setText("fuato1@hotmail.com");
 
         sendSolBtn.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
         sendSolBtn.setForeground(new java.awt.Color(0, 0, 0));
@@ -635,9 +637,9 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(addToSLBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 619, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(removeFromSTBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(slLabel)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 619, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -657,10 +659,10 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(javax.swing.GroupLayout.Alignment.CENTER, jPanel1Layout.createSequentialGroup()
-                .addGap(678, 678, 678)
-                .addComponent(slLabel)
-                .addGap(536, 536, 536))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(901, Short.MAX_VALUE)
+                .addComponent(removeFromSTBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(359, 359, 359))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -750,12 +752,12 @@ public class MainFrame extends javax.swing.JFrame {
                 MedicamentoDAO medDAO = new MedicamentoDAO();
                 medDAO.deleteXId(id);
                 model.removeRow(medTable.getSelectedRow());
-                
+
                 checkAlerts();
             }
         }
     }//GEN-LAST:event_borrarButtonActionPerformed
-    
+
     /**
      * Evento para el boton de agregar medicamento.
      */
@@ -847,14 +849,14 @@ public class MainFrame extends javax.swing.JFrame {
     private void addToSLBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addToSLBtnActionPerformed
         // TODO add your handling code here:
         List<String> selValues = missingsList.getSelectedValuesList();
-        
-        if(selValues.size() > 0) {
+
+        if (selValues.size() > 0) {
             DefaultTableModel stModel = (DefaultTableModel) solicitudeTable.getModel();
             DefaultListModel mlModel = (DefaultListModel) missingsList.getModel();
-            
+
             selValues.forEach(e -> {
-                if(!contains(solicitudeTable, e)) {
-                    stModel.addRow(new Object[]{ e, 0, 0, 0 });
+                if (!contains(solicitudeTable, e)) {
+                    stModel.addRow(new Object[]{e, 0, 0, 0});
                     mlModel.removeElement(e);
                 }
             });
@@ -864,13 +866,13 @@ public class MainFrame extends javax.swing.JFrame {
     private void removeFromSTBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeFromSTBtnActionPerformed
         // TODO add your handling code here:
         int[] selValues = solicitudeTable.getSelectedRows();
-        
-        if(selValues.length > 0) {
+
+        if (selValues.length > 0) {
             DefaultTableModel stModel = (DefaultTableModel) solicitudeTable.getModel();
             DefaultListModel mlModel = (DefaultListModel) missingsList.getModel();
-            
+
             for (int i = selValues.length - 1; i >= 0; i--) {
-                if(!mlModel.contains(stModel.getValueAt(selValues[i], 0))) {
+                if (!mlModel.contains(stModel.getValueAt(selValues[i], 0))) {
                     mlModel.addElement(stModel.getValueAt(selValues[i], 0));
                     stModel.removeRow(selValues[i]);
                 }
@@ -884,36 +886,36 @@ public class MainFrame extends javax.swing.JFrame {
         String fromEmail = fromTF.getText();
         String emailSub = emailSubject.getText();
         String emailCmt = emailComment.getText();
-        
+
         EmailValidator ev = EmailValidator.getInstance();
         DefaultTableModel model = (DefaultTableModel) solicitudeTable.getModel();
-        
-        if(ev.isValid(toEmail) && ev.isValid(fromEmail)) {
+
+        if (ev.isValid(toEmail) && ev.isValid(fromEmail)) {
             try {
                 try (BufferedWriter bw = new BufferedWriter(new FileWriter(".\\table.html", false))) {
                     bw.write("<html>");
                     bw.write("<body style='max-width: 500px; margin: auto;'>");
                     bw.write("<p>" + StringEscapeUtils.escapeHtml4(emailCmt) + "</p>");
-                    
+
                     bw.write("<table>");
-                    
+
                     bw.write("<tr>");
-                    for(int c = 0; c < model.getColumnCount(); ++c) {
+                    for (int c = 0; c < model.getColumnCount(); ++c) {
                         bw.write("<th style='text-align: center;'>");
                         bw.write(model.getColumnName(c));
                         bw.write("</th>");
                     }
                     bw.write("</tr>");
-                    
-                    for(int r = 0; r < model.getRowCount(); ++r) {
+
+                    for (int r = 0; r < model.getRowCount(); ++r) {
                         bw.write("<tr>");
-                        
-                        for(int c = 0; c < model.getColumnCount(); ++c) {
+
+                        for (int c = 0; c < model.getColumnCount(); ++c) {
                             bw.write("<td style='text-align: center;'>");
                             bw.write(model.getValueAt(r, c).toString());
                             bw.write("</td>");
                         }
-                        
+
                         bw.write("</tr>");
                     }
                     bw.write("</table>");
@@ -923,58 +925,58 @@ public class MainFrame extends javax.swing.JFrame {
             } catch (IOException ex) {
                 System.out.println(ex);
             }
-            
+
             try {
                 File html = new File(".\\table.html");
-                
+
                 Email email = EmailBuilder.startingBlank()
-                    .from("Unidad Sanitaria Colonia Seré", fromEmail)
-                    .to("To", toEmail)
-                    .withSubject(emailSub)
-                    .withHTMLText(html)
-                    .buildEmail();
+                        .from("Unidad Sanitaria Colonia Seré", fromEmail)
+                        .to("To", toEmail)
+                        .withSubject(emailSub)
+                        .withHTMLText(html)
+                        .buildEmail();
 
                 JPasswordField passField = new JPasswordField();
                 String[] options = new String[]{"OK", "Cancelar"};
                 int op = JOptionPane.showOptionDialog(
-                        null, 
-                        passField, 
-                        "Ingrese contraseña: ", 
-                        JOptionPane.NO_OPTION, 
-                        JOptionPane.PLAIN_MESSAGE, 
-                        null, 
+                        null,
+                        passField,
+                        "Ingrese contraseña: ",
+                        JOptionPane.NO_OPTION,
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
                         options,
                         options[0]
                 );
 
-                if(op == 0) {
+                if (op == 0) {
                     String password = new String(passField.getPassword());
-                    
-                    if(!password.equals("")) {
-                        if(!model.getDataVector().isEmpty()) {
+
+                    if (!password.equals("")) {
+                        if (!model.getDataVector().isEmpty()) {
                             Mailer mailer = MailerBuilder
-                            .withSMTPServer("smtp.office365.com", 587, fromEmail, password)
-                            .withTransportStrategy(TransportStrategy.SMTP_TLS)
-                            .withDebugLogging(true)
-                            .async()
-                            .buildMailer();
-                            
+                                    .withSMTPServer("smtp.office365.com", 587, fromEmail, password)
+                                    .withTransportStrategy(TransportStrategy.SMTP_TLS)
+                                    .withDebugLogging(true)
+                                    .async()
+                                    .buildMailer();
+
                             AsyncResponse res = mailer.sendMail(email, true);
 
-                            if(res != null) {
+                            if (res != null) {
                                 res.onSuccess(() -> {
                                     solicitudeTable.removeAll();
 
                                     JOptionPane.showMessageDialog(
-                                                this,
-                                                "El email con la solicitud se ha enviado exitosamente.",
-                                                "Information",
-                                                JOptionPane.INFORMATION_MESSAGE
-                                        );
+                                            this,
+                                            "El email con la solicitud se ha enviado exitosamente.",
+                                            "Information",
+                                            JOptionPane.INFORMATION_MESSAGE
+                                    );
                                 });
 
                                 res.onException(e -> {
-                                    if(e.getCause().getClass().equals(AuthenticationFailedException.class)) {
+                                    if (e.getCause().getClass().equals(AuthenticationFailedException.class)) {
                                         JOptionPane.showMessageDialog(
                                                 this,
                                                 "La contraseña para el email " + fromEmail + " es incorrecta. Por favor intente de nuevo.",
@@ -983,25 +985,20 @@ public class MainFrame extends javax.swing.JFrame {
                                         );
                                     }
                                 });
-                            }
-                            else {
+                            } else {
                                 JOptionPane.showMessageDialog(this, "Ha ocurrido un error en el envío del email.");
                             }
-                        }
-                        else {
+                        } else {
                             JOptionPane.showMessageDialog(this, "La tabla para la solicitud esta vacia. Por favor cargue elementos a la tabla.");
                         }
-                    }
-                    else {
+                    } else {
                         JOptionPane.showMessageDialog(this, "Debe ingrear una contraseña para enviar el email.");
                     }
                 }
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 System.out.println(e);
             }
-        }
-        else {
+        } else {
             JOptionPane.showMessageDialog(
                     this,
                     "Debe rellenar el email de envío y recepción para realizar una solicitud.",
@@ -1014,7 +1011,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void filterComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_filterComboBoxItemStateChanged
         filterTable();
     }//GEN-LAST:event_filterComboBoxItemStateChanged
-    
+
     /**
      * Transforma un @String de formato fecha fromFormat a toFormat.
      *
@@ -1025,26 +1022,36 @@ public class MainFrame extends javax.swing.JFrame {
     private boolean contains(JTable table, String value) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         Vector<Vector> rows = model.getDataVector();
-        
+
         for (int i = 0; i < rows.size(); i++) {
-            if(rows.get(i).get(0).equals(value)) {
-               return true;
+            if (rows.get(i).get(0).equals(value)) {
+                return true;
             }
         }
-        
+
         return false;
     }
-    
+
     private void filterTable() {
         String text = searchBar.getText();
         int indexSearch = 0;
-        
+
         switch (filterComboBox.getSelectedItem().toString()) {
-            case "Por Nombre": indexSearch = 1; break;
-            case "Por Dosis": indexSearch = 4; break;
-            case "Por Presentación": indexSearch = 5; break;
-            case "Por Laboratorio": indexSearch = 6; break;
-            default: indexSearch = 0; break;
+            case "Por Nombre":
+                indexSearch = 1;
+                break;
+            case "Por Dosis":
+                indexSearch = 4;
+                break;
+            case "Por Presentación":
+                indexSearch = 5;
+                break;
+            case "Por Laboratorio":
+                indexSearch = 6;
+                break;
+            default:
+                indexSearch = 0;
+                break;
         }
 
         if (text.trim().length() == 0) {
@@ -1063,24 +1070,25 @@ public class MainFrame extends javax.swing.JFrame {
 
         List<Medicamento> medsWithLowStock = medDAO.medsWithLowStock();
         List<Medicamento> medsInExpRange = (List<Medicamento>) medDAO.medsInExpRange();
-        
+
         /**
          * Para evitar las dobles entradas en la lista
-         **/
+         *
+         */
         medsInExpRange.removeIf((e) -> {
             return medsWithLowStock.contains(e);
         });
-        
+
         DefaultListModel mlModel = (DefaultListModel) missingsList.getModel();
         DefaultTableModel stModel = (DefaultTableModel) solicitudeTable.getModel();
-        
+
         mlModel.removeAllElements();
 
         if (medsWithLowStock != null) {
             if (medsWithLowStock.size() > 0) {
                 medStockAlert.setText("Hay medicamentos con poco stock!");
                 medStockAlert.setDisabledTextColor(Color.red);
-                
+
                 medsWithLowStock.forEach(m -> {
                     mlModel.addElement(m.getNombre());
                 });
@@ -1094,7 +1102,7 @@ public class MainFrame extends javax.swing.JFrame {
             if (medsInExpRange.size() > 0) {
                 medExpAlert.setText("Hay medicamentos en rango de vencimiento!");
                 medExpAlert.setDisabledTextColor(Color.red);
-                
+
                 medsInExpRange.forEach(m -> {
                     mlModel.addElement(m.getNombre());
                 });
@@ -1103,27 +1111,26 @@ public class MainFrame extends javax.swing.JFrame {
                 medExpAlert.setDisabledTextColor(Color.green);
             }
         }
-        
+
         List<EquipoMedico> medEqWithLowStock = medEqDAO.medEqWithLowStock();
-        
-        if(medEqWithLowStock != null) {
-            if(medEqWithLowStock.size() > 0) {
+
+        if (medEqWithLowStock != null) {
+            if (medEqWithLowStock.size() > 0) {
                 medEqWithLowStock.forEach(me -> {
                     mlModel.addElement(me.getNombre());
                 });
             }
         }
-        
+
         Vector<Vector> rows = stModel.getDataVector();
-        
+
         for (int i = 0; i < rows.size(); i++) {
             Object e = rows.get(i).get(0);
-            
-            if(!mlModel.contains(e)) {
-               stModel.removeRow(i);
-               i--;
-            }
-            else {
+
+            if (!mlModel.contains(e)) {
+                stModel.removeRow(i);
+                i--;
+            } else {
                 mlModel.removeElement(e);
             }
         }
@@ -1157,11 +1164,11 @@ public class MainFrame extends javax.swing.JFrame {
                         });
             });
         }
-        
+
         rowSorter.setRowFilter(null);
         filterComboBox.setSelectedIndex(0);
         searchBar.setText("");
-        
+
         medTable.getRowSorter().setSortKeys(null);
         cbLowStock.setSelected(false);
         cbExpDate.setSelected(false);

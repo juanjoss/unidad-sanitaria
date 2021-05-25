@@ -3,22 +3,18 @@ package ui;
 import javax.swing.JOptionPane;
 import dao.MedicamentoDAO;
 import dao.PresentacionDAO;
-
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import model.Medicamento;
 import model.Presentacion;
+import util.DateUtil;
 
 public class AddMedFrame extends javax.swing.JFrame {
 
     public AddMedFrame() {
         initComponents();
+        loadPresentaciones();
     }
 
     /**
@@ -56,17 +52,14 @@ public class AddMedFrame extends javax.swing.JFrame {
 
         nombreLabel.setBackground(new java.awt.Color(0, 0, 0));
         nombreLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        nombreLabel.setForeground(new java.awt.Color(0, 0, 0));
         nombreLabel.setText("Nombre:");
 
         stockLabel.setBackground(new java.awt.Color(0, 0, 0));
         stockLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        stockLabel.setForeground(new java.awt.Color(0, 0, 0));
         stockLabel.setText("Stock:");
 
         fechaVLabel.setBackground(new java.awt.Color(0, 0, 0));
         fechaVLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        fechaVLabel.setForeground(new java.awt.Color(0, 0, 0));
         fechaVLabel.setText("Fecha de Vencimiento:");
 
         stockTextField.setText("0");
@@ -91,23 +84,19 @@ public class AddMedFrame extends javax.swing.JFrame {
 
         laboratorioLabel.setBackground(new java.awt.Color(0, 0, 0));
         laboratorioLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        laboratorioLabel.setForeground(new java.awt.Color(0, 0, 0));
         laboratorioLabel.setText("Laboratorio:");
 
         dosisLabel.setBackground(new java.awt.Color(0, 0, 0));
         dosisLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        dosisLabel.setForeground(new java.awt.Color(0, 0, 0));
         dosisLabel.setText("Dosis:");
 
         presentacionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        loadPresentaciones(); // cargar presentaciones desde BD
 
         presentacionLabel.setBackground(new java.awt.Color(0, 0, 0));
         presentacionLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        presentacionLabel.setForeground(new java.awt.Color(0, 0, 0));
         presentacionLabel.setText("Presentación:");
 
-        jButton1.setText("nuevo");
+        jButton1.setText("Nuevo");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -204,14 +193,13 @@ public class AddMedFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
+
     /**
      * Evento para agregar un medicamento.
      */
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
         String nombre = nombreTextField.getText();
         int stock = Integer.parseInt(stockTextField.getText());
-        boolean fechaCorrecta = true;
 
         SimpleDateFormat fechaFormato = new SimpleDateFormat("yyyy-MM-dd");
         String fechaVencimiento = fechaFormato.format(selectFechaV.getDate());
@@ -219,17 +207,6 @@ public class AddMedFrame extends javax.swing.JFrame {
         String laboratorio = laboratorioTextField.getText();
         String dosis = dosisTextField.getText();
         Presentacion presentacion = presentaciones.get(presentacionComboBox.getSelectedIndex());
-        
-        try {
-            Date fecha1 = fechaFormato.parse(fechaVencimiento);
-            Date fechaSistema = new Date();
-            if (fecha1.before(fechaSistema)) {
-                fechaCorrecta = false;
-            }
-        } catch (ParseException ex) {
-            
-        }
-        
 
         if (!nombre.equals("") && !fechaVencimiento.equals("")) {
             // verificar si ya esta cargado un medicamento con el mismo nombre
@@ -243,42 +220,35 @@ public class AddMedFrame extends javax.swing.JFrame {
             med.setDosis(dosis);
             med.setPresentacion(presentacion.getNombre());
             med.setId_presentacion(presentacion.getId());
+
             if (!medDAO.exist(med)) {
-                if (stock >= 0) {     
-                    if (fechaCorrecta) {
+                if (stock >= 0) {
+                    if (DateUtil.greaterThanCrntDate(selectFechaV.getDate())) {
                         medDAO.insert(med);
                         JOptionPane.showMessageDialog(
-                        this,
-                        "¡El medicamento se ha guardado exitosamente!",
-                        "Éxito",
-                        JOptionPane.INFORMATION_MESSAGE
+                                this,
+                                "¡El medicamento se ha guardado exitosamente!",
+                                "Éxito",
+                                JOptionPane.INFORMATION_MESSAGE
                         );
-                    volverMain();
-                    }
-                    else{
+                        volverMain();
+                    } else {
                         JOptionPane.showMessageDialog(
-                        this,
-                        "El medicamento ingresado esta vencido","",
-                        JOptionPane.INFORMATION_MESSAGE
-                        ); 
+                                this,
+                                "El medicamento ingresado esta vencido", "",
+                                JOptionPane.INFORMATION_MESSAGE
+                        );
                     }
-                    
-                }
-                else{
-                   JOptionPane.showMessageDialog(
-                        this,
-                        "El stock cargado es invalidó",
-                        "Éxito",
-                        JOptionPane.INFORMATION_MESSAGE
-                    ); 
-                }
 
-                
-                //nombreTextField.setText("");
-                //stockTextField.setText("0");
-                //selectFechaV.setCalendar(new GregorianCalendar());
-            }
-            else{
+                } else {
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "El stock cargado es invalidó",
+                            "Éxito",
+                            JOptionPane.INFORMATION_MESSAGE
+                    );
+                }
+            } else {
                 JOptionPane.showMessageDialog(
                         this,
                         "¡Existe un medicamento con el mismo nombre!",
@@ -295,7 +265,7 @@ public class AddMedFrame extends javax.swing.JFrame {
             );
         }
     }//GEN-LAST:event_addBtnActionPerformed
-    
+
     /**
      * Evento para cerrar la ventana.
      */
@@ -305,9 +275,10 @@ public class AddMedFrame extends javax.swing.JFrame {
 
     /**
      * vuelve a la pagina principal
+     *
      * @return {@code void}.
      */
-    private void volverMain(){
+    private void volverMain() {
         MainFrame p = new MainFrame();
         p.setVisible(true);
         p.pack();
@@ -317,12 +288,14 @@ public class AddMedFrame extends javax.swing.JFrame {
     }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String nombre = JOptionPane.showInputDialog(this, "Agregar nueva presentación");
-        // NO MUESTRA EL INPUT
+        String nombre = JOptionPane.showInputDialog(this, "Ingrese ueva presentación:");
+
         Presentacion newPresentacion = new Presentacion();
-        newPresentacion.setNombre(nombre);
         PresentacionDAO pDAO = new PresentacionDAO();
+
+        newPresentacion.setNombre(nombre);
         pDAO.insert(newPresentacion);
+
         loadPresentaciones();
         presentacionComboBox.setSelectedItem(nombre);
 
@@ -330,17 +303,20 @@ public class AddMedFrame extends javax.swing.JFrame {
 
     /**
      * Carga presentaciones desde BD.
+     *
      * @return {@code void}.
      */
     private void loadPresentaciones() {
         PresentacionDAO pDAO = new PresentacionDAO();
         presentaciones = pDAO.selectAll();
         String[] itemsList = new String[presentaciones.size()];
+
         int index = 0;
         for (Presentacion p : presentaciones) {
             itemsList[index] = (String) p.getNombre();
             index++;
         }
+
         presentacionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(itemsList));
     }
 

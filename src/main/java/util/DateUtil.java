@@ -8,9 +8,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import ui.MainFrame;
 
 public class DateUtil {
 
@@ -31,7 +28,6 @@ public class DateUtil {
             Date originalDate = originalFormat.parse(date);
             formattedDate = targetFormat.format(originalDate);
         } catch (ParseException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return formattedDate;
@@ -53,10 +49,23 @@ public class DateUtil {
             );
             valid = true;
         } catch (DateTimeParseException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
             valid = false;
         }
 
         return valid;
+    }
+
+    /**
+     * Valida si una fecha (con formato 'yyyy-MM-dd') pasada por parametro es
+     * mayor a la fecha actual.
+     *
+     * @param date A {@code String} fecha a validar.
+     * @return A {@code boolean} true o false dependiendo si la fecha pasada es
+     * mayor a la actual.
+     */
+    public static boolean greaterThanCrntDate(Date date) {
+        Date sysDate = new Date();
+
+        return !date.before(sysDate);
     }
 }

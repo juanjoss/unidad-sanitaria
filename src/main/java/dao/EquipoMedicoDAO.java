@@ -6,6 +6,7 @@ import model.EquipoMedico;
 import org.sql2o.Connection;
 
 public class EquipoMedicoDAO {
+
     /**
      * Retorna todo el equipo medico con poco stock (5 unidades o menos).
      *

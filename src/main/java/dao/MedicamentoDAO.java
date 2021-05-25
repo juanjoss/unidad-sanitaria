@@ -7,14 +7,14 @@ import model.Medicamento;
 import util.DateUtil;
 
 public class MedicamentoDAO {
-    
+
     /**
      * Retorna todos los medicamentos.
      *
      * @return A {@code List<Medicameto>}.
      */
     public List<Medicamento> selectAll() {
-        String query = "SELECT medicamento.id, medicamento.nombre, stock, fechaVencimiento, laboratorio, dosis, presentacion.id as 'id_presentacion',"
+        String query = "SELECT medicamento.id, medicamento.nombre, stock, fechaVencimiento, laboratorio, dosis, id_presentacion,"
                 + " presentacion.nombre as 'presentacion' FROM medicamento JOIN presentacion ON medicamento.id_presentacion = presentacion.id;";
 
         try (Connection con = SQLiteDAO.getConn().open()) {
@@ -28,7 +28,7 @@ public class MedicamentoDAO {
 
         return null;
     }
-    
+
     /**
      * Retorna un medicamento.
      *
@@ -36,8 +36,9 @@ public class MedicamentoDAO {
      * @return A {@code Medicameto}.
      */
     public Medicamento getMedicamento(int id) {
-        String query = "SELECT id, nombre, stock, fechaVencimiento, laboratorio, dosis, id_presentacion AS 'presentacion' "
-                + "FROM medicamento WHERE id = :id";
+        String query = "SELECT medicamento.id, medicamento.nombre, stock, fechaVencimiento, laboratorio, dosis, id_presentacion, presentacion.nombre AS 'presentacion' "
+                + "FROM medicamento JOIN presentacion ON medicamento.id_presentacion = presentacion.id "
+                + "WHERE medicamento.id = :id;";
 
         try (Connection con = SQLiteDAO.getConn().open()) {
             Medicamento med = con
@@ -82,9 +83,10 @@ public class MedicamentoDAO {
 
         return null;
     }
-    
+
     /**
-     * Retorna todos los medicamentos en rango de vencimiento (rango de 15 dias).
+     * Retorna todos los medicamentos en rango de vencimiento (rango de 15
+     * dias).
      *
      * @return A {@code List<Medicameto>}.
      */
@@ -104,7 +106,7 @@ public class MedicamentoDAO {
 
         return null;
     }
-    
+
     /**
      * Inserta un medicamento en la BD.
      *
@@ -120,7 +122,7 @@ public class MedicamentoDAO {
             System.out.println(e);
         }
     }
-    
+
     /**
      * Elimina un medicamento de la BD.
      *
@@ -135,7 +137,7 @@ public class MedicamentoDAO {
             System.out.println(e);
         }
     }
-    
+
     /**
      * Actualiza un medicamento de la BD.
      *
@@ -143,14 +145,14 @@ public class MedicamentoDAO {
      */
     public void update(Medicamento med) {
         String query1 = "SELECT id FROM presentacion WHERE nombre = :presName";
-        
+
         try (Connection con = SQLiteDAO.getConn().open()) {
             Integer medPresId = con
                     .createQuery(query1)
                     .addParameter("presName", med.getPresentacion())
                     .executeAndFetchFirst(Integer.class);
-            
-            if(medPresId != null) {
+
+            if (medPresId != null) {
                 String query2 = "UPDATE medicamento "
                         + "SET nombre = :nombre, stock = :stock, fechaVencimiento = :fechaVencimiento, "
                         + "laboratorio = :laboratorio, dosis = :dosis, id_presentacion = " + medPresId
@@ -162,8 +164,8 @@ public class MedicamentoDAO {
             System.out.println(e);
         }
     }
-    
-    public boolean exist( Medicamento med){
+
+    public boolean exist(Medicamento med) {
         boolean var = false;
         String query1 = "SELECT id FROM medicamento WHERE nombre = :nombre";
         try (Connection con = SQLiteDAO.getConn().open()) {
@@ -171,9 +173,9 @@ public class MedicamentoDAO {
                     .createQuery(query1)
                     .addParameter("nombre", med.getNombre())
                     .executeAndFetchFirst(Integer.class);
-            
-            if(medPresId != null) {
-               var = true;
+
+            if (medPresId != null) {
+                var = true;
             }
         } catch (Exception e) {
             System.out.println(e);

@@ -167,11 +167,11 @@ public class MedicamentoDAO {
 
     public boolean exist(Medicamento med) {
         boolean var = false;
-        String query1 = "SELECT id FROM medicamento WHERE nombre = :nombre";
+        String query1 = "SELECT id FROM medicamento WHERE nombre = :nombre AND id_presentacion = :id_presentacion ";
         try (Connection con = SQLiteDAO.getConn().open()) {
             Integer medPresId = con
                     .createQuery(query1)
-                    .addParameter("nombre", med.getNombre())
+                    .addParameter("nombre", med.getNombre()).addParameter("id_presentacion",med.getId_presentacion())
                     .executeAndFetchFirst(Integer.class);
 
             if (medPresId != null) {

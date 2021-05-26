@@ -262,7 +262,7 @@ public class AddMedFrame extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(
                         this,
-                        "¡Existe un medicamento con el mismo nombre!",
+                        "¡Existe un medicamento con el mismo nombre y presentacion!",
                         "Éxito",
                         JOptionPane.INFORMATION_MESSAGE
                 );

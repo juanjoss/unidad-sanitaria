@@ -199,7 +199,19 @@ public class AddMedFrame extends javax.swing.JFrame {
      */
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
         String nombre = nombreTextField.getText();
-        int stock = Integer.parseInt(stockTextField.getText());
+        
+        int stock = 0;
+        try {
+            stock = Integer.parseInt(stockTextField.getText());
+        } catch(Exception e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "El stock ingresado es invalido.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            stockTextField.setText("0");
+        }
 
         SimpleDateFormat fechaFormato = new SimpleDateFormat("yyyy-MM-dd");
         String fechaVencimiento = fechaFormato.format(selectFechaV.getDate());
@@ -209,7 +221,6 @@ public class AddMedFrame extends javax.swing.JFrame {
         Presentacion presentacion = presentaciones.get(presentacionComboBox.getSelectedIndex());
 
         if (!nombre.equals("") && !fechaVencimiento.equals("")) {
-            // verificar si ya esta cargado un medicamento con el mismo nombre
             MedicamentoDAO medDAO = new MedicamentoDAO();
             Medicamento med = new Medicamento();
 
@@ -221,38 +232,29 @@ public class AddMedFrame extends javax.swing.JFrame {
             med.setPresentacion(presentacion.getNombre());
             med.setId_presentacion(presentacion.getId());
 
-            if (!medDAO.exist(med)) {
-                if (stock >= 0) {
-                    if (DateUtil.greaterThanCrntDate(selectFechaV.getDate())) {
-                        medDAO.insert(med);
-                        JOptionPane.showMessageDialog(
-                                this,
-                                "¡El medicamento se ha guardado exitosamente!",
-                                "Éxito",
-                                JOptionPane.INFORMATION_MESSAGE
-                        );
-                        volverMain();
-                    } else {
-                        JOptionPane.showMessageDialog(
-                                this,
-                                "El medicamento ingresado esta vencido", "",
-                                JOptionPane.INFORMATION_MESSAGE
-                        );
-                    }
-
+            if (!medDAO.exists(med)) {
+                if (DateUtil.greaterThanCrntDate(selectFechaV.getDate())) {
+                    medDAO.insert(med);
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "¡El medicamento se ha guardado exitosamente!",
+                            "Éxito",
+                            JOptionPane.INFORMATION_MESSAGE
+                    );
+                    volverMain();
                 } else {
                     JOptionPane.showMessageDialog(
                             this,
-                            "El stock cargado es invalidó",
-                            "Éxito",
+                            "El medicamento ingresado esta vencido.", 
+                            "Error",
                             JOptionPane.INFORMATION_MESSAGE
                     );
                 }
             } else {
                 JOptionPane.showMessageDialog(
                         this,
-                        "¡Existe un medicamento con el mismo nombre!",
-                        "Éxito",
+                        "¡Ya existe un medicamento con el mismo nombre y presentación!",
+                        "Error",
                         JOptionPane.INFORMATION_MESSAGE
                 );
             }
@@ -288,7 +290,12 @@ public class AddMedFrame extends javax.swing.JFrame {
     }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String nombre = JOptionPane.showInputDialog(this, "Ingrese ueva presentación:");
+        String nombre = JOptionPane.showInputDialog(
+                this, 
+                "Ingrese nueva presentación:", 
+                "Agregar Presentación", 
+                JOptionPane.INFORMATION_MESSAGE
+        );
 
         Presentacion newPresentacion = new Presentacion();
         PresentacionDAO pDAO = new PresentacionDAO();

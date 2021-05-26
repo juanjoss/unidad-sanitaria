@@ -63,7 +63,6 @@ public class MainFrame extends javax.swing.JFrame {
          */
         model.addTableModelListener((TableModelEvent evt) -> {
             if (evt.getType() == TableModelEvent.UPDATE && evt.getColumn() != TableModelEvent.ALL_COLUMNS) {
-                Medicamento newMed = new Medicamento();
 
                 int idMed = (int) model.getValueAt(evt.getFirstRow(), 0);
                 String medName = (String) model.getValueAt(evt.getFirstRow(), 1);
@@ -76,7 +75,8 @@ public class MainFrame extends javax.swing.JFrame {
                 /**
                  * Controles de los nuevos datos
                  */
-                Medicamento prevMed = medDAO.getMedicamento(idMed);
+                Medicamento med = medDAO.getMedicamento(idMed);
+                boolean error = false;
 
                 if (medName.equals("")) {
                     JOptionPane.showMessageDialog(
@@ -86,7 +86,8 @@ public class MainFrame extends javax.swing.JFrame {
                             JOptionPane.ERROR_MESSAGE
                     );
 
-                    model.setValueAt(prevMed.getNombre(), evt.getFirstRow(), 1);
+                    model.setValueAt(med.getNombre(), evt.getFirstRow(), 1);
+                    error = true;
                 }
 
                 if (medStock < 0) {
@@ -97,7 +98,8 @@ public class MainFrame extends javax.swing.JFrame {
                             JOptionPane.ERROR_MESSAGE
                     );
 
-                    model.setValueAt(prevMed.getStock(), evt.getFirstRow(), 2);
+                    model.setValueAt(med.getStock(), evt.getFirstRow(), 2);
+                    error = true;
                 }
 
                 if (!DateUtil.isValidDate(medExpDate, "d/M/uuuu")) {
@@ -112,7 +114,8 @@ public class MainFrame extends javax.swing.JFrame {
                             JOptionPane.ERROR_MESSAGE
                     );
 
-                    model.setValueAt(prevMed.getFechaVencimiento(), evt.getFirstRow(), 3);
+                    model.setValueAt(med.getFechaVencimiento(), evt.getFirstRow(), 3);
+                    error = true;
                 }
 
                 if (medPres.equals("")) {
@@ -123,26 +126,28 @@ public class MainFrame extends javax.swing.JFrame {
                             JOptionPane.ERROR_MESSAGE
                     );
 
-                    model.setValueAt(prevMed.getPresentacion(), evt.getFirstRow(), 5);
+                    model.setValueAt(med.getPresentacion(), evt.getFirstRow(), 5);
+                    error = true;
                 }
 
-                newMed.setId(idMed);
-                newMed.setNombre(medName);
-                newMed.setStock(medStock);
-                newMed.setFechaVencimiento(
-                        DateUtil.formatDate(
-                                medExpDate,
-                                "dd/mm/yyyy",
-                                "yyyy-mm-dd"
-                        )
-                );
-                newMed.setDosis(medDosis);
-                newMed.setPresentacion(medPres);
-                newMed.setId_presentacion(prevMed.getId_presentacion());
-                newMed.setLaboratorio(medLab);
+                if (!error) {
+                    med.setId(idMed);
+                    med.setNombre(medName);
+                    med.setStock(medStock);
+                    med.setFechaVencimiento(
+                            DateUtil.formatDate(
+                                    medExpDate,
+                                    "dd/mm/yyyy",
+                                    "yyyy-mm-dd"
+                            )
+                    );
+                    med.setDosis(medDosis);
+                    med.setPresentacion(medPres);
+                    med.setLaboratorio(medLab);
 
-                medDAO.update(newMed);
-                checkAlerts();
+                    medDAO.update(med);
+                    checkAlerts();
+                }
             }
         });
 
@@ -505,7 +510,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         DefaultListModel mlModel = new DefaultListModel();
         missingsList.setModel(mlModel);
-        missingsList.setFont(new java.awt.Font("Cascadia Code", 0, 18)); // NOI18N
+        missingsList.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
         missingsList.setForeground(new java.awt.Color(0, 0, 0));
         DefaultListCellRenderer mlCellRenderer = (DefaultListCellRenderer) missingsList.getCellRenderer();
         mlCellRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -604,6 +609,7 @@ public class MainFrame extends javax.swing.JFrame {
         jScrollPane3.setViewportView(solicitudeTable);
         if (solicitudeTable.getColumnModel().getColumnCount() > 0) {
             solicitudeTable.getColumnModel().getColumn(0).setResizable(false);
+            solicitudeTable.getColumnModel().getColumn(0).setPreferredWidth(300);
             solicitudeTable.getColumnModel().getColumn(1).setResizable(false);
             solicitudeTable.getColumnModel().getColumn(2).setResizable(false);
             solicitudeTable.getColumnModel().getColumn(3).setResizable(false);
@@ -897,21 +903,21 @@ public class MainFrame extends javax.swing.JFrame {
                     bw.write("<body style='max-width: 500px; margin: auto;'>");
                     bw.write("<p>" + StringEscapeUtils.escapeHtml4(emailCmt) + "</p>");
 
-                    bw.write("<table>");
+                    bw.write("<table style='border: 1px solid black;'>");
 
-                    bw.write("<tr>");
+                    bw.write("<tr style='border: 1px solid black;'>");
                     for (int c = 0; c < model.getColumnCount(); ++c) {
-                        bw.write("<th style='text-align: center;'>");
+                        bw.write("<th style='text-align: center; border: 1px solid black;'>");
                         bw.write(model.getColumnName(c));
                         bw.write("</th>");
                     }
                     bw.write("</tr>");
 
                     for (int r = 0; r < model.getRowCount(); ++r) {
-                        bw.write("<tr>");
+                        bw.write("<tr style='border: 1px solid black;'>");
 
                         for (int c = 0; c < model.getColumnCount(); ++c) {
-                            bw.write("<td style='text-align: center;'>");
+                            bw.write("<td style='text-align: center; border: 1px solid black;'>");
                             bw.write(model.getValueAt(r, c).toString());
                             bw.write("</td>");
                         }
@@ -1071,14 +1077,6 @@ public class MainFrame extends javax.swing.JFrame {
         List<Medicamento> medsWithLowStock = medDAO.medsWithLowStock();
         List<Medicamento> medsInExpRange = (List<Medicamento>) medDAO.medsInExpRange();
 
-        /**
-         * Para evitar las dobles entradas en la lista
-         *
-         */
-        medsInExpRange.removeIf((e) -> {
-            return medsWithLowStock.contains(e);
-        });
-
         DefaultListModel mlModel = (DefaultListModel) missingsList.getModel();
         DefaultTableModel stModel = (DefaultTableModel) solicitudeTable.getModel();
 
@@ -1090,7 +1088,7 @@ public class MainFrame extends javax.swing.JFrame {
                 medStockAlert.setDisabledTextColor(Color.red);
 
                 medsWithLowStock.forEach(m -> {
-                    mlModel.addElement(m.getNombre());
+                    mlModel.addElement(m.getNombre() + " " + m.getPresentacion() + " (" + m.getDosis() + ")");
                 });
             } else {
                 medStockAlert.setText("No hay medicamentos con poco stock");
@@ -1104,7 +1102,9 @@ public class MainFrame extends javax.swing.JFrame {
                 medExpAlert.setDisabledTextColor(Color.red);
 
                 medsInExpRange.forEach(m -> {
-                    mlModel.addElement(m.getNombre());
+                    if (!medsWithLowStock.contains(m)) {
+                        mlModel.addElement(m.getNombre() + " " + m.getPresentacion() + " (" + m.getDosis() + ")");
+                    }
                 });
             } else {
                 medExpAlert.setText("No hay vencimientos cercanos");

@@ -68,8 +68,10 @@ public class MedicamentoDAO {
      * @return A {@code List<Medicameto>}.
      */
     public List<Medicamento> medsWithLowStock() {
-        String query = "SELECT id, nombre, stock, fechaVencimiento, laboratorio, dosis, id_presentacion AS 'presentacion'"
-                + "FROM medicamento WHERE stock <= 5";
+        String query = "SELECT medicamento.id, medicamento.nombre, stock, fechaVencimiento, laboratorio, "
+                + "dosis, id_presentacion, presentacion.nombre AS 'presentacion' "
+                + "FROM medicamento JOIN presentacion ON medicamento.id_presentacion = presentacion.id "
+                + "WHERE stock <= 5";
 
         try (Connection con = SQLiteDAO.getConn().open()) {
             List<Medicamento> medicamentos = con
@@ -91,8 +93,10 @@ public class MedicamentoDAO {
      * @return A {@code List<Medicameto>}.
      */
     public List<Medicamento> medsInExpRange() {
-        String query = "SELECT id, nombre, stock, fechaVencimiento, laboratorio, dosis, id_presentacion AS 'presentacion' "
-                + "FROM medicamento WHERE (julianday(fechaVencimiento) - julianday('now')) <= 15";
+        String query = "SELECT medicamento.id, medicamento.nombre, stock, fechaVencimiento, laboratorio, "
+                + "dosis, id_presentacion, presentacion.nombre AS 'presentacion' "
+                + "FROM medicamento JOIN presentacion ON medicamento.id_presentacion = presentacion.id "
+                + "WHERE (julianday(fechaVencimiento) - julianday('now')) <= 15";
 
         try (Connection con = SQLiteDAO.getConn().open()) {
             List<Medicamento> medicamentos = con
@@ -144,43 +148,37 @@ public class MedicamentoDAO {
      * @param med A {@code Medicameto} el medicamento a actualizar.
      */
     public void update(Medicamento med) {
-        String query1 = "SELECT id FROM presentacion WHERE nombre = :presName";
+        String query2 = "UPDATE medicamento "
+                + "SET nombre = :nombre, stock = :stock, fechaVencimiento = :fechaVencimiento, "
+                + "laboratorio = :laboratorio, dosis = :dosis, id_presentacion = :id_presentacion"
+                + " WHERE id = :id";
 
         try (Connection con = SQLiteDAO.getConn().open()) {
-            Integer medPresId = con
-                    .createQuery(query1)
-                    .addParameter("presName", med.getPresentacion())
-                    .executeAndFetchFirst(Integer.class);
-
-            if (medPresId != null) {
-                String query2 = "UPDATE medicamento "
-                        + "SET nombre = :nombre, stock = :stock, fechaVencimiento = :fechaVencimiento, "
-                        + "laboratorio = :laboratorio, dosis = :dosis, id_presentacion = " + medPresId
-                        + " WHERE id = :id";
-
-                con.createQuery(query2).bind(med).executeUpdate();
-            }
+            con.createQuery(query2).bind(med).executeUpdate();
         } catch (Exception e) {
             System.out.println(e);
         }
     }
 
-    public boolean exist(Medicamento med) {
-        boolean var = false;
-        String query1 = "SELECT id FROM medicamento WHERE nombre = :nombre";
+    public boolean exists(Medicamento med) {
+        String query1 = "SELECT medicamento.id "
+                + "FROM medicamento JOIN presentacion ON medicamento.id_presentacion = presentacion.id "
+                + "WHERE medicamento.nombre = :nombre AND presentacion.nombre = :presName";
+
         try (Connection con = SQLiteDAO.getConn().open()) {
             Integer medPresId = con
                     .createQuery(query1)
                     .addParameter("nombre", med.getNombre())
+                    .addParameter("presName", med.getPresentacion())
                     .executeAndFetchFirst(Integer.class);
 
             if (medPresId != null) {
-                var = true;
+                return true;
             }
         } catch (Exception e) {
             System.out.println(e);
         }
 
-        return var;
+        return false;
     }
 }

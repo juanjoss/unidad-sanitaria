@@ -199,18 +199,11 @@ public class AddMedFrame extends javax.swing.JFrame {
      */
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
         String nombre = nombreTextField.getText();
-        
         int stock = 0;
         try {
             stock = Integer.parseInt(stockTextField.getText());
         } catch(Exception e) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "El stock ingresado es invalido.",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
-            stockTextField.setText("0");
+            stock= -1;
         }
 
         SimpleDateFormat fechaFormato = new SimpleDateFormat("yyyy-MM-dd");
@@ -234,14 +227,24 @@ public class AddMedFrame extends javax.swing.JFrame {
 
             if (!medDAO.exists(med)) {
                 if (DateUtil.greaterThanCrntDate(selectFechaV.getDate())) {
-                    medDAO.insert(med);
-                    JOptionPane.showMessageDialog(
-                            this,
-                            "¡El medicamento se ha guardado exitosamente!",
-                            "Éxito",
-                            JOptionPane.INFORMATION_MESSAGE
-                    );
-                    volverMain();
+                    if (stock >=0) {
+                        medDAO.insert(med);
+                        JOptionPane.showMessageDialog(
+                                this,
+                                "¡El medicamento se ha guardado exitosamente!",
+                                "Éxito",
+                                JOptionPane.INFORMATION_MESSAGE
+                        );
+                        volverMain();   
+                    } else {
+                        JOptionPane.showMessageDialog(
+                        this,
+                        "El stock ingresado es invalido.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                        );
+                        stockTextField.setText("0");
+                    }  
                 } else {
                     JOptionPane.showMessageDialog(
                             this,

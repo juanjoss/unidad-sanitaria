@@ -20,6 +20,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
+import javax.swing.WindowConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
@@ -43,8 +44,9 @@ import org.simplejavamail.mailer.MailerBuilder;
 public class MainFrame extends javax.swing.JFrame {
 
     TableRowSorter<TableModel> rowSorter;
+    private static final MainFrame mainFrame = new MainFrame();
 
-    public MainFrame() {
+    private MainFrame() {
         initComponents();
 
         DefaultTableModel model = (DefaultTableModel) medTable.getModel();
@@ -62,6 +64,9 @@ public class MainFrame extends javax.swing.JFrame {
          * Evento para la actualizacion de filas en la BD.
          */
         model.addTableModelListener((TableModelEvent evt) -> {
+            if(evt.getType() == TableModelEvent.INSERT) {
+                System.out.println(model.getValueAt(evt.getFirstRow(), 1));
+            }
             if (evt.getType() == TableModelEvent.UPDATE && evt.getColumn() != TableModelEvent.ALL_COLUMNS) {
 
                 int idMed = (int) model.getValueAt(evt.getFirstRow(), 0);
@@ -165,7 +170,15 @@ public class MainFrame extends javax.swing.JFrame {
 
         checkAlerts();
     }
-
+    
+    public static MainFrame getInstance() {
+        return mainFrame;
+    }
+    
+    public static void updateInstace() {
+        mainFrame.resetTableModel();
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -557,6 +570,7 @@ public class MainFrame extends javax.swing.JFrame {
         fromTF.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
         fromTF.setForeground(new java.awt.Color(0, 0, 0));
         fromTF.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        fromTF.setText("unisancolser@hotmail.com");
 
         sendSolBtn.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
         sendSolBtn.setForeground(new java.awt.Color(0, 0, 0));
@@ -617,6 +631,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         emailSubject.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
         emailSubject.setForeground(new java.awt.Color(0, 0, 0));
+        emailSubject.setText("Solicitud de Stock");
 
         jLabel1.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
@@ -768,13 +783,11 @@ public class MainFrame extends javax.swing.JFrame {
      * Evento para el boton de agregar medicamento.
      */
     private void addMedBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMedBtnActionPerformed
-        // TODO add your handling code here:
-        AddMedFrame p = new AddMedFrame();
-        p.setVisible(true);
-        p.pack();
-        p.setLocationRelativeTo(null);
-        p.setDefaultCloseOperation(p.DO_NOTHING_ON_CLOSE);
-        this.dispose();
+        AddMedFrame addFrame = new AddMedFrame();
+        addFrame.setVisible(true);
+        addFrame.pack();
+        addFrame.setLocationRelativeTo(null);
+        addFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     }//GEN-LAST:event_addMedBtnActionPerformed
 
     /**
@@ -1146,8 +1159,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         if (meds != null) {
             model.setNumRows(0);
-
-            meds.forEach(m -> {
+            
+            meds.forEach(m -> {                
                 model.addRow(
                         new Object[]{
                             m.getId(),

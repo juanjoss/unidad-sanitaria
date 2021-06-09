@@ -743,6 +743,7 @@
                   <Color blue="0" green="0" red="0" type="rgb"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
+                <Property name="text" type="java.lang.String" value="unisancolser@hotmail.com"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="sendSolBtn">
@@ -825,6 +826,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="0" green="0" red="0" type="rgb"/>
                 </Property>
+                <Property name="text" type="java.lang.String" value="Solicitud de Stock"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel1">

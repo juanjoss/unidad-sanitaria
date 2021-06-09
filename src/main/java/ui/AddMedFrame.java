@@ -11,7 +11,7 @@ import model.Presentacion;
 import util.DateUtil;
 
 public class AddMedFrame extends javax.swing.JFrame {
-
+    
     public AddMedFrame() {
         initComponents();
         loadPresentaciones();
@@ -52,15 +52,15 @@ public class AddMedFrame extends javax.swing.JFrame {
 
         nombreLabel.setBackground(new java.awt.Color(0, 0, 0));
         nombreLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        nombreLabel.setText("Nombre:");
+        nombreLabel.setText("Nombre: *");
 
         stockLabel.setBackground(new java.awt.Color(0, 0, 0));
         stockLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        stockLabel.setText("Stock:");
+        stockLabel.setText("Stock: *");
 
         fechaVLabel.setBackground(new java.awt.Color(0, 0, 0));
         fechaVLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        fechaVLabel.setText("Fecha de Vencimiento:");
+        fechaVLabel.setText("Fecha de Vencimiento: *");
 
         stockTextField.setText("0");
 
@@ -108,19 +108,15 @@ public class AddMedFrame extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(146, Short.MAX_VALUE)
+                .addContainerGap(76, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(nombreLabel)
                     .addComponent(stockLabel)
                     .addComponent(fechaVLabel)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(dosisLabel)
-                        .addGap(53, 53, 53))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(laboratorioLabel)
-                            .addComponent(presentacionLabel))
-                        .addGap(24, 24, 24)))
+                    .addComponent(dosisLabel)
+                    .addComponent(presentacionLabel)
+                    .addComponent(laboratorioLabel))
+                .addGap(53, 53, 53)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
@@ -193,7 +189,7 @@ public class AddMedFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     /**
      * Evento para agregar un medicamento.
      */
@@ -235,7 +231,8 @@ public class AddMedFrame extends javax.swing.JFrame {
                                 "Éxito",
                                 JOptionPane.INFORMATION_MESSAGE
                         );
-                        volverMain();   
+                        
+                        volverMain();
                     } else {
                         JOptionPane.showMessageDialog(
                         this,
@@ -284,12 +281,8 @@ public class AddMedFrame extends javax.swing.JFrame {
      * @return {@code void}.
      */
     private void volverMain() {
-        MainFrame p = new MainFrame();
-        p.setVisible(true);
-        p.pack();
-        p.setLocationRelativeTo(null);
-        p.setDefaultCloseOperation(p.EXIT_ON_CLOSE);
         this.dispose();
+        MainFrame.updateInstace();
     }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -299,16 +292,25 @@ public class AddMedFrame extends javax.swing.JFrame {
                 "Agregar Presentación", 
                 JOptionPane.INFORMATION_MESSAGE
         );
+        
+        if(!nombre.isEmpty()) {
+            Presentacion newPresentacion = new Presentacion();
+            PresentacionDAO pDAO = new PresentacionDAO();
 
-        Presentacion newPresentacion = new Presentacion();
-        PresentacionDAO pDAO = new PresentacionDAO();
+            newPresentacion.setNombre(nombre);
+            pDAO.insert(newPresentacion);
 
-        newPresentacion.setNombre(nombre);
-        pDAO.insert(newPresentacion);
-
-        loadPresentaciones();
-        presentacionComboBox.setSelectedItem(nombre);
-
+            loadPresentaciones();
+            presentacionComboBox.setSelectedItem(nombre);
+        }
+        else {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "¡La presentación ingresada no es valida!",
+                    "Advertencia",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

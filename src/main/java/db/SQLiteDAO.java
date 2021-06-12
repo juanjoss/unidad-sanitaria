@@ -37,6 +37,7 @@ public class SQLiteDAO {
                 + "'pass'	TEXT NOT NULL,"
                 + "'userName'	TEXT NOT NULL UNIQUE,"
                 + "'ultimaSesion'	TEXT,"
+                + "'email'	TEXT NOT NULL,"
                 + "PRIMARY KEY('id' AUTOINCREMENT));";
             
             String queryPedidoTable = "CREATE TABLE IF NOT EXISTS 'pedido' ("

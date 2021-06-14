@@ -39,7 +39,7 @@ public class SQLiteDAO {
                 + "'ultimaSesion'	TEXT,"
                 + "'email'	TEXT NOT NULL,"
                 + "PRIMARY KEY('id' AUTOINCREMENT));";
-            
+
             String queryPedidoTable = "CREATE TABLE IF NOT EXISTS 'pedido' ("
                 + "'id'	INTEGER,"
                 + "'idUsuario'	INTEGER NOT NULL,"
@@ -48,13 +48,25 @@ public class SQLiteDAO {
                 + "'estado'	TEXT NOT NULL,"
                 + "FOREIGN KEY('idUsuario') REFERENCES 'usuario'('id'),"
                 + "PRIMARY KEY('id'));";
-            
-            String queryDetallePedidoTable = "CREATE TABLE IF NOT EXISTS 'detallePedido' ("
-                + "'id'	INTEGER NOT NULL,"
-                + "'idPedido'	INTEGER NOT NULL,"
+
+            String queryDetallePedidoEMTable = "CREATE TABLE IF NOT EXISTS 'detallePedidoEM' ("
+                + "'id'	INTEGER,"
                 + "'cantidad'	INTEGER NOT NULL,"
                 + "'descripcion'	TEXT,"
-                + "FOREIGN KEY('idPedido') REFERENCES 'pedido'('id'),"
+                + "'pedido_id'	INTEGER NOT NULL,"
+                + "'equipoMedico_id'	INTEGER NOT NULL,"
+                + "FOREIGN KEY('equipoMedico_id') REFERENCES 'equipoMedico'('id'),"
+                + "FOREIGN KEY('pedido_id') REFERENCES 'pedido'('id'),"
+                + "PRIMARY KEY('id' AUTOINCREMENT));";
+
+            String queryDetallePedidoMTable = "CREATE TABLE IF NOT EXISTS 'detallePedidoM' ("
+                + "'id'	INTEGER,"
+                + "'cantidad'	INTEGER NOT NULL,"
+                + "'descripcion'	TEXT,"
+                + "'medicamento_id'	INTEGER NOT NULL,"
+                + "'pedido_id'	INTEGER NOT NULL,"
+                + "FOREIGN KEY('medicamento_id') REFERENCES 'medicamento'('id'),"
+                + "FOREIGN KEY('pedido_id') REFERENCES 'pedido'('id'),"
                 + "PRIMARY KEY('id' AUTOINCREMENT));";
 
             String queryDataPresentacion = "INSERT OR IGNORE INTO presentacion(nombre) VALUES ('Sin Especificar');";
@@ -65,7 +77,8 @@ public class SQLiteDAO {
                 sql2o.open().createQuery(queryMedicamentoTable).executeUpdate();
                 sql2o.open().createQuery(queryUsuarioTable).executeUpdate();
                 sql2o.open().createQuery(queryPedidoTable).executeUpdate();
-                sql2o.open().createQuery(queryDetallePedidoTable).executeUpdate();
+                sql2o.open().createQuery(queryDetallePedidoEMTable).executeUpdate();
+                sql2o.open().createQuery(queryDetallePedidoMTable).executeUpdate();
                 sql2o.open().createQuery(queryDataPresentacion).executeUpdate();
             } catch (Exception e) {
                 System.out.println(e);

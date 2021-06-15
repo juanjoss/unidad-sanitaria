@@ -181,4 +181,30 @@ public class MedicamentoDAO {
 
         return false;
     }
+
+     /**
+     * Retorna un medicamento.
+     *
+     * @param id A {@code int} el ID del medicamento.
+     * @return A {@code Medicameto}.
+     */
+    public Medicamento buscarPorNombrePresentacion(String nombre, String presentacion, String dosis) {
+        String query = "SELECT medicamento.id, medicamento.nombre, stock, fechaVencimiento, laboratorio, dosis, id_presentacion, presentacion.nombre AS 'presentacion' "
+                + "FROM medicamento JOIN presentacion ON medicamento.id_presentacion = presentacion.id "
+                + "WHERE medicamento.nombre = :nombre AND presentacion.nombre = :presentacion AND medicamento.dosis = :dosis;";
+
+        try (Connection con = SQLiteDAO.getConn().open()) {
+            Medicamento med = con
+                    .createQuery(query)
+                    .addParameter("nombre", nombre)
+                    .addParameter("presentacion", presentacion)
+                    .addParameter("dosis", dosis)
+                    .executeAndFetchFirst(Medicamento.class);
+            return med;
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return null;
+    }
 }

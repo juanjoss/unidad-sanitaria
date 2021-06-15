@@ -27,4 +27,28 @@ public class EquipoMedicoDAO {
 
         return null;
     }
+
+    /**
+     * Retorna un equipo médico.
+     *
+     * @param id A {@code string} el nombre del equipo médico.
+     * @return A {@code EquipoMedico}.
+     */
+    public EquipoMedico buscarPorNombre(String nombre) {
+        String query = "SELECT * "
+                + "FROM equipoMedico "
+                + "WHERE equipoMedico.nombre = :nombre;";
+
+        try (Connection con = SQLiteDAO.getConn().open()) {
+            EquipoMedico em = con
+                    .createQuery(query)
+                    .addParameter("nombre", nombre)
+                    .executeAndFetchFirst(EquipoMedico.class);
+            return em;
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return null;
+    }
 }

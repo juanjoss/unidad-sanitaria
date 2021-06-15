@@ -43,7 +43,7 @@ public class SQLiteDAO {
             String queryPedidoTable = "CREATE TABLE IF NOT EXISTS 'pedido' ("
                 + "'id'	INTEGER,"
                 + "'idUsuario'	INTEGER NOT NULL,"
-                + "'correoProveedor'	INTEGER NOT NULL,"
+                + "'correoProveedor'	TEXT NOT NULL,"
                 + "'fecha'	TEXT NOT NULL,"
                 + "'estado'	TEXT NOT NULL,"
                 + "FOREIGN KEY('idUsuario') REFERENCES 'usuario'('id'),"

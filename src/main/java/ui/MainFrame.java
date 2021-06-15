@@ -8,6 +8,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
@@ -28,8 +29,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-import model.EquipoMedico;
+import model.*;
 import model.Medicamento;
+import model.EquipoMedico;
 import org.apache.commons.text.StringEscapeUtils;
 import util.DateUtil;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -899,6 +901,11 @@ public class MainFrame extends javax.swing.JFrame {
         if (ev.isValid(toEmail) && ev.isValid(fromEmail)) {
             try {
                 try (BufferedWriter bw = new BufferedWriter(new FileWriter(".\\table.html", false))) {
+                    
+
+
+                    Pedido pedido = new Pedido();//agregar arg
+                    
                     bw.write("<html>");
                     bw.write("<body style='max-width: 500px; margin: auto;'>");
                     bw.write("<p>" + StringEscapeUtils.escapeHtml4(emailCmt) + "</p>");
@@ -914,12 +921,50 @@ public class MainFrame extends javax.swing.JFrame {
                     bw.write("</tr>");
 
                     for (int r = 0; r < model.getRowCount(); ++r) {
+                        String descripcion = "";
+                        String[] partes = null; //ver
+                        String mg = "";
+                        String comprimido = "";
+                        int cantidad = 0;
+
                         bw.write("<tr style='border: 1px solid black;'>");
 
                         for (int c = 0; c < model.getColumnCount(); ++c) {
                             bw.write("<td style='text-align: center; border: 1px solid black;'>");
                             bw.write(model.getValueAt(r, c).toString());
+                            
+                            if (c == 0){
+                                descripcion = model.getValueAt(r, c).toString();
+                                partes = descripcion.split("-");
+                            }
+
+                            if (c == 3){
+                                cantidad = Integer.parseInt(model.getValueAt(r, c).toString());
+                            }
+
+                            if (c == 1){
+                                mg = model.getValueAt(r, c).toString();
+                            }
+
+                            if (c == 2){
+                                comprimido = model.getValueAt(r, c).toString();
+                            }
+                            
                             bw.write("</td>");
+                        }
+                        EquipoMedicoDAO equipoMedicoDAO = new EquipoMedicoDAO();
+                        MedicamentoDAO medicamentoDAO = new MedicamentoDAO();
+                        
+                        if(partes.length == 3){  // controla si es un medicamento
+                            Medicamento m = medicamentoDAO.buscarPorNombrePresentacion(partes[0].trim(), partes[1].trim(), partes[3].trim());
+                            itemMedicamento.add(m);
+                            DetallePedidoM dpm = new DetallePedidoM(0, cantidad, descripcion, pedido.getId(), m.getId());
+                        }
+                        else
+                        {
+                            EquipoMedico em = equipoMedicoDAO.buscarPorNombre(partes[0].trim());
+                            itemEquipoM.add(em);
+                            DetallePedidoEM dpem = new DetallePedidoEM(0, cantidad, descripcion, pedido.getId(), em.getId());
                         }
 
                         bw.write("</tr>");
@@ -1068,7 +1113,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     /**
-     * Checkeo de alertas por bajo stock y vencimientos.
+     * Checkeo de alertas por bajo stock y vencimientos. 
      */
     private void checkAlerts() {
         MedicamentoDAO medDAO = new MedicamentoDAO();
@@ -1088,7 +1133,7 @@ public class MainFrame extends javax.swing.JFrame {
                 medStockAlert.setDisabledTextColor(Color.red);
 
                 medsWithLowStock.forEach(m -> {
-                    mlModel.addElement(m.getNombre() + " " + m.getPresentacion() + " (" + m.getDosis() + ")");
+                    mlModel.addElement(m.getNombre() + " - " + m.getPresentacion() + " - " + m.getDosis());
                 });
             } else {
                 medStockAlert.setText("No hay medicamentos con poco stock");
@@ -1103,7 +1148,8 @@ public class MainFrame extends javax.swing.JFrame {
 
                 medsInExpRange.forEach(m -> {
                     if (!medsWithLowStock.contains(m)) {
-                        mlModel.addElement(m.getNombre() + " " + m.getPresentacion() + " (" + m.getDosis() + ")");
+                        mlModel.addElement(m.getNombre() + " - " + m.getPresentacion() + " - " + m.getDosis());
+                       
                     }
                 });
             } else {
@@ -1197,6 +1243,9 @@ public class MainFrame extends javax.swing.JFrame {
             new MainFrame().setVisible(true);
         });
     }
+
+    List<Medicamento> itemMedicamento = new ArrayList<>();
+    List<EquipoMedico> itemEquipoM = new ArrayList<>();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JButton addMedBtn;

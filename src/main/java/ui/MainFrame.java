@@ -45,7 +45,6 @@ public class MainFrame extends javax.swing.JFrame {
 
     TableRowSorter<TableModel> rowSorter;
     TableRowSorter<TableModel> meRowSorter;
-    private static final MainFrame mainFrame = new MainFrame();
 
     private MainFrame() {
         initComponents();
@@ -69,6 +68,9 @@ public class MainFrame extends javax.swing.JFrame {
          * Evento para la tabla de equipo medico la actualizacion de filas en la BD.
          */
         meModel.addTableModelListener((TableModelEvent evt) -> {
+            if(evt.getType() == TableModelEvent.INSERT) {
+//                System.out.println(meModel.getValueAt(evt.getFirstRow(), 1));
+            }
             if(evt.getType() == TableModelEvent.UPDATE && evt.getColumn() != TableModelEvent.ALL_COLUMNS) {
                 int id = (int) meModel.getValueAt(evt.getFirstRow(), 0);
                 String name = (String) meModel.getValueAt(evt.getFirstRow(), 1);
@@ -129,7 +131,7 @@ public class MainFrame extends javax.swing.JFrame {
          */
         medModel.addTableModelListener((TableModelEvent evt) -> {
             if(evt.getType() == TableModelEvent.INSERT) {
-//                System.out.println(model.getValueAt(evt.getFirstRow(), 1));
+//                System.out.println(medModel.getValueAt(evt.getFirstRow(), 1));
             }
             if (evt.getType() == TableModelEvent.UPDATE && evt.getColumn() != TableModelEvent.ALL_COLUMNS) {
 
@@ -233,14 +235,6 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         checkAlerts();
-    }
-    
-    public static MainFrame getInstance() {
-        return mainFrame;
-    }
-    
-    public void updateInstace() {
-        
     }
     
     /**
@@ -1349,11 +1343,17 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void addMEBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMEBtnActionPerformed
         // TODO add your handling code here:
+        this.dispose();
         AddMEDialog dialog = new AddMEDialog(this, true);
         
         dialog.setVisible(true);
         dialog.pack();
         dialog.setLocationRelativeTo(null);
+        
+        MainFrame m = new MainFrame();
+        m.setVisible(true);
+        m.pack();
+        m.setLocationRelativeTo(null);
     }//GEN-LAST:event_addMEBtnActionPerformed
 
     private void meCbLowStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_meCbLowStockActionPerformed
@@ -1543,6 +1543,7 @@ public class MainFrame extends javax.swing.JFrame {
                         });
             });
         }
+//        System.out.println("med: " + medModel.getDataVector());
             
         /**
          * Tabla de medicamentos
@@ -1573,6 +1574,7 @@ public class MainFrame extends javax.swing.JFrame {
                 );
             });
         }
+//        System.out.println("Eq. med: " + meModel.getDataVector());
         
         /**
          * Tabla de equipo medico

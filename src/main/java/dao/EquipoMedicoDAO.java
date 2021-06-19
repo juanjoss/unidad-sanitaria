@@ -94,6 +94,30 @@ public class EquipoMedicoDAO {
     }
     
     /**
+     * Retorna todo el equipo medico.
+     *
+     * @param name A {@code String} nombre del equipo medico a recuperar.
+     * @return A {@code EquipoMedico}.
+     */
+    public EquipoMedico getMedEqByName(String name) {
+        String query = "SELECT * FROM equipoMedico WHERE nombre = :name;";
+        
+        try(Connection con = SQLiteDAO.getConn().open()) {
+            EquipoMedico me = con
+                    .createQuery(query)
+                    .addParameter("name", name)
+                    .executeAndFetchFirst(EquipoMedico.class);
+            
+            return me;
+        }
+        catch(Exception e) {
+            System.out.println(e);
+        }
+        
+        return null;
+    }
+    
+    /**
      * actualiza un equipo medico.
      *
      * @param me A {@code EquipoMedico} el equipo medico a actualizar.
@@ -116,15 +140,20 @@ public class EquipoMedicoDAO {
      * Elimina un equipo medico.
      *
      * @param id A {@code Integer} el id del equipo medico a eliminar.
+     * @return A {@code boolean} si se pudo eliminar.
      */
-    public void delete(int id) {
+    public boolean delete(int id) {
         String query = "DELETE FROM equipoMedico WHERE id = :id";
         
         try (Connection con = SQLiteDAO.getConn().open()) {
             con.createQuery(query)
                     .addParameter("id", id)
                     .executeUpdate();
+            
+            return true;
         }
-        catch (Exception e) {}
+        catch (Exception e) {
+            return false;
+        }
     }
 }

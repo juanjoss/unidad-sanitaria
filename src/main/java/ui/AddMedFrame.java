@@ -282,7 +282,6 @@ public class AddMedFrame extends javax.swing.JFrame {
      */
     private void volverMain() {
         this.dispose();
-        MainFrame.updateInstace();
     }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

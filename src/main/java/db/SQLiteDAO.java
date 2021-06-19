@@ -11,10 +11,11 @@ public class SQLiteDAO {
             sql2o = new Sql2o("jdbc:sqlite:./unidad_sanitaria.db", null, null);
 
             String queryEquipoTable = "CREATE TABLE IF NOT EXISTS 'equipoMedico' ("
-                    + "'nombre'	TEXT NOT NULL,"
-                    + "'id'	INTEGER NOT NULL,"
-                    + "'stock'	INTEGER NOT NULL,"
-                    + "PRIMARY KEY('id','nombre'));";
+                    + "nombre TEXT NOT NULL UNIQUE, "
+                    + "id INTEGER NOT NULL, "
+                    + "stock INTEGER NOT NULL, "
+                    + "PRIMARY KEY(id AUTOINCREMENT)"
+                    + ");";
 
             String queryPresentacionTable = "CREATE TABLE IF NOT EXISTS 'presentacion' ("
                     + "'id'	INTEGER NOT NULL,"

@@ -1,13 +1,14 @@
 package model;
 
 import lombok.Data;
+import lombok.AllArgsConstructor;
 
-@Data
+@Data @AllArgsConstructor
 public class Pedido {
 
     private int id;
     private int idUsuario;
-    private String correoProvedor;
+    private String correoProveedor;
     private String fecha;
     private String estado;
 }

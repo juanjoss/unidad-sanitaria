@@ -2,6 +2,8 @@ package ui;
 
 import dao.EquipoMedicoDAO;
 import dao.MedicamentoDAO;
+import dao.PedidoDAO;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.io.BufferedWriter;
@@ -9,7 +11,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Enumeration;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Vector;
 import javax.mail.AuthenticationFailedException;
@@ -51,14 +55,26 @@ public class MainFrame extends javax.swing.JFrame {
 
         DefaultTableModel model = (DefaultTableModel) medTable.getModel();
         DefaultTableModel stModel = (DefaultTableModel) solicitudeTable.getModel();
+        DefaultTableModel pModel = (DefaultTableModel) tablaPedido.getModel();
 
         MedicamentoDAO medDAO = new MedicamentoDAO();
+
+        PedidoDAO pedDAO = new PedidoDAO();
 
         /**
          * Se carga la tabla desde la BD y se remueve la columna Id
          */
         resetTableModel();
         medTable.removeColumn(medTable.getColumnModel().getColumn(0));
+
+        /**
+         * Para los pedidos
+         */
+       
+        resetTablaPedidos();
+       //tablaPedido.removeColumn(tablaPedido.getColumnModel().getColumn(0));
+        
+       //tablaPedido.removeColumn(tablaPedido.getColumnModel().getColumn(1));
 
         /**
          * Evento para la actualizacion de filas en la BD.
@@ -217,13 +233,17 @@ public class MainFrame extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         emailComment = new javax.swing.JTextPane();
         jLabel2 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tablaPedido = new javax.swing.JTable();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        tablaDetallle = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMinimumSize(new java.awt.Dimension(1200, 600));
 
         jTabbedPane1.setBackground(new java.awt.Color(255, 255, 221));
-        jTabbedPane1.setForeground(new java.awt.Color(0, 0, 0));
         jTabbedPane1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jTabbedPane1.setFont(new java.awt.Font("Cascadia Code", 0, 18)); // NOI18N
         jTabbedPane1.setMaximumSize(new java.awt.Dimension(1366, 768));
@@ -290,13 +310,11 @@ public class MainFrame extends javax.swing.JFrame {
         }
 
         searchBarLabel.setFont(new java.awt.Font("Cascadia Code", 0, 16)); // NOI18N
-        searchBarLabel.setForeground(new java.awt.Color(0, 0, 0));
         searchBarLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         searchBarLabel.setText("Ingrese un medicamento para buscar:");
 
         cbLowStock.setBackground(new java.awt.Color(255, 255, 204));
         cbLowStock.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
-        cbLowStock.setForeground(new java.awt.Color(0, 0, 0));
         cbLowStock.setText("Solo medicamentos con poco stock");
         cbLowStock.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -306,7 +324,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         cbExpDate.setBackground(new java.awt.Color(255, 255, 204));
         cbExpDate.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
-        cbExpDate.setForeground(new java.awt.Color(0, 0, 0));
         cbExpDate.setText("Solo medicamentos en rango de vencimiento");
         cbExpDate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -340,11 +357,9 @@ public class MainFrame extends javax.swing.JFrame {
         medStockAlert.setEnabled(false);
 
         expAlertLbl.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
-        expAlertLbl.setForeground(new java.awt.Color(0, 0, 0));
         expAlertLbl.setText("Estado de Vencimientos:");
 
         stockAlertLbl.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
-        stockAlertLbl.setForeground(new java.awt.Color(0, 0, 0));
         stockAlertLbl.setText("Estado del Stock:");
 
         medExpAlert.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
@@ -424,7 +439,6 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         filterComboBox.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
-        filterComboBox.setForeground(new java.awt.Color(0, 0, 0));
         filterComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Por Nombre", "Por Dosis", "Por Laboratorio", "Por Presentación" }));
         filterComboBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -454,7 +468,7 @@ public class MainFrame extends javax.swing.JFrame {
                         .addComponent(resetTableBtn)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -513,21 +527,17 @@ public class MainFrame extends javax.swing.JFrame {
         DefaultListModel mlModel = new DefaultListModel();
         missingsList.setModel(mlModel);
         missingsList.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        missingsList.setForeground(new java.awt.Color(0, 0, 0));
         DefaultListCellRenderer mlCellRenderer = (DefaultListCellRenderer) missingsList.getCellRenderer();
         mlCellRenderer.setHorizontalAlignment(JLabel.CENTER);
         jScrollPane1.setViewportView(missingsList);
 
         mlLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        mlLabel.setForeground(new java.awt.Color(0, 0, 0));
         mlLabel.setText("Medicamentos y Equipo Médico Faltante:");
 
         slLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        slLabel.setForeground(new java.awt.Color(0, 0, 0));
         slLabel.setText("Lista de Pedidos:");
 
         addToSLBtn.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        addToSLBtn.setForeground(new java.awt.Color(0, 0, 0));
         addToSLBtn.setText("Agregar");
         addToSLBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -536,7 +546,6 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         removeFromSTBtn.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        removeFromSTBtn.setForeground(new java.awt.Color(0, 0, 0));
         removeFromSTBtn.setText("Quitar");
         removeFromSTBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -545,23 +554,18 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         toTF.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        toTF.setForeground(new java.awt.Color(0, 0, 0));
         toTF.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         toTFLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        toTFLabel.setForeground(new java.awt.Color(0, 0, 0));
         toTFLabel.setText("Enviar a:");
 
         fromTFLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        fromTFLabel.setForeground(new java.awt.Color(0, 0, 0));
         fromTFLabel.setText("Enviar desde:");
 
         fromTF.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        fromTF.setForeground(new java.awt.Color(0, 0, 0));
         fromTF.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         sendSolBtn.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        sendSolBtn.setForeground(new java.awt.Color(0, 0, 0));
         sendSolBtn.setText("Enviar Solicitud");
         sendSolBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -570,7 +574,6 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         solicitudeTable.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        solicitudeTable.setForeground(new java.awt.Color(0, 0, 0));
         solicitudeTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -618,20 +621,16 @@ public class MainFrame extends javax.swing.JFrame {
         }
 
         emailSubject.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        emailSubject.setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel1.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Asunto:");
 
         jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         emailComment.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        emailComment.setForeground(new java.awt.Color(0, 0, 0));
         jScrollPane2.setViewportView(emailComment);
 
         jLabel2.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Comentario:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -722,6 +721,57 @@ public class MainFrame extends javax.swing.JFrame {
         );
 
         jTabbedPane1.addTab("Solicitud de Medicamentos", jPanel1);
+
+        jPanel5.setBackground(new java.awt.Color(255, 255, 204));
+
+        tablaPedido.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Correo Proveedor", "Fecha", "Estado"
+            }
+        ));
+        jScrollPane4.setViewportView(tablaPedido);
+
+        tablaDetallle.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Descripcion", "Cantidad"
+            }
+        ));
+        jScrollPane5.setViewportView(tablaDetallle);
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(441, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(282, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Historial de Pedidos", jPanel5);
 
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.PAGE_START);
 
@@ -902,10 +952,6 @@ public class MainFrame extends javax.swing.JFrame {
             try {
                 try (BufferedWriter bw = new BufferedWriter(new FileWriter(".\\table.html", false))) {
                     
-
-
-                    Pedido pedido = new Pedido();//agregar arg
-                    
                     bw.write("<html>");
                     bw.write("<body style='max-width: 500px; margin: auto;'>");
                     bw.write("<p>" + StringEscapeUtils.escapeHtml4(emailCmt) + "</p>");
@@ -921,54 +967,17 @@ public class MainFrame extends javax.swing.JFrame {
                     bw.write("</tr>");
 
                     for (int r = 0; r < model.getRowCount(); ++r) {
-                        String descripcion = "";
-                        String[] partes = null; //ver
-                        String mg = "";
-                        String comprimido = "";
-                        int cantidad = 0;
-
                         bw.write("<tr style='border: 1px solid black;'>");
 
                         for (int c = 0; c < model.getColumnCount(); ++c) {
                             bw.write("<td style='text-align: center; border: 1px solid black;'>");
                             bw.write(model.getValueAt(r, c).toString());
-                            
-                            if (c == 0){
-                                descripcion = model.getValueAt(r, c).toString();
-                                partes = descripcion.split("-");
-                            }
-
-                            if (c == 3){
-                                cantidad = Integer.parseInt(model.getValueAt(r, c).toString());
-                            }
-
-                            if (c == 1){
-                                mg = model.getValueAt(r, c).toString();
-                            }
-
-                            if (c == 2){
-                                comprimido = model.getValueAt(r, c).toString();
-                            }
-                            
                             bw.write("</td>");
-                        }
-                        EquipoMedicoDAO equipoMedicoDAO = new EquipoMedicoDAO();
-                        MedicamentoDAO medicamentoDAO = new MedicamentoDAO();
-                        
-                        if(partes.length == 3){  // controla si es un medicamento
-                            Medicamento m = medicamentoDAO.buscarPorNombrePresentacion(partes[0].trim(), partes[1].trim(), partes[3].trim());
-                            itemMedicamento.add(m);
-                            DetallePedidoM dpm = new DetallePedidoM(0, cantidad, descripcion, pedido.getId(), m.getId());
-                        }
-                        else
-                        {
-                            EquipoMedico em = equipoMedicoDAO.buscarPorNombre(partes[0].trim());
-                            itemEquipoM.add(em);
-                            DetallePedidoEM dpem = new DetallePedidoEM(0, cantidad, descripcion, pedido.getId(), em.getId());
                         }
 
                         bw.write("</tr>");
                     }
+                    
                     bw.write("</table>");
                     bw.write("</body>");
                     bw.write("</html>");
@@ -1016,8 +1025,19 @@ public class MainFrame extends javax.swing.JFrame {
 
                             if (res != null) {
                                 res.onSuccess(() -> {
-                                    solicitudeTable.removeAll();
+                                    Calendar fecha_actual = new GregorianCalendar();                                                   
+                                    int anio = fecha_actual.get(Calendar.YEAR);
+                                    int mes = fecha_actual.get(Calendar.MONTH);
+                                    int dia = fecha_actual.get(Calendar.DAY_OF_MONTH);
+                                    String fecha_pedido = "" + dia + "/" + (mes+1) + "/" + anio;
 
+                                    Pedido pedido = new Pedido(0, 1, "ejemplo@ejemplo.com", fecha_pedido, "enviado");
+
+                                    System.out.println(pedido.getId());
+
+                                    crearDetalles(pedido.getId());
+                                    
+                                    solicitudeTable.removeAll();
                                     JOptionPane.showMessageDialog(
                                             this,
                                             "El email con la solicitud se ha enviado exitosamente.",
@@ -1058,7 +1078,61 @@ public class MainFrame extends javax.swing.JFrame {
             );
         }
     }//GEN-LAST:event_sendSolBtnActionPerformed
+    
+    private void crearDetalles(int id_pedido) {
+        DefaultTableModel model = (DefaultTableModel) solicitudeTable.getModel();
+        
+        for (int r = 0; r < model.getRowCount(); ++r) {
+            String descripcion = "";
+            String[] partes = null; //ver
+            String mg = "";
+            String comprimido = "";
+            int cantidad = 0;
 
+            for (int c = 0; c < model.getColumnCount(); ++c) {
+                
+                if (c == 0){
+                    descripcion = model.getValueAt(r, c).toString();
+                    partes = descripcion.split("-");
+                }
+
+                if (c == 3){
+                    cantidad = Integer.parseInt(model.getValueAt(r, c).toString());
+                }
+
+                if (c == 1){
+                    mg = model.getValueAt(r, c).toString();
+                }
+
+                if (c == 2){
+                    comprimido = model.getValueAt(r, c).toString();
+                }
+                
+            }
+            
+            EquipoMedicoDAO equipoMedicoDAO = new EquipoMedicoDAO();
+            MedicamentoDAO medicamentoDAO = new MedicamentoDAO();
+            
+            if(partes.length == 3) {  // controla si es un medicamento
+                Medicamento m = medicamentoDAO.buscarPorNombrePresentacion(partes[0].trim(), partes[1].trim(), partes[2].trim());
+                itemMedicamento.add(m);
+                System.out.println(m.getNombre());
+                System.out.println(m.getFechaVencimiento());
+                System.out.println(m.getLaboratorio());
+                System.out.println(m.getDosis());
+                System.out.println(m.getStock());
+                System.out.println(m.getPresentacion());
+                DetallePedidoM dpm = new DetallePedidoM(0, cantidad, descripcion, id_pedido, m.getId());
+            }
+            else
+            {
+                EquipoMedico em = equipoMedicoDAO.buscarPorNombre(partes[0].trim());
+                itemEquipoM.add(em);
+                DetallePedidoEM dpem = new DetallePedidoEM(0, cantidad, descripcion, id_pedido, em.getId());
+            }   
+        }
+    }
+    
     private void filterComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_filterComboBoxItemStateChanged
         filterTable();
     }//GEN-LAST:event_filterComboBoxItemStateChanged
@@ -1220,6 +1294,40 @@ public class MainFrame extends javax.swing.JFrame {
         cbExpDate.setSelected(false);
     }
 
+    /**
+     * Restaura la tabla de pedidos.
+     */
+    private void resetTablaPedidos() {
+        DefaultTableModel model = (DefaultTableModel) tablaPedido.getModel();
+        PedidoDAO pedDAO = new PedidoDAO();
+        List<Pedido> peds = pedDAO.selectAllxId(1);
+
+        if (peds != null) {
+            model.setNumRows(0);
+
+            peds.forEach(p -> {
+                model.addRow(
+                        new Object[]{
+                            //p.getId(),
+                            //p.getIdUsuario(),
+                            p.getCorreoProveedor(),
+                            /*DateUtil.formatDate(
+                                    p.getFecha(),
+                                    "yyyy-mm-dd",
+                                    "dd/mm/yyyy"
+                            //),*/
+                            p.getFecha(),
+                            p.getEstado()
+                        });
+            });
+        }
+
+        //rowSorter.setRowFilter(null);
+        //medTable.getRowSorter().setSortKeys(null);
+        //cbLowStock.setSelected(false);
+        //cbExpDate.setSelected(false);
+    }
+
     public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -1266,9 +1374,12 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JPanel jPanel1;
     javax.swing.JPanel jPanel2;
     javax.swing.JPanel jPanel3;
+    javax.swing.JPanel jPanel5;
     javax.swing.JScrollPane jScrollPane1;
     javax.swing.JScrollPane jScrollPane2;
     javax.swing.JScrollPane jScrollPane3;
+    javax.swing.JScrollPane jScrollPane4;
+    javax.swing.JScrollPane jScrollPane5;
     javax.swing.JTabbedPane jTabbedPane1;
     javax.swing.JPanel mainPanel;
     javax.swing.JTextField medExpAlert;
@@ -1285,6 +1396,8 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JLabel slLabel;
     javax.swing.JTable solicitudeTable;
     javax.swing.JLabel stockAlertLbl;
+    javax.swing.JTable tablaDetallle;
+    javax.swing.JTable tablaPedido;
     javax.swing.JTextField toTF;
     javax.swing.JLabel toTFLabel;
     // End of variables declaration//GEN-END:variables

@@ -11,7 +11,6 @@ public class DetallePedidoEM {
     private int pedido_id;
     private int equipoMedico_id;
     
-    
     public DetallePedidoEM(int id, int cantidad, String descripcion, int pedido_id, int equipoMedico_id) {
         this.id = id;
         this.cantidad = cantidad;

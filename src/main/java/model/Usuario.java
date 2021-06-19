@@ -10,4 +10,5 @@ public class Usuario {
     private String userName;
     private String ultimaSesion;
     private String email;
+
 }

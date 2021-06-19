@@ -3,7 +3,7 @@ package ui;
 import dao.EquipoMedicoDAO;
 import dao.MedicamentoDAO;
 import dao.PedidoDAO;
-
+import db.SQLiteDAO;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.io.BufferedWriter;
@@ -36,8 +36,11 @@ import javax.swing.table.TableRowSorter;
 import model.*;
 import model.Medicamento;
 import model.EquipoMedico;
+import model.Usuario;
 import org.apache.commons.text.StringEscapeUtils;
 import util.DateUtil;
+import util.SesionUsuario;
+
 import org.apache.commons.validator.routines.EmailValidator;
 import org.simplejavamail.api.email.Email;
 import org.simplejavamail.api.mailer.AsyncResponse;
@@ -49,8 +52,30 @@ import org.simplejavamail.mailer.MailerBuilder;
 public class MainFrame extends javax.swing.JFrame {
 
     TableRowSorter<TableModel> rowSorter;
+    LoginPanel logP;
 
     public MainFrame() {
+        SQLiteDAO.getConn();
+
+        if(SesionUsuario.getInstance().isLogged()) {
+            loggedIn(SesionUsuario.getInstance().getLoggedUser());
+        }
+        else {
+            logP = new LoginPanel(this);
+            this.add(logP);
+        }
+        setMinimumSize(new java.awt.Dimension(1200, 600));
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+    }
+
+    public void loggedIn(Usuario user) {
+        
+        // Setear en sesion
+        SesionUsuario sesion = SesionUsuario.getInstance();
+        sesion.setLoggedUser(user);
+
+        // Iniciar componentes
         initComponents();
 
         DefaultTableModel model = (DefaultTableModel) medTable.getModel();

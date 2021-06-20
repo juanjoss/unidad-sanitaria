@@ -538,9 +538,6 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap(25, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(borrarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(46, 46, 46))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 968, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel4Layout.createSequentialGroup()
@@ -551,7 +548,10 @@ public class MainFrame extends javax.swing.JFrame {
                                 .addComponent(resetTableBtn)
                                 .addGap(63, 63, 63)
                                 .addComponent(addMedBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(24, 24, 24))))
+                        .addGap(24, 24, 24))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(borrarButton)
+                        .addGap(46, 46, 46))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -571,7 +571,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(borrarButton)
                 .addGap(18, 18, 18)
                 .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         searchBar.getDocument().addDocumentListener(new DocumentListener() {
@@ -1343,17 +1343,11 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void addMEBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMEBtnActionPerformed
         // TODO add your handling code here:
-        this.dispose();
-        AddMEDialog dialog = new AddMEDialog(this, true);
-        
+        AddMEDialog dialog = new AddMEDialog(this, false);
         dialog.setVisible(true);
         dialog.pack();
         dialog.setLocationRelativeTo(null);
-        
-        MainFrame m = new MainFrame();
-        m.setVisible(true);
-        m.pack();
-        m.setLocationRelativeTo(null);
+        dialog.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     }//GEN-LAST:event_addMEBtnActionPerformed
 
     private void meCbLowStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_meCbLowStockActionPerformed
@@ -1543,7 +1537,6 @@ public class MainFrame extends javax.swing.JFrame {
                         });
             });
         }
-//        System.out.println("med: " + medModel.getDataVector());
             
         /**
          * Tabla de medicamentos
@@ -1556,7 +1549,7 @@ public class MainFrame extends javax.swing.JFrame {
         cbExpDate.setSelected(false);
     }
     
-    private void resetMeTableModel() {
+    public void resetMeTableModel() {
         DefaultTableModel meModel = (DefaultTableModel) meEqTable.getModel();
         EquipoMedicoDAO meDAO = new EquipoMedicoDAO();
         List<EquipoMedico> me = meDAO.selectAll();
@@ -1574,7 +1567,6 @@ public class MainFrame extends javax.swing.JFrame {
                 );
             });
         }
-//        System.out.println("Eq. med: " + meModel.getDataVector());
         
         /**
          * Tabla de equipo medico

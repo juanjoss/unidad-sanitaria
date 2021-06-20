@@ -5,6 +5,8 @@ import javax.swing.JOptionPane;
 import model.EquipoMedico;
 
 public class AddMEDialog extends javax.swing.JDialog {
+    
+    private MainFrame mainFrame;
 
     /**
      * Creates new form AddMEDialog
@@ -14,6 +16,7 @@ public class AddMEDialog extends javax.swing.JDialog {
     public AddMEDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.mainFrame = (MainFrame) parent;
     }
 
     @SuppressWarnings("unchecked")
@@ -193,6 +196,7 @@ public class AddMEDialog extends javax.swing.JDialog {
                         "Éxito",
                         JOptionPane.INFORMATION_MESSAGE
                 );
+                mainFrame.resetMeTableModel();
                 this.dispose();
             }
         }

@@ -13,7 +13,7 @@ public class UsuarioDAO {
      * @return Un {@code Usuario} si es encontrado, o {@code null} en otro caso.
      */
     public Usuario getUsuario(String username, String pass) {
-        String query = "SELECT * FROM usuario WHERE userName = :username AND pass = :pass;";
+        String query = "SELECT * FROM usuario WHERE email = :username AND pass = :pass;"; //ver con luciano
 
         try (Connection con = SQLiteDAO.getConn().open()) {
             Usuario user = con

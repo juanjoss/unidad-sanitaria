@@ -64,12 +64,15 @@ public class MainFrame extends javax.swing.JFrame {
             logP = new LoginPanel(this);
             this.add(logP);
         }
+        
         setMinimumSize(new java.awt.Dimension(1200, 600));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     }
 
     public void loggedIn(Usuario user) {
+        
+        remove(logP); //avisarle a luciano
         
         // Setear en sesion
         SesionUsuario sesion = SesionUsuario.getInstance();

@@ -13,13 +13,38 @@ public class UsuarioDAO {
      * @return Un {@code Usuario} si es encontrado, o {@code null} en otro caso.
      */
     public Usuario getUsuario(String username, String pass) {
-        String query = "SELECT * FROM usuario WHERE email = :username AND pass = :pass;"; //ver con luciano
+        String query = "SELECT * FROM usuario WHERE userName = :username AND pass = :pass;";
 
         try (Connection con = SQLiteDAO.getConn().open()) {
             Usuario user = con
                     .createQuery(query)
                     .addParameter("username", username)
                     .addParameter("pass", pass)
+                    .executeAndFetchFirst(Usuario.class);
+
+            return user;
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return null;
+    }
+
+    /**
+     * Retorna un Usuario.
+     *
+     * @param username {@code String} nombre de usuario.
+     * @param email {@code String} email.
+     * @return Un {@code Usuario} si es encontrado, o {@code null} en otro caso.
+     */
+    public Usuario getUsuarioByEmail(String username, String email) {
+        String query = "SELECT * FROM usuario WHERE userName = :username AND email = :email;";
+
+        try (Connection con = SQLiteDAO.getConn().open()) {
+            Usuario user = con
+                    .createQuery(query)
+                    .addParameter("username", username)
+                    .addParameter("email", email)
                     .executeAndFetchFirst(Usuario.class);
 
             return user;

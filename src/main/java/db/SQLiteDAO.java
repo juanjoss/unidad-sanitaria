@@ -70,7 +70,7 @@ public class SQLiteDAO {
                 + "PRIMARY KEY('id' AUTOINCREMENT));";
 
             String queryDataPresentacion = "INSERT OR IGNORE INTO presentacion(nombre) VALUES ('Sin Especificar');";
-            String queryUser = "INSERT OR IGNORE INTO usuario('id', 'pass', 'userName', 'ultimaSesion', 'email') VALUES ('0', 'admin', 'admin', 'today', 'unisancolser@hotmail.com.ar');";
+            String queryUser = "INSERT OR IGNORE INTO usuario('id', 'pass', 'userName', 'ultimaSesion', 'email') VALUES ('0', 'admin', 'Administracion', 'today', 'unisancolser@hotmail.com.ar');";
             try {
                 sql2o.open().createQuery(queryEquipoTable).executeUpdate();
                 sql2o.open().createQuery(queryPresentacionTable).executeUpdate();

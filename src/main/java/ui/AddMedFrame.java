@@ -12,9 +12,12 @@ import util.DateUtil;
 
 public class AddMedFrame extends javax.swing.JFrame {
     
-    public AddMedFrame() {
+    private MainFrame mainFrame;
+
+    public AddMedFrame(MainFrame mainFrame) {
         initComponents();
         loadPresentaciones();
+        this.mainFrame = mainFrame;
     }
 
     /**
@@ -281,6 +284,7 @@ public class AddMedFrame extends javax.swing.JFrame {
      * @return {@code void}.
      */
     private void volverMain() {
+        mainFrame.resetMedTableModel();
         this.dispose();
     }
 

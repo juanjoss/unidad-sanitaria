@@ -1068,7 +1068,7 @@ public class MainFrame extends javax.swing.JFrame {
      * Evento para el boton de agregar medicamento.
      */
     private void addMedBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMedBtnActionPerformed
-        AddMedFrame addFrame = new AddMedFrame();
+        AddMedFrame addFrame = new AddMedFrame(this);
         addFrame.setVisible(true);
         addFrame.pack();
         addFrame.setLocationRelativeTo(null);
@@ -1518,7 +1518,7 @@ public class MainFrame extends javax.swing.JFrame {
     /**
      * Restaura la tabla de medicamentos.
      */
-    private void resetMedTableModel() {
+    public void resetMedTableModel() {
         DefaultTableModel medModel = (DefaultTableModel) medTable.getModel();
         MedicamentoDAO medDAO = new MedicamentoDAO();
         List<Medicamento> meds = medDAO.selectAll();

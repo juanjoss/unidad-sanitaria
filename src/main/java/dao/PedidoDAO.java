@@ -5,22 +5,23 @@ import java.util.List;
 import model.Pedido;
 import org.sql2o.Connection;
 
-
-public class PedidoDAO{
+public class PedidoDAO {
+    
     /**
      * Retorna todos los pedidos.
      *
+     * @param idUsuario
      * @return A {@code List<Pedido>}.
      */
-    public List<Pedido> selectAllxId(int id) {
-        String query = "SELECT * FROM pedido where id = :id";
+    public List<Pedido> selectAllxId(int idUsuario) {
+        String query = "SELECT * FROM pedido WHERE idUsuario = :idUsuario";
 
         try (Connection con = SQLiteDAO.getConn().open()) {
-            List<Pedido> pedido = con
+            List<Pedido> pedidos = con
                     .createQuery(query)
-                    .addParameter("id", id)
+                    .addParameter("idUsuario", idUsuario)
                     .executeAndFetch(Pedido.class);
-            return pedido;
+            return pedidos;
         } catch (Exception e) {
             System.out.println(e);
         }

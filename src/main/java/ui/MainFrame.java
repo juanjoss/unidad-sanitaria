@@ -25,6 +25,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
+import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
@@ -72,7 +73,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     public void loggedIn(Usuario user) {
         
-        remove(logP); //avisarle a luciano
+        remove(logP);
         
         // Setear en sesion
         SesionUsuario sesion = SesionUsuario.getInstance();
@@ -83,11 +84,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         DefaultTableModel model = (DefaultTableModel) medTable.getModel();
         DefaultTableModel stModel = (DefaultTableModel) solicitudeTable.getModel();
-        DefaultTableModel pModel = (DefaultTableModel) tablaPedido.getModel();
+        //DefaultTableModel pModel = (DefaultTableModel) pedidoTable.getModel();
 
         MedicamentoDAO medDAO = new MedicamentoDAO();
 
-        PedidoDAO pedDAO = new PedidoDAO();
+        //PedidoDAO pedDAO = new PedidoDAO();
 
         /**
          * Se carga la tabla desde la BD y se remueve la columna Id
@@ -98,11 +99,7 @@ public class MainFrame extends javax.swing.JFrame {
         /**
          * Para los pedidos
          */
-       
-        resetTablaPedidos();
-       //tablaPedido.removeColumn(tablaPedido.getColumnModel().getColumn(0));
-        
-       //tablaPedido.removeColumn(tablaPedido.getColumnModel().getColumn(1));
+        resetTablePedidos();
 
         /**
          * Evento para la actualizacion de filas en la BD.
@@ -221,6 +218,7 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
         mainPanel = new javax.swing.JPanel();
@@ -261,11 +259,14 @@ public class MainFrame extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         emailComment = new javax.swing.JTextPane();
         jLabel2 = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
+        pedidosPanel = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        tablaPedido = new javax.swing.JTable();
+        pedidoTable = new javax.swing.JTable();
         jScrollPane5 = new javax.swing.JScrollPane();
-        tablaDetallle = new javax.swing.JTable();
+        detallesTable = new javax.swing.JTable();
+        leyenda = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -750,56 +751,113 @@ public class MainFrame extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Solicitud de Medicamentos", jPanel1);
 
-        jPanel5.setBackground(new java.awt.Color(255, 255, 204));
+        pedidosPanel.setBackground(new java.awt.Color(255, 255, 204));
+        pedidosPanel.setLayout(new java.awt.GridBagLayout());
 
-        tablaPedido.setModel(new javax.swing.table.DefaultTableModel(
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel3.setText("LISTADO DE PEDIDOS");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
+        pedidosPanel.add(jLabel3, gridBagConstraints);
+
+        jLabel4.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel4.setText("DETALLES DEL PEDIDO #");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        pedidosPanel.add(jLabel4, gridBagConstraints);
+
+        jScrollPane4.setPreferredSize(new java.awt.Dimension(600, 400));
+
+        pedidoTable.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        pedidoTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
-                "Correo Proveedor", "Fecha", "Estado"
+                "Número pedido", "Correo del proveedor", "Fecha del pedido", "Estado del pedido"
             }
-        ));
-        jScrollPane4.setViewportView(tablaPedido);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, true
+            };
 
-        tablaDetallle.setModel(new javax.swing.table.DefaultTableModel(
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        pedidoTable.setGridColor(new java.awt.Color(102, 102, 102));
+        pedidoTable.setPreferredSize(new java.awt.Dimension(400, 0));
+        pedidoTable.setRowHeight(30);
+        pedidoTable.setRowMargin(2);
+        pedidoTable.setSelectionBackground(new java.awt.Color(255, 255, 204));
+        pedidoTable.setShowGrid(true);
+        jScrollPane4.setViewportView(pedidoTable);
+        pedidoTable.getAccessibleContext().setAccessibleDescription("");
+        ((DefaultTableCellRenderer) pedidoTable.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        pedidosPanel.add(jScrollPane4, gridBagConstraints);
+
+        jScrollPane5.setPreferredSize(new java.awt.Dimension(500, 400));
+
+        detallesTable.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        detallesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+
             },
             new String [] {
-                "Descripcion", "Cantidad"
+                "Descripción", "Cantidad"
             }
-        ));
-        jScrollPane5.setViewportView(tablaDetallle);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(441, Short.MAX_VALUE))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(282, Short.MAX_VALUE))
-        );
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        detallesTable.setRowHeight(30);
+        detallesTable.setRowMargin(2);
+        jScrollPane5.setViewportView(detallesTable);
+        ((DefaultTableCellRenderer) detallesTable.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
 
-        jTabbedPane1.addTab("Historial de Pedidos", jPanel5);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        pedidosPanel.add(jScrollPane5, gridBagConstraints);
+
+        leyenda.setFont(new java.awt.Font("Arial", 2, 14)); // NOI18N
+        String userName = SesionUsuario.getInstance().getLoggedUser().getUserName();
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(10, 60, 10, 60);
+        pedidosPanel.add(leyenda, gridBagConstraints);
+        leyenda.setText("Los pedidos que se muestran a continuación se hicieron bajo el usuario: " + userName);
+
+        jTabbedPane1.addTab("Historial de Pedidos", pedidosPanel);
 
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.PAGE_START);
 
@@ -1325,25 +1383,22 @@ public class MainFrame extends javax.swing.JFrame {
     /**
      * Restaura la tabla de pedidos.
      */
-    private void resetTablaPedidos() {
-        DefaultTableModel model = (DefaultTableModel) tablaPedido.getModel();
+    private void resetTablePedidos() {
+        //System.out.println("hola");
+        DefaultTableModel pmodel = (DefaultTableModel) pedidoTable.getModel();
         PedidoDAO pedDAO = new PedidoDAO();
-        List<Pedido> peds = pedDAO.selectAllxId(1);
-
+        List<Pedido> peds = pedDAO.selectAllxId(SesionUsuario.getInstance().getLoggedUser().getId());
+        //System.out.println(SesionUsuario.getInstance().getLoggedUser().getId());
         if (peds != null) {
-            model.setNumRows(0);
-
+            //System.out.println(peds.get(1).getId());
+            //pmodel.setNumRows(0);
+            //System.out.println("hola");
             peds.forEach(p -> {
-                model.addRow(
+                pmodel.addRow(
                         new Object[]{
-                            //p.getId(),
+                            p.getId(),
                             //p.getIdUsuario(),
                             p.getCorreoProveedor(),
-                            /*DateUtil.formatDate(
-                                    p.getFecha(),
-                                    "yyyy-mm-dd",
-                                    "dd/mm/yyyy"
-                            //),*/
                             p.getFecha(),
                             p.getEstado()
                         });
@@ -1380,8 +1435,8 @@ public class MainFrame extends javax.swing.JFrame {
         });
     }
 
-    List<Medicamento> itemMedicamento = new ArrayList<>();
-    List<EquipoMedico> itemEquipoM = new ArrayList<>();
+    private List<Medicamento> itemMedicamento = new ArrayList<>();
+    private List<EquipoMedico> itemEquipoM = new ArrayList<>();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JButton addMedBtn;
@@ -1389,6 +1444,7 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JButton borrarButton;
     javax.swing.JCheckBox cbExpDate;
     javax.swing.JCheckBox cbLowStock;
+    javax.swing.JTable detallesTable;
     javax.swing.JTextPane emailComment;
     javax.swing.JTextField emailSubject;
     javax.swing.JLabel expAlertLbl;
@@ -1399,22 +1455,26 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JLabel fromTFLabel;
     javax.swing.JLabel jLabel1;
     javax.swing.JLabel jLabel2;
+    javax.swing.JLabel jLabel3;
+    javax.swing.JLabel jLabel4;
     javax.swing.JPanel jPanel1;
     javax.swing.JPanel jPanel2;
     javax.swing.JPanel jPanel3;
-    javax.swing.JPanel jPanel5;
     javax.swing.JScrollPane jScrollPane1;
     javax.swing.JScrollPane jScrollPane2;
     javax.swing.JScrollPane jScrollPane3;
     javax.swing.JScrollPane jScrollPane4;
     javax.swing.JScrollPane jScrollPane5;
     javax.swing.JTabbedPane jTabbedPane1;
+    javax.swing.JLabel leyenda;
     javax.swing.JPanel mainPanel;
     javax.swing.JTextField medExpAlert;
     javax.swing.JTextField medStockAlert;
     javax.swing.JTable medTable;
     javax.swing.JList<String> missingsList;
     javax.swing.JLabel mlLabel;
+    javax.swing.JTable pedidoTable;
+    javax.swing.JPanel pedidosPanel;
     javax.swing.JButton removeFromSTBtn;
     javax.swing.JButton resetTableBtn;
     javax.swing.JScrollPane scrollPane;
@@ -1424,8 +1484,6 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JLabel slLabel;
     javax.swing.JTable solicitudeTable;
     javax.swing.JLabel stockAlertLbl;
-    javax.swing.JTable tablaDetallle;
-    javax.swing.JTable tablaPedido;
     javax.swing.JTextField toTF;
     javax.swing.JLabel toTFLabel;
     // End of variables declaration//GEN-END:variables

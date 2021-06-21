@@ -249,15 +249,14 @@ public class MainFrame extends javax.swing.JFrame {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
         mainPanel = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
+        alertsPanel = new javax.swing.JPanel();
+        stockAlertLbl = new javax.swing.JLabel();
+        medStockAlert = new javax.swing.JTextField();
         expAlertLbl = new javax.swing.JLabel();
         medExpAlert = new javax.swing.JTextField();
         meStockAlert = new javax.swing.JTextField();
-        stockAlertLbl = new javax.swing.JLabel();
-        medStockAlert = new javax.swing.JTextField();
-        jTabbedPane2 = new javax.swing.JTabbedPane();
-        jPanel4 = new javax.swing.JPanel();
+        mainTabbedPane = new javax.swing.JTabbedPane();
+        mainMedsPanel = new javax.swing.JPanel();
         searchBar = new javax.swing.JTextField();
         scrollPane = new javax.swing.JScrollPane();
         medTable = new javax.swing.JTable();
@@ -268,16 +267,16 @@ public class MainFrame extends javax.swing.JFrame {
         borrarButton = new javax.swing.JButton();
         resetTableBtn = new javax.swing.JButton();
         filterComboBox = new javax.swing.JComboBox<>();
-        jPanel5 = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
+        mainMeEqPanel = new javax.swing.JPanel();
+        meEqTableScrollPane = new javax.swing.JScrollPane();
         meEqTable = new javax.swing.JTable();
-        jLabel3 = new javax.swing.JLabel();
+        meEqSearchBarLabel = new javax.swing.JLabel();
         meSearchBar = new javax.swing.JTextField();
         meCbLowStock = new javax.swing.JCheckBox();
         resetMeTableBtn = new javax.swing.JButton();
         addMEBtn = new javax.swing.JButton();
         delMEBtn = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
+        solicitudePanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         missingsList = new javax.swing.JList<>();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
@@ -301,7 +300,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setMinimumSize(new java.awt.Dimension(1200, 600));
+        setMinimumSize(new java.awt.Dimension(1366, 768));
 
         jTabbedPane1.setBackground(new java.awt.Color(255, 255, 221));
         jTabbedPane1.setForeground(new java.awt.Color(0, 0, 0));
@@ -315,21 +314,31 @@ public class MainFrame extends javax.swing.JFrame {
 
         mainPanel.setBackground(new java.awt.Color(255, 255, 204));
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 204));
+        alertsPanel.setBackground(new java.awt.Color(255, 255, 204));
 
-        jPanel3.setBackground(new java.awt.Color(255, 255, 204));
+        stockAlertLbl.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
+        stockAlertLbl.setForeground(new java.awt.Color(0, 0, 0));
+        stockAlertLbl.setText("Estado del Stock:");
+
+        medStockAlert.setBackground(new java.awt.Color(255, 255, 204));
+        medStockAlert.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
+        medStockAlert.setForeground(new java.awt.Color(0, 0, 0));
+        medStockAlert.setDisabledTextColor(new java.awt.Color(153, 255, 153));
+        medStockAlert.setEnabled(false);
 
         expAlertLbl.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
         expAlertLbl.setForeground(new java.awt.Color(0, 0, 0));
         expAlertLbl.setText("Estado de Vencimientos:");
 
+        medExpAlert.setBackground(new java.awt.Color(255, 255, 204));
         medExpAlert.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
-        medExpAlert.setForeground(new java.awt.Color(255, 51, 51));
+        medExpAlert.setForeground(new java.awt.Color(0, 0, 0));
         medExpAlert.setDisabledTextColor(new java.awt.Color(153, 255, 153));
         medExpAlert.setEnabled(false);
 
         meStockAlert.setBackground(new java.awt.Color(255, 255, 204));
         meStockAlert.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
+        meStockAlert.setForeground(new java.awt.Color(0, 0, 0));
         meStockAlert.setEnabled(false);
         meStockAlert.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -337,77 +346,53 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(meStockAlert)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(80, Short.MAX_VALUE)
-                .addComponent(expAlertLbl)
-                .addGap(69, 69, 69))
-            .addComponent(medExpAlert)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(meStockAlert, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
-                .addComponent(expAlertLbl)
-                .addGap(18, 18, 18)
-                .addComponent(medExpAlert, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        expAlertLbl.setHorizontalAlignment(JLabel.CENTER);
-        medExpAlert.setHorizontalAlignment(JTextField.CENTER);
-
-        stockAlertLbl.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
-        stockAlertLbl.setForeground(new java.awt.Color(0, 0, 0));
-        stockAlertLbl.setText("Estado del Stock:");
-
-        medStockAlert.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
-        medStockAlert.setForeground(new java.awt.Color(255, 0, 0));
-        medStockAlert.setDisabledTextColor(new java.awt.Color(153, 255, 153));
-        medStockAlert.setEnabled(false);
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout alertsPanelLayout = new javax.swing.GroupLayout(alertsPanel);
+        alertsPanel.setLayout(alertsPanelLayout);
+        alertsPanelLayout.setHorizontalGroup(
+            alertsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(alertsPanelLayout.createSequentialGroup()
+                .addContainerGap(10, Short.MAX_VALUE)
+                .addGroup(alertsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(medStockAlert)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(stockAlertLbl)
-                                .addGap(90, 90, 90)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addComponent(meStockAlert)
+                    .addComponent(medExpAlert)
+                    .addGroup(alertsPanelLayout.createSequentialGroup()
+                        .addGroup(alertsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(alertsPanelLayout.createSequentialGroup()
+                                .addGap(62, 62, 62)
+                                .addComponent(expAlertLbl))
+                            .addGroup(alertsPanelLayout.createSequentialGroup()
+                                .addGap(85, 85, 85)
+                                .addComponent(stockAlertLbl)))
+                        .addGap(0, 43, Short.MAX_VALUE)))
                 .addContainerGap())
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(169, 169, 169)
+        alertsPanelLayout.setVerticalGroup(
+            alertsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, alertsPanelLayout.createSequentialGroup()
+                .addContainerGap(225, Short.MAX_VALUE)
                 .addComponent(stockAlertLbl)
                 .addGap(18, 18, 18)
                 .addComponent(medStockAlert, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
+                .addComponent(meStockAlert, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(67, 67, 67)
+                .addComponent(expAlertLbl)
                 .addGap(18, 18, 18)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addComponent(medExpAlert, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(69, 69, 69))
         );
 
         stockAlertLbl.setHorizontalAlignment(JLabel.CENTER);
         medStockAlert.setHorizontalAlignment(JTextField.CENTER);
+        expAlertLbl.setHorizontalAlignment(JLabel.CENTER);
+        medExpAlert.setHorizontalAlignment(JTextField.CENTER);
+        meStockAlert.setHorizontalAlignment(JTextField.CENTER);
 
-        jTabbedPane2.setForeground(new java.awt.Color(0, 0, 0));
-        jTabbedPane2.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
+        mainTabbedPane.setForeground(new java.awt.Color(0, 0, 0));
+        mainTabbedPane.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
 
-        jPanel4.setBackground(new java.awt.Color(255, 255, 204));
+        mainMedsPanel.setBackground(new java.awt.Color(255, 255, 204));
 
         searchBar.setFont(new java.awt.Font("Cascadia Code", 0, 18)); // NOI18N
 
@@ -522,11 +507,11 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        javax.swing.GroupLayout mainMedsPanelLayout = new javax.swing.GroupLayout(mainMedsPanel);
+        mainMedsPanel.setLayout(mainMedsPanelLayout);
+        mainMedsPanelLayout.setHorizontalGroup(
+            mainMedsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainMedsPanelLayout.createSequentialGroup()
                 .addGap(38, 38, 38)
                 .addComponent(searchBarLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -534,35 +519,32 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(filterComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainMedsPanelLayout.createSequentialGroup()
                 .addContainerGap(25, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 968, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(cbExpDate)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbLowStock)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(resetTableBtn)
-                                .addGap(63, 63, 63)
-                                .addComponent(addMedBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(24, 24, 24))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(borrarButton)
-                        .addGap(46, 46, 46))))
+                .addGroup(mainMedsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 968, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(mainMedsPanelLayout.createSequentialGroup()
+                        .addComponent(cbExpDate)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbLowStock)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(resetTableBtn)
+                        .addGap(63, 63, 63)
+                        .addGroup(mainMedsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(borrarButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(addMedBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE))))
+                .addGap(24, 24, 24))
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        mainMedsPanelLayout.setVerticalGroup(
+            mainMedsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainMedsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(mainMedsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(searchBarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(searchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(filterComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(37, 37, 37)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(mainMedsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(resetTableBtn)
                     .addComponent(cbLowStock)
                     .addComponent(cbExpDate)
@@ -603,9 +585,9 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        jTabbedPane2.addTab("Medicamentos", jPanel4);
+        mainTabbedPane.addTab("Medicamentos", mainMedsPanel);
 
-        jPanel5.setBackground(new java.awt.Color(255, 255, 204));
+        mainMeEqPanel.setBackground(new java.awt.Color(255, 255, 204));
 
         meEqTable.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         meEqTable.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
@@ -653,16 +635,16 @@ public class MainFrame extends javax.swing.JFrame {
         /** buscador para la barra de busqueda */
         meRowSorter = new TableRowSorter<>(meEqTable.getModel());
         meEqTable.setRowSorter(meRowSorter);
-        jScrollPane4.setViewportView(meEqTable);
+        meEqTableScrollPane.setViewportView(meEqTable);
         if (meEqTable.getColumnModel().getColumnCount() > 0) {
             meEqTable.getColumnModel().getColumn(0).setResizable(false);
             meEqTable.getColumnModel().getColumn(1).setResizable(false);
             meEqTable.getColumnModel().getColumn(2).setResizable(false);
         }
 
-        jLabel3.setFont(new java.awt.Font("Cascadia Code", 0, 16)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("Ingrese Nombre para Buscar:");
+        meEqSearchBarLabel.setFont(new java.awt.Font("Cascadia Code", 0, 16)); // NOI18N
+        meEqSearchBarLabel.setForeground(new java.awt.Color(0, 0, 0));
+        meEqSearchBarLabel.setText("Ingrese Nombre para Buscar:");
 
         meSearchBar.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
         meSearchBar.setForeground(new java.awt.Color(0, 0, 0));
@@ -705,37 +687,37 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+        javax.swing.GroupLayout mainMeEqPanelLayout = new javax.swing.GroupLayout(mainMeEqPanel);
+        mainMeEqPanel.setLayout(mainMeEqPanelLayout);
+        mainMeEqPanelLayout.setHorizontalGroup(
+            mainMeEqPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainMeEqPanelLayout.createSequentialGroup()
                 .addContainerGap(67, Short.MAX_VALUE)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(meEqTableScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(142, 142, 142)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                .addGroup(mainMeEqPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(addMEBtn)
                     .addComponent(delMEBtn)
                     .addComponent(resetMeTableBtn)
                     .addComponent(meCbLowStock))
                 .addGap(89, 89, 89))
-            .addGroup(jPanel5Layout.createSequentialGroup()
+            .addGroup(mainMeEqPanelLayout.createSequentialGroup()
                 .addGap(137, 137, 137)
-                .addComponent(jLabel3)
+                .addComponent(meEqSearchBarLabel)
                 .addGap(49, 49, 49)
                 .addComponent(meSearchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+        mainMeEqPanelLayout.setVerticalGroup(
+            mainMeEqPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainMeEqPanelLayout.createSequentialGroup()
                 .addGap(66, 66, 66)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
+                .addGroup(mainMeEqPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(meEqSearchBarLabel)
                     .addComponent(meSearchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addGroup(mainMeEqPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainMeEqPanelLayout.createSequentialGroup()
                         .addComponent(addMEBtn)
                         .addGap(33, 33, 33)
                         .addComponent(delMEBtn)
@@ -744,8 +726,8 @@ public class MainFrame extends javax.swing.JFrame {
                         .addGap(33, 33, 33)
                         .addComponent(meCbLowStock)
                         .addGap(221, 221, 221))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainMeEqPanelLayout.createSequentialGroup()
+                        .addComponent(meEqTableScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(41, 41, 41))))
         );
 
@@ -778,33 +760,33 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        jTabbedPane2.addTab("Equipo Médico", jPanel5);
+        mainTabbedPane.addTab("Equipo Médico", mainMeEqPanel);
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1019, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(45, Short.MAX_VALUE)
+                .addComponent(mainTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 1019, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(alertsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(alertsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(mainPanelLayout.createSequentialGroup()
                         .addGap(20, 20, 20)
-                        .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 669, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(mainTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 669, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(47, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Inicio", mainPanel);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 204));
+        solicitudePanel.setBackground(new java.awt.Color(255, 255, 204));
 
         DefaultListModel mlModel = new DefaultListModel();
         missingsList.setModel(mlModel);
@@ -932,26 +914,26 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Comentario:");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout solicitudePanelLayout = new javax.swing.GroupLayout(solicitudePanel);
+        solicitudePanel.setLayout(solicitudePanelLayout);
+        solicitudePanelLayout.setHorizontalGroup(
+            solicitudePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(solicitudePanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                .addGroup(solicitudePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(mlLabel)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(addToSLBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                .addGroup(solicitudePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(slLabel)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 619, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(solicitudePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(solicitudePanelLayout.createSequentialGroup()
                         .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(47, 47, 47)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                        .addGroup(solicitudePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(toTFLabel)
                             .addComponent(toTF)
                             .addComponent(fromTFLabel)
@@ -962,33 +944,33 @@ public class MainFrame extends javax.swing.JFrame {
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(sendSolBtn))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(solicitudePanelLayout.createSequentialGroup()
                         .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(901, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, solicitudePanelLayout.createSequentialGroup()
+                .addGap(900, 900, 900)
                 .addComponent(removeFromSTBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(359, 359, 359))
+                .addGap(370, 370, 370))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        solicitudePanelLayout.setVerticalGroup(
+            solicitudePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(solicitudePanelLayout.createSequentialGroup()
                 .addGap(210, 210, 210)
                 .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(solicitudePanelLayout.createSequentialGroup()
+                .addGroup(solicitudePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(solicitudePanelLayout.createSequentialGroup()
                         .addGap(63, 63, 63)
                         .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(7, 7, 7))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, solicitudePanelLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(solicitudePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(mlLabel, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(slLabel, javax.swing.GroupLayout.Alignment.TRAILING))))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(solicitudePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(solicitudePanelLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(toTFLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -1007,19 +989,19 @@ public class MainFrame extends javax.swing.JFrame {
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addComponent(sendSolBtn))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(solicitudePanelLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(solicitudePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE))))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(solicitudePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addToSLBtn)
                     .addComponent(removeFromSTBtn))
                 .addGap(253, 253, 253))
         );
 
-        jTabbedPane1.addTab("Solicitud de Medicamentos", jPanel1);
+        jTabbedPane1.addTab("Solicitud de Medicamentos", solicitudePanel);
 
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.PAGE_START);
 
@@ -1605,6 +1587,7 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JButton addMEBtn;
     javax.swing.JButton addMedBtn;
     javax.swing.JButton addToSLBtn;
+    javax.swing.JPanel alertsPanel;
     javax.swing.JButton borrarButton;
     javax.swing.JCheckBox cbExpDate;
     javax.swing.JCheckBox cbLowStock;
@@ -1619,21 +1602,18 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JLabel fromTFLabel;
     javax.swing.JLabel jLabel1;
     javax.swing.JLabel jLabel2;
-    javax.swing.JLabel jLabel3;
-    javax.swing.JPanel jPanel1;
-    javax.swing.JPanel jPanel2;
-    javax.swing.JPanel jPanel3;
-    javax.swing.JPanel jPanel4;
-    javax.swing.JPanel jPanel5;
     javax.swing.JScrollPane jScrollPane1;
     javax.swing.JScrollPane jScrollPane2;
     javax.swing.JScrollPane jScrollPane3;
-    javax.swing.JScrollPane jScrollPane4;
     javax.swing.JTabbedPane jTabbedPane1;
-    javax.swing.JTabbedPane jTabbedPane2;
+    javax.swing.JPanel mainMeEqPanel;
+    javax.swing.JPanel mainMedsPanel;
     javax.swing.JPanel mainPanel;
+    javax.swing.JTabbedPane mainTabbedPane;
     javax.swing.JCheckBox meCbLowStock;
+    javax.swing.JLabel meEqSearchBarLabel;
     javax.swing.JTable meEqTable;
+    javax.swing.JScrollPane meEqTableScrollPane;
     javax.swing.JTextField meSearchBar;
     javax.swing.JTextField meStockAlert;
     javax.swing.JTextField medExpAlert;
@@ -1649,6 +1629,7 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JLabel searchBarLabel;
     javax.swing.JButton sendSolBtn;
     javax.swing.JLabel slLabel;
+    javax.swing.JPanel solicitudePanel;
     javax.swing.JTable solicitudeTable;
     javax.swing.JLabel stockAlertLbl;
     javax.swing.JTextField toTF;

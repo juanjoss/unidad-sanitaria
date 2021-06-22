@@ -39,4 +39,45 @@ public class PedidoDAO {
             System.out.println(e);
         }
     }
+    
+    public void update(Pedido ped) {
+        String query = "UPDATE pedido SET estado = :estado WHERE id = :id";
+        
+        try (Connection con = SQLiteDAO.getConn().open()) {
+            con.createQuery(query).bind(ped).executeUpdate();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+    
+    public Pedido getPedido(int id) {
+        String query = "SELECT * FROM pedido WHERE id = :id";
+
+        try (Connection con = SQLiteDAO.getConn().open()) {
+            Pedido pedido = con
+                    .createQuery(query)
+                    .addParameter("id", id)
+                    .executeAndFetchFirst(Pedido.class);
+            return pedido;
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return null;
+    }
+    
+    public int ultimoPedido() {
+        String query = "SELECT MAX(id) AS id FROM pedido";
+
+        try (Connection con = SQLiteDAO.getConn().open()) {
+            Integer idUltimoPedido = con
+                    .createQuery(query)
+                    .executeAndFetchFirst(Integer.class);
+            return idUltimoPedido;
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return -1;
+    }
 }

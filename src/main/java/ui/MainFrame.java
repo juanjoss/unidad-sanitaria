@@ -1,8 +1,6 @@
 package ui;
 
-import dao.EquipoMedicoDAO;
-import dao.MedicamentoDAO;
-import dao.PedidoDAO;
+import dao.*;
 import db.SQLiteDAO;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -10,10 +8,11 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.Enumeration;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Vector;
 import javax.mail.AuthenticationFailedException;
@@ -84,23 +83,38 @@ public class MainFrame extends javax.swing.JFrame {
 
         DefaultTableModel model = (DefaultTableModel) medTable.getModel();
         DefaultTableModel stModel = (DefaultTableModel) solicitudeTable.getModel();
-        //DefaultTableModel pModel = (DefaultTableModel) pedidoTable.getModel();
+        DefaultTableModel pModel = (DefaultTableModel) pedidoTable.getModel();
 
         MedicamentoDAO medDAO = new MedicamentoDAO();
-
-        //PedidoDAO pedDAO = new PedidoDAO();
+        PedidoDAO pedDAO = new PedidoDAO();
 
         /**
-         * Se carga la tabla desde la BD y se remueve la columna Id
+         * Se carga la tabla medicamentos desde la BD y se remueve la columna Id
          */
         resetTableModel();
         medTable.removeColumn(medTable.getColumnModel().getColumn(0));
 
         /**
-         * Para los pedidos
+         * Se carga la tabla pedidos desde la BD.
          */
         resetTablePedidos();
-
+        
+        /**
+         * Evento para la actualizacion de filas de la tabla pedidos en la BD.
+         */
+        pModel.addTableModelListener((TableModelEvent evt) -> {
+            if (evt.getType() == TableModelEvent.UPDATE && evt.getColumn() != TableModelEvent.ALL_COLUMNS) {
+                
+                int idPedido = (int) pModel.getValueAt(evt.getFirstRow(), 0);
+                String estado = (String) pModel.getValueAt(evt.getFirstRow(), 3);
+                
+                Pedido pedido = pedDAO.getPedido(idPedido);
+                
+                pedido.setEstado(estado);
+                pedDAO.update(pedido);
+            }
+        });
+        
         /**
          * Evento para la actualizacion de filas en la BD.
          */
@@ -260,13 +274,17 @@ public class MainFrame extends javax.swing.JFrame {
         emailComment = new javax.swing.JTextPane();
         jLabel2 = new javax.swing.JLabel();
         pedidosPanel = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        listaPedidosLabel = new javax.swing.JLabel();
+        detallesMedLabel = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         pedidoTable = new javax.swing.JTable();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        detallesTable = new javax.swing.JTable();
         leyenda = new javax.swing.JLabel();
+        mostrarDetalleButton = new javax.swing.JButton();
+        detallesEMLabel = new javax.swing.JLabel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        detallesMedTable = new javax.swing.JTable();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        detallesEMTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -754,26 +772,24 @@ public class MainFrame extends javax.swing.JFrame {
         pedidosPanel.setBackground(new java.awt.Color(255, 255, 204));
         pedidosPanel.setLayout(new java.awt.GridBagLayout());
 
-        jLabel3.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jLabel3.setText("LISTADO DE PEDIDOS");
+        listaPedidosLabel.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        listaPedidosLabel.setText("LISTADO DE PEDIDOS");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
-        pedidosPanel.add(jLabel3, gridBagConstraints);
+        pedidosPanel.add(listaPedidosLabel, gridBagConstraints);
 
-        jLabel4.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jLabel4.setText("DETALLES DEL PEDIDO #");
+        detallesMedLabel.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        detallesMedLabel.setText("MEDICAMENTOS DEL PEDIDO #");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
-        pedidosPanel.add(jLabel4, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        pedidosPanel.add(detallesMedLabel, gridBagConstraints);
 
-        jScrollPane4.setPreferredSize(new java.awt.Dimension(600, 400));
+        jScrollPane4.setPreferredSize(new java.awt.Dimension(600, 500));
 
         pedidoTable.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         pedidoTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -781,7 +797,7 @@ public class MainFrame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Número pedido", "Correo del proveedor", "Fecha del pedido", "Estado del pedido"
+                "Número pedido", "Correo del proveedor", "Fecha y hora del pedido", "Estado del pedido"
             }
         ) {
             Class[] types = new Class [] {
@@ -799,52 +815,31 @@ public class MainFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        pedidoTable.setGridColor(new java.awt.Color(102, 102, 102));
-        pedidoTable.setPreferredSize(new java.awt.Dimension(400, 0));
+        pedidoTable.setPreferredSize(new java.awt.Dimension(400, 600));
         pedidoTable.setRowHeight(30);
         pedidoTable.setRowMargin(2);
-        pedidoTable.setSelectionBackground(new java.awt.Color(255, 255, 204));
+        pedidoTable.setSelectionBackground(new java.awt.Color(102, 102, 102));
         pedidoTable.setShowGrid(true);
+        pedidoTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pedidoTableMouseClicked(evt);
+            }
+        });
         jScrollPane4.setViewportView(pedidoTable);
         pedidoTable.getAccessibleContext().setAccessibleDescription("");
         ((DefaultTableCellRenderer) pedidoTable.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
 
+        Enumeration<TableColumn> colModel2 = pedidoTable.getColumnModel().getColumns();
+        while(colModel2.hasMoreElements()) {
+            colModel2.nextElement().setCellRenderer(centerRndr);
+        }
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        pedidosPanel.add(jScrollPane4, gridBagConstraints);
-
-        jScrollPane5.setPreferredSize(new java.awt.Dimension(500, 400));
-
-        detallesTable.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        detallesTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Descripción", "Cantidad"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        detallesTable.setRowHeight(30);
-        detallesTable.setRowMargin(2);
-        jScrollPane5.setViewportView(detallesTable);
-        ((DefaultTableCellRenderer) detallesTable.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
-        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.gridheight = 4;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        pedidosPanel.add(jScrollPane5, gridBagConstraints);
+        pedidosPanel.add(jScrollPane4, gridBagConstraints);
 
         leyenda.setFont(new java.awt.Font("Arial", 2, 14)); // NOI18N
         String userName = SesionUsuario.getInstance().getLoggedUser().getUserName();
@@ -853,9 +848,115 @@ public class MainFrame extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(10, 60, 10, 60);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         pedidosPanel.add(leyenda, gridBagConstraints);
         leyenda.setText("Los pedidos que se muestran a continuación se hicieron bajo el usuario: " + userName);
+
+        mostrarDetalleButton.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        mostrarDetalleButton.setText("Mostrar detalles del pedido");
+        mostrarDetalleButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mostrarDetalleButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
+        pedidosPanel.add(mostrarDetalleButton, gridBagConstraints);
+
+        detallesEMLabel.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        detallesEMLabel.setText("EQUIPO MÉDICO DEL PEDIDO #");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
+        pedidosPanel.add(detallesEMLabel, gridBagConstraints);
+
+        jScrollPane7.setPreferredSize(new java.awt.Dimension(500, 200));
+
+        detallesMedTable.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        detallesMedTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Descripción", "Cantidad"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        detallesMedTable.setPreferredSize(new java.awt.Dimension(150, 200));
+        detallesMedTable.setRowHeight(30);
+        jScrollPane7.setViewportView(detallesMedTable);
+        ((DefaultTableCellRenderer) detallesMedTable.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+
+        Enumeration<TableColumn> colModel3 = detallesMedTable.getColumnModel().getColumns();
+        while(colModel3.hasMoreElements()) {
+            colModel3.nextElement().setCellRenderer(centerRndr);
+        }
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        pedidosPanel.add(jScrollPane7, gridBagConstraints);
+
+        jScrollPane8.setPreferredSize(new java.awt.Dimension(500, 200));
+
+        detallesEMTable.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        detallesEMTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Descripción", "Cantidad"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        detallesEMTable.setPreferredSize(new java.awt.Dimension(150, 200));
+        detallesEMTable.setRowHeight(30);
+        jScrollPane8.setViewportView(detallesEMTable);
+        ((DefaultTableCellRenderer) detallesEMTable.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+
+        Enumeration<TableColumn> colModel4 = detallesEMTable.getColumnModel().getColumns();
+        while(colModel4.hasMoreElements()) {
+            colModel4.nextElement().setCellRenderer(centerRndr);
+        }
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        pedidosPanel.add(jScrollPane8, gridBagConstraints);
 
         jTabbedPane1.addTab("Historial de Pedidos", pedidosPanel);
 
@@ -864,6 +965,183 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void pedidoTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pedidoTableMouseClicked
+
+    }//GEN-LAST:event_pedidoTableMouseClicked
+
+    private void sendSolBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendSolBtnActionPerformed
+        // TODO add your handling code here:
+        String toEmail = toTF.getText();
+        String fromEmail = fromTF.getText();
+        String emailSub = emailSubject.getText();
+        String emailCmt = emailComment.getText();
+
+        EmailValidator ev = EmailValidator.getInstance();
+        DefaultTableModel model = (DefaultTableModel) solicitudeTable.getModel();
+
+        if (ev.isValid(toEmail) && ev.isValid(fromEmail)) {
+            try {
+                try (BufferedWriter bw = new BufferedWriter(new FileWriter(".\\table.html", false))) {
+
+                    bw.write("<html>");
+                    bw.write("<body style='max-width: 500px; margin: auto;'>");
+                    bw.write("<p>" + StringEscapeUtils.escapeHtml4(emailCmt) + "</p>");
+
+                    bw.write("<table style='border: 1px solid black;'>");
+
+                    bw.write("<tr style='border: 1px solid black;'>");
+                    for (int c = 0; c < model.getColumnCount(); ++c) {
+                        bw.write("<th style='text-align: center; border: 1px solid black;'>");
+                        bw.write(model.getColumnName(c));
+                        bw.write("</th>");
+                    }
+                    bw.write("</tr>");
+
+                    for (int r = 0; r < model.getRowCount(); ++r) {
+                        bw.write("<tr style='border: 1px solid black;'>");
+
+                        for (int c = 0; c < model.getColumnCount(); ++c) {
+                            bw.write("<td style='text-align: center; border: 1px solid black;'>");
+                            bw.write(model.getValueAt(r, c).toString());
+                            bw.write("</td>");
+                        }
+
+                        bw.write("</tr>");
+                    }
+
+                    bw.write("</table>");
+                    bw.write("</body>");
+                    bw.write("</html>");
+                }
+            } catch (IOException ex) {
+                System.out.println(ex);
+            }
+
+            try {
+                File html = new File(".\\table.html");
+
+                Email email = EmailBuilder.startingBlank()
+                .from("Unidad Sanitaria Colonia Seré", fromEmail)
+                .to("To", toEmail)
+                .withSubject(emailSub)
+                .withHTMLText(html)
+                .buildEmail();
+
+                JPasswordField passField = new JPasswordField();
+                String[] options = new String[]{"OK", "Cancelar"};
+                int op = JOptionPane.showOptionDialog(
+                    null,
+                    passField,
+                    "Ingrese contraseña: ",
+                    JOptionPane.NO_OPTION,
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    options,
+                    options[0]
+                );
+
+                if (op == 0) {
+                    String password = new String(passField.getPassword());
+
+                    if (!password.equals("")) {
+                        if (!model.getDataVector().isEmpty()) {
+                            Mailer mailer = MailerBuilder
+                            .withSMTPServer("smtp.office365.com", 587, fromEmail, password)
+                            .withTransportStrategy(TransportStrategy.SMTP_TLS)
+                            .withDebugLogging(true)
+                            .async()
+                            .buildMailer();
+
+                            AsyncResponse res = mailer.sendMail(email, true);
+
+                            if (res != null) {
+                                res.onSuccess(() -> {
+                                    crearPedido();
+                                    
+                                    PedidoDAO pDAO = new PedidoDAO();
+                                    crearDetalles(pDAO.ultimoPedido()); //Para que devuelva el ID del último pedido creado.
+                                    
+                                    solicitudeTable.removeAll();
+                                    
+                                    JOptionPane.showMessageDialog(
+                                        this,
+                                        "El email con la solicitud se ha enviado exitosamente.",
+                                        "Information",
+                                        JOptionPane.INFORMATION_MESSAGE
+                                    );
+                                });
+
+                                res.onException(e -> {
+                                    if (e.getCause().getClass().equals(AuthenticationFailedException.class)) {
+                                        JOptionPane.showMessageDialog(
+                                            this,
+                                            "La contraseña para el email " + fromEmail + " es incorrecta. Por favor intente de nuevo.",
+                                            "Error",
+                                            JOptionPane.ERROR_MESSAGE
+                                        );
+                                    }
+                                });
+                            } else {
+                                JOptionPane.showMessageDialog(this, "Ha ocurrido un error en el envío del email.");
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(this, "La tabla para la solicitud esta vacia. Por favor cargue elementos a la tabla.");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Debe ingrear una contraseña para enviar el email.");
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } else {
+            JOptionPane.showMessageDialog(
+                this,
+                "Debe rellenar el email de envío y recepción para realizar una solicitud.",
+                "Warning",
+                JOptionPane.WARNING_MESSAGE
+            );
+        }
+    }//GEN-LAST:event_sendSolBtnActionPerformed
+
+    private void removeFromSTBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeFromSTBtnActionPerformed
+        // TODO add your handling code here:
+        int[] selValues = solicitudeTable.getSelectedRows();
+
+        if (selValues.length > 0) {
+            DefaultTableModel stModel = (DefaultTableModel) solicitudeTable.getModel();
+            DefaultListModel mlModel = (DefaultListModel) missingsList.getModel();
+
+            for (int i = selValues.length - 1; i >= 0; i--) {
+                if (!mlModel.contains(stModel.getValueAt(selValues[i], 0))) {
+                    mlModel.addElement(stModel.getValueAt(selValues[i], 0));
+                    stModel.removeRow(selValues[i]);
+                }
+            }
+        }
+    }//GEN-LAST:event_removeFromSTBtnActionPerformed
+
+    private void addToSLBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addToSLBtnActionPerformed
+        // TODO add your handling code here:
+        List<String> selValues = missingsList.getSelectedValuesList();
+
+        if (selValues.size() > 0) {
+            DefaultTableModel stModel = (DefaultTableModel) solicitudeTable.getModel();
+            DefaultListModel mlModel = (DefaultListModel) missingsList.getModel();
+
+            selValues.forEach(e -> {
+                if (!contains(solicitudeTable, e)) {
+                    stModel.addRow(new Object[]{e, 0, 0, 0});
+                    mlModel.removeElement(e);
+                }
+            });
+        }
+    }//GEN-LAST:event_addToSLBtnActionPerformed
+
+    private void filterComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_filterComboBoxItemStateChanged
+        filterTable();
+    }//GEN-LAST:event_filterComboBoxItemStateChanged
 
     /**
      * Restaura la tabla de medicamentos.
@@ -882,10 +1160,10 @@ public class MainFrame extends javax.swing.JFrame {
             DefaultTableModel model = (DefaultTableModel) medTable.getModel();
 
             int confirmacion = JOptionPane.showConfirmDialog(
-                    mainPanel,
-                    "¿Está seguro que desea borrar ese medicamento?",
-                    "Confirmación",
-                    JOptionPane.YES_NO_OPTION
+                mainPanel,
+                "¿Está seguro que desea borrar ese medicamento?",
+                "Confirmación",
+                JOptionPane.YES_NO_OPTION
             );
 
             if (JOptionPane.YES_OPTION == confirmacion) {
@@ -930,26 +1208,26 @@ public class MainFrame extends javax.swing.JFrame {
             if (meds != null) {
                 meds.forEach(m -> {
                     model.addRow(
-                            new Object[]{
-                                m.getId(),
-                                m.getNombre(),
-                                m.getStock(),
-                                DateUtil.formatDate(
-                                        m.getFechaVencimiento(),
-                                        "yyyy-mm-dd",
-                                        "dd/mm/yyyy"
-                                ),
-                                m.getDosis(),
-                                m.getPresentacion(),
-                                m.getLaboratorio()
-                            });
-                });
+                        new Object[]{
+                            m.getId(),
+                            m.getNombre(),
+                            m.getStock(),
+                            DateUtil.formatDate(
+                                m.getFechaVencimiento(),
+                                "yyyy-mm-dd",
+                                "dd/mm/yyyy"
+                            ),
+                            m.getDosis(),
+                            m.getPresentacion(),
+                            m.getLaboratorio()
+                        });
+                    });
 
-                cbLowStock.setSelected(false);
+                    cbLowStock.setSelected(false);
+                }
+            } else {
+                resetTableModel();
             }
-        } else {
-            resetTableModel();
-        }
     }//GEN-LAST:event_cbExpDateActionPerformed
 
     /**
@@ -968,261 +1246,135 @@ public class MainFrame extends javax.swing.JFrame {
             if (meds != null) {
                 meds.forEach(m -> {
                     model.addRow(
-                            new Object[]{
-                                m.getId(),
-                                m.getNombre(),
-                                m.getStock(),
-                                DateUtil.formatDate(
-                                        m.getFechaVencimiento(),
-                                        "yyyy-mm-dd",
-                                        "dd/mm/yyyy"
-                                ),
-                                m.getDosis(),
-                                m.getPresentacion(),
-                                m.getLaboratorio()
-                            });
-                });
+                        new Object[]{
+                            m.getId(),
+                            m.getNombre(),
+                            m.getStock(),
+                            DateUtil.formatDate(
+                                m.getFechaVencimiento(),
+                                "yyyy-mm-dd",
+                                "dd/mm/yyyy"
+                            ),
+                            m.getDosis(),
+                            m.getPresentacion(),
+                            m.getLaboratorio()
+                        });
+                    });
 
-                cbExpDate.setSelected(false);
+                    cbExpDate.setSelected(false);
+                }
+            } else {
+                resetTableModel();
             }
-        } else {
-            resetTableModel();
-        }
     }//GEN-LAST:event_cbLowStockActionPerformed
 
-    private void addToSLBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addToSLBtnActionPerformed
-        // TODO add your handling code here:
-        List<String> selValues = missingsList.getSelectedValuesList();
-
-        if (selValues.size() > 0) {
-            DefaultTableModel stModel = (DefaultTableModel) solicitudeTable.getModel();
-            DefaultListModel mlModel = (DefaultListModel) missingsList.getModel();
-
-            selValues.forEach(e -> {
-                if (!contains(solicitudeTable, e)) {
-                    stModel.addRow(new Object[]{e, 0, 0, 0});
-                    mlModel.removeElement(e);
-                }
-            });
+    /**
+     * Botón para mostrar los detalles de un pedido.
+     * 
+     */
+    private void mostrarDetalleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mostrarDetalleButtonActionPerformed
+        if (pedidoTable.getSelectedRow() != -1) {
+            DefaultTableModel model = (DefaultTableModel) pedidoTable.getModel();
+            int col_idPedido = 0;
+            int row = pedidoTable.getSelectedRow();
+            int idPedido = (int)model.getValueAt(row, col_idPedido);
+           
+           resetTableDetallesEM(idPedido); 
+           resetTableDetallesMed(idPedido);
         }
-    }//GEN-LAST:event_addToSLBtnActionPerformed
-
-    private void removeFromSTBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeFromSTBtnActionPerformed
-        // TODO add your handling code here:
-        int[] selValues = solicitudeTable.getSelectedRows();
-
-        if (selValues.length > 0) {
-            DefaultTableModel stModel = (DefaultTableModel) solicitudeTable.getModel();
-            DefaultListModel mlModel = (DefaultListModel) missingsList.getModel();
-
-            for (int i = selValues.length - 1; i >= 0; i--) {
-                if (!mlModel.contains(stModel.getValueAt(selValues[i], 0))) {
-                    mlModel.addElement(stModel.getValueAt(selValues[i], 0));
-                    stModel.removeRow(selValues[i]);
-                }
-            }
-        }
-    }//GEN-LAST:event_removeFromSTBtnActionPerformed
-
-    private void sendSolBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendSolBtnActionPerformed
-        // TODO add your handling code here:
-        String toEmail = toTF.getText();
-        String fromEmail = fromTF.getText();
-        String emailSub = emailSubject.getText();
-        String emailCmt = emailComment.getText();
-
-        EmailValidator ev = EmailValidator.getInstance();
-        DefaultTableModel model = (DefaultTableModel) solicitudeTable.getModel();
-
-        if (ev.isValid(toEmail) && ev.isValid(fromEmail)) {
-            try {
-                try (BufferedWriter bw = new BufferedWriter(new FileWriter(".\\table.html", false))) {
-                    
-                    bw.write("<html>");
-                    bw.write("<body style='max-width: 500px; margin: auto;'>");
-                    bw.write("<p>" + StringEscapeUtils.escapeHtml4(emailCmt) + "</p>");
-
-                    bw.write("<table style='border: 1px solid black;'>");
-
-                    bw.write("<tr style='border: 1px solid black;'>");
-                    for (int c = 0; c < model.getColumnCount(); ++c) {
-                        bw.write("<th style='text-align: center; border: 1px solid black;'>");
-                        bw.write(model.getColumnName(c));
-                        bw.write("</th>");
-                    }
-                    bw.write("</tr>");
-
-                    for (int r = 0; r < model.getRowCount(); ++r) {
-                        bw.write("<tr style='border: 1px solid black;'>");
-
-                        for (int c = 0; c < model.getColumnCount(); ++c) {
-                            bw.write("<td style='text-align: center; border: 1px solid black;'>");
-                            bw.write(model.getValueAt(r, c).toString());
-                            bw.write("</td>");
-                        }
-
-                        bw.write("</tr>");
-                    }
-                    
-                    bw.write("</table>");
-                    bw.write("</body>");
-                    bw.write("</html>");
-                }
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
-
-            try {
-                File html = new File(".\\table.html");
-
-                Email email = EmailBuilder.startingBlank()
-                        .from("Unidad Sanitaria Colonia Seré", fromEmail)
-                        .to("To", toEmail)
-                        .withSubject(emailSub)
-                        .withHTMLText(html)
-                        .buildEmail();
-
-                JPasswordField passField = new JPasswordField();
-                String[] options = new String[]{"OK", "Cancelar"};
-                int op = JOptionPane.showOptionDialog(
-                        null,
-                        passField,
-                        "Ingrese contraseña: ",
-                        JOptionPane.NO_OPTION,
-                        JOptionPane.PLAIN_MESSAGE,
-                        null,
-                        options,
-                        options[0]
-                );
-
-                if (op == 0) {
-                    String password = new String(passField.getPassword());
-
-                    if (!password.equals("")) {
-                        if (!model.getDataVector().isEmpty()) {
-                            Mailer mailer = MailerBuilder
-                                    .withSMTPServer("smtp.office365.com", 587, fromEmail, password)
-                                    .withTransportStrategy(TransportStrategy.SMTP_TLS)
-                                    .withDebugLogging(true)
-                                    .async()
-                                    .buildMailer();
-
-                            AsyncResponse res = mailer.sendMail(email, true);
-
-                            if (res != null) {
-                                res.onSuccess(() -> {
-                                    Calendar fecha_actual = new GregorianCalendar();                                                   
-                                    int anio = fecha_actual.get(Calendar.YEAR);
-                                    int mes = fecha_actual.get(Calendar.MONTH);
-                                    int dia = fecha_actual.get(Calendar.DAY_OF_MONTH);
-                                    String fecha_pedido = "" + dia + "/" + (mes+1) + "/" + anio;
-
-                                    Pedido pedido = new Pedido(0, 1, "ejemplo@ejemplo.com", fecha_pedido, "enviado");
-
-                                    System.out.println(pedido.getId());
-
-                                    crearDetalles(pedido.getId());
-                                    
-                                    solicitudeTable.removeAll();
-                                    JOptionPane.showMessageDialog(
-                                            this,
-                                            "El email con la solicitud se ha enviado exitosamente.",
-                                            "Information",
-                                            JOptionPane.INFORMATION_MESSAGE
-                                    );
-                                });
-
-                                res.onException(e -> {
-                                    if (e.getCause().getClass().equals(AuthenticationFailedException.class)) {
-                                        JOptionPane.showMessageDialog(
-                                                this,
-                                                "La contraseña para el email " + fromEmail + " es incorrecta. Por favor intente de nuevo.",
-                                                "Error",
-                                                JOptionPane.ERROR_MESSAGE
-                                        );
-                                    }
-                                });
-                            } else {
-                                JOptionPane.showMessageDialog(this, "Ha ocurrido un error en el envío del email.");
-                            }
-                        } else {
-                            JOptionPane.showMessageDialog(this, "La tabla para la solicitud esta vacia. Por favor cargue elementos a la tabla.");
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Debe ingrear una contraseña para enviar el email.");
-                    }
-                }
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-        } else {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Debe rellenar el email de envío y recepción para realizar una solicitud.",
-                    "Warning",
-                    JOptionPane.WARNING_MESSAGE
-            );
-        }
-    }//GEN-LAST:event_sendSolBtnActionPerformed
+    }//GEN-LAST:event_mostrarDetalleButtonActionPerformed
     
+    /**
+     * Al enviarse la solicitud se crea el pedido.
+     * 
+     */
+    private void crearPedido() {
+        Date date = new Date();
+        DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String fecha_pedido = "" + dateFormat.format(date) + " - " + hourFormat.format(date);
+
+        int idUsuario = SesionUsuario.getInstance().getLoggedUser().getId();
+
+        Pedido pedido = new Pedido();
+        pedido.setIdUsuario(idUsuario);
+        pedido.setCorreoProveedor("Farmacia_garre@ejemplo.com");
+        pedido.setFecha(fecha_pedido);
+        pedido.setEstado("Enviado");
+
+        PedidoDAO pDAO = new PedidoDAO();
+        pDAO.insert(pedido);
+
+        resetTablePedidos();
+    }
+    
+     /**
+     * Se crean los detalles de un pedido.
+     * 
+     */
     private void crearDetalles(int id_pedido) {
         DefaultTableModel model = (DefaultTableModel) solicitudeTable.getModel();
         
         for (int r = 0; r < model.getRowCount(); ++r) {
             String descripcion = "";
-            String[] partes = null; //ver
+            String[] partes = null;
             String mg = "";
             String comprimido = "";
             int cantidad = 0;
-
+            
             for (int c = 0; c < model.getColumnCount(); ++c) {
-                
-                if (c == 0){
-                    descripcion = model.getValueAt(r, c).toString();
-                    partes = descripcion.split("-");
+                switch (c) {
+                    case 0:
+                        descripcion = model.getValueAt(r, c).toString();
+                        partes = descripcion.split("-");
+                        break;
+                    case 1:
+                        mg = model.getValueAt(r, c).toString();
+                        break;
+                    case 2:
+                        comprimido = model.getValueAt(r, c).toString();
+                        break;
+                    case 3:
+                        cantidad = Integer.parseInt(model.getValueAt(r, c).toString());
+                        break;
                 }
-
-                if (c == 3){
-                    cantidad = Integer.parseInt(model.getValueAt(r, c).toString());
-                }
-
-                if (c == 1){
-                    mg = model.getValueAt(r, c).toString();
-                }
-
-                if (c == 2){
-                    comprimido = model.getValueAt(r, c).toString();
-                }
-                
+                /*if (c == 0){
+                    
+                }*/
             }
             
             EquipoMedicoDAO equipoMedicoDAO = new EquipoMedicoDAO();
             MedicamentoDAO medicamentoDAO = new MedicamentoDAO();
             
-            if(partes.length == 3) {  // controla si es un medicamento
+            if(partes.length == 3) {  //Se controla si es un medicamento o un equipo médico
                 Medicamento m = medicamentoDAO.buscarPorNombrePresentacion(partes[0].trim(), partes[1].trim(), partes[2].trim());
-                itemMedicamento.add(m);
-                System.out.println(m.getNombre());
-                System.out.println(m.getFechaVencimiento());
-                System.out.println(m.getLaboratorio());
-                System.out.println(m.getDosis());
-                System.out.println(m.getStock());
-                System.out.println(m.getPresentacion());
-                DetallePedidoM dpm = new DetallePedidoM(0, cantidad, descripcion, id_pedido, m.getId());
+                
+                DetallePedidoM dpm = new DetallePedidoM();
+                dpm.setCantidad(cantidad);
+                dpm.setDescripcion(descripcion + " - mg:" + mg + " - Comprimido:" + comprimido);
+                dpm.setPedido_id(id_pedido);
+                dpm.setMedicamento_id(m.getId());
+                
+                DetallePedidoMDAO dpmDAO = new DetallePedidoMDAO();
+                dpmDAO.insert(dpm);
             }
             else
             {
                 EquipoMedico em = equipoMedicoDAO.buscarPorNombre(partes[0].trim());
-                itemEquipoM.add(em);
-                DetallePedidoEM dpem = new DetallePedidoEM(0, cantidad, descripcion, id_pedido, em.getId());
+                
+                DetallePedidoEM dpem = new DetallePedidoEM();
+                dpem.setCantidad(cantidad);
+                dpem.setDescripcion(descripcion);
+                dpem.setPedido_id(id_pedido);
+                dpem.setEquipoMedico_id(em.getId());
+                
+                DetallePedidoEMDAO dpemDAO = new DetallePedidoEMDAO();
+                dpemDAO.insert(dpem);
+                
             }   
         }
     }
     
-    private void filterComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_filterComboBoxItemStateChanged
-        filterTable();
-    }//GEN-LAST:event_filterComboBoxItemStateChanged
-
     /**
      * Transforma un @String de formato fecha fromFormat a toFormat.
      *
@@ -1384,31 +1536,69 @@ public class MainFrame extends javax.swing.JFrame {
      * Restaura la tabla de pedidos.
      */
     private void resetTablePedidos() {
-        //System.out.println("hola");
         DefaultTableModel pmodel = (DefaultTableModel) pedidoTable.getModel();
         PedidoDAO pedDAO = new PedidoDAO();
         List<Pedido> peds = pedDAO.selectAllxId(SesionUsuario.getInstance().getLoggedUser().getId());
-        //System.out.println(SesionUsuario.getInstance().getLoggedUser().getId());
+
         if (peds != null) {
-            //System.out.println(peds.get(1).getId());
-            //pmodel.setNumRows(0);
-            //System.out.println("hola");
+            pmodel.setNumRows(0);
+
             peds.forEach(p -> {
                 pmodel.addRow(
                         new Object[]{
                             p.getId(),
-                            //p.getIdUsuario(),
                             p.getCorreoProveedor(),
                             p.getFecha(),
                             p.getEstado()
                         });
             });
         }
+    }
+    
+    /**
+     * Restaura la tabla de los medicamentos que tiene un pedido.
+     */
+    private void resetTableDetallesMed(int pedido_id) {
+        DefaultTableModel model = (DefaultTableModel) detallesMedTable.getModel();
+        DetallePedidoMDAO dpmDAO = new DetallePedidoMDAO();
+        List<DetallePedidoM> detallesMed = dpmDAO.selectXPedidoId(pedido_id);
 
-        //rowSorter.setRowFilter(null);
-        //medTable.getRowSorter().setSortKeys(null);
-        //cbLowStock.setSelected(false);
-        //cbExpDate.setSelected(false);
+        if (detallesMed != null) {
+            model.setNumRows(0);
+
+            detallesMed.forEach(m -> {
+                model.addRow(
+                        new Object[]{
+                            m.getDescripcion(),
+                            m.getCantidad(),
+                        });
+            });
+        }
+        
+        detallesMedLabel.setText("MEDICAMENTOS DEL PEDIDO #" + pedido_id);
+    }
+    
+    /**
+     * Restaura la tabla de los equipos médicos que tiene un pedido.
+     */
+    private void resetTableDetallesEM(int pedido_id) {
+        DefaultTableModel model = (DefaultTableModel) detallesEMTable.getModel();
+        DetallePedidoEMDAO dpemDAO = new DetallePedidoEMDAO();
+        List<DetallePedidoEM> detallesEM = dpemDAO.selectXPedidoId(pedido_id);
+
+        if (detallesEM != null) {
+            model.setNumRows(0);
+
+            detallesEM.forEach(em -> {
+                model.addRow(
+                        new Object[]{
+                            em.getDescripcion(),
+                            em.getCantidad(),
+                        });
+            });
+        }
+        
+        detallesEMLabel.setText("EQUIPOS MÉDICOS DEL PEDIDO #" + pedido_id);
     }
 
     public static void main(String args[]) {
@@ -1444,7 +1634,10 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JButton borrarButton;
     javax.swing.JCheckBox cbExpDate;
     javax.swing.JCheckBox cbLowStock;
-    javax.swing.JTable detallesTable;
+    javax.swing.JLabel detallesEMLabel;
+    javax.swing.JTable detallesEMTable;
+    javax.swing.JLabel detallesMedLabel;
+    javax.swing.JTable detallesMedTable;
     javax.swing.JTextPane emailComment;
     javax.swing.JTextField emailSubject;
     javax.swing.JLabel expAlertLbl;
@@ -1455,8 +1648,6 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JLabel fromTFLabel;
     javax.swing.JLabel jLabel1;
     javax.swing.JLabel jLabel2;
-    javax.swing.JLabel jLabel3;
-    javax.swing.JLabel jLabel4;
     javax.swing.JPanel jPanel1;
     javax.swing.JPanel jPanel2;
     javax.swing.JPanel jPanel3;
@@ -1464,15 +1655,18 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JScrollPane jScrollPane2;
     javax.swing.JScrollPane jScrollPane3;
     javax.swing.JScrollPane jScrollPane4;
-    javax.swing.JScrollPane jScrollPane5;
+    javax.swing.JScrollPane jScrollPane7;
+    javax.swing.JScrollPane jScrollPane8;
     javax.swing.JTabbedPane jTabbedPane1;
     javax.swing.JLabel leyenda;
+    javax.swing.JLabel listaPedidosLabel;
     javax.swing.JPanel mainPanel;
     javax.swing.JTextField medExpAlert;
     javax.swing.JTextField medStockAlert;
     javax.swing.JTable medTable;
     javax.swing.JList<String> missingsList;
     javax.swing.JLabel mlLabel;
+    javax.swing.JButton mostrarDetalleButton;
     javax.swing.JTable pedidoTable;
     javax.swing.JPanel pedidosPanel;
     javax.swing.JButton removeFromSTBtn;
@@ -1488,3 +1682,5 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JLabel toTFLabel;
     // End of variables declaration//GEN-END:variables
 }
+
+

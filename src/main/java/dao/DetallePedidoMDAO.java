@@ -8,20 +8,20 @@ import util.DateUtil;
 
 public class DetallePedidoMDAO {
     /**
-     * Retorna todos los Detalles de pedido medicamento.
+     * Retorna todos los detalles pedidos de medicamentos de un pedido.
      *
-     * @return A {@code List<Medicameto>}.
+     * @param pedido_id {@code Integer>} ID del pedido.
+     * @return A {@code List<DetallePedidoM>}.
      */
-    public List<DetallePedidoM> selectAllxId(int pedido_id) {
-        String query = "SELECT detallePedidoM.descripcion, detallePedidoM.cantidad"
-        + " FROM detallePedidoM JOIN pedido ON pedido.id = detallePedidoM.pedido_id AND pedido.id = :pedido_id;";
+    public List<DetallePedidoM> selectXPedidoId(int pedido_id) {
+        String query = "SELECT detallePedidoM.descripcion, detallePedidoM.cantidad FROM detallePedidoM WHERE detallePedidoM.pedido_id = :pedido_id;";
 
         try (Connection con = SQLiteDAO.getConn().open()) {
-            List<DetallePedidoM> medicamentos = con
+            List<DetallePedidoM> detallesMed = con
                     .createQuery(query)
                     .addParameter("pedido_id", pedido_id)
                     .executeAndFetch(DetallePedidoM.class);
-            return medicamentos;
+            return detallesMed;
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -30,13 +30,12 @@ public class DetallePedidoMDAO {
     }
 
     /**
-    * Inserta un detalle pedido de un equipo médico en la BD.
-    *
-    * @param med A {@code Medicamento} el medicamento a insertar.
-    */
+     * Inserta un detalle pedido de un medicamento en la BD.
+     *
+     * @param detallePedidoM {@code DetallePedidoM} el detalle pedido a insertar.
+     */
     public void insert(DetallePedidoM detallePedidoM) {
-        String query = "INSERT INTO detallePedidoM (cantidad, descripcion, pedido_id, medicameto_id) "
-                + "VALUES (:cantidad, :descripcion, :pedido_id, :medicamento_id)";
+        String query = "INSERT INTO detallePedidoM (cantidad, descripcion, pedido_id, medicamento_id) VALUES (:cantidad, :descripcion, :pedido_id, :medicamento_id)";
 
         try (Connection con = SQLiteDAO.getConn().open()) {
             con.createQuery(query).bind(detallePedidoM).executeUpdate();

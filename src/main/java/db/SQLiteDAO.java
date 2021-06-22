@@ -11,10 +11,10 @@ public class SQLiteDAO {
             sql2o = new Sql2o("jdbc:sqlite:./unidad_sanitaria.db", null, null);
 
             String queryEquipoTable = "CREATE TABLE IF NOT EXISTS 'equipoMedico' ("
-                + "'nombre'	TEXT NOT NULL,"
+                + "'nombre'	TEXT NOT NULL UNIQUE,"
                 + "'id'	INTEGER NOT NULL,"
                 + "'stock'	INTEGER NOT NULL,"
-                + "PRIMARY KEY('id','nombre'));";
+                + "PRIMARY KEY('id' AUTOINCREMENT));";
 
             String queryPresentacionTable = "CREATE TABLE IF NOT EXISTS 'presentacion' ("
                 + "'id'	INTEGER NOT NULL,"
@@ -47,7 +47,7 @@ public class SQLiteDAO {
                 + "'fecha'	TEXT NOT NULL,"
                 + "'estado'	TEXT NOT NULL,"
                 + "FOREIGN KEY('idUsuario') REFERENCES 'usuario'('id'),"
-                + "PRIMARY KEY('id'));";
+                + "PRIMARY KEY('id' AUTOINCREMENT));";
 
             String queryDetallePedidoEMTable = "CREATE TABLE IF NOT EXISTS 'detallePedidoEM' ("
                 + "'id'	INTEGER,"
@@ -70,7 +70,7 @@ public class SQLiteDAO {
                 + "PRIMARY KEY('id' AUTOINCREMENT));";
 
             String queryDataPresentacion = "INSERT OR IGNORE INTO presentacion(nombre) VALUES ('Sin Especificar');";
-            String queryUser = "INSERT OR IGNORE INTO usuario('id', 'pass', 'userName', 'ultimaSesion', 'email') VALUES ('0', 'admin', 'admin', 'today', 'unisancolser@hotmail.com.ar');";
+            String queryUser = "INSERT OR IGNORE INTO usuario('id', 'pass', 'userName', 'ultimaSesion', 'email') VALUES ('1', 'admin', 'admin', 'today', 'unisancolser@hotmail.com.ar');";
             try {
                 sql2o.open().createQuery(queryEquipoTable).executeUpdate();
                 sql2o.open().createQuery(queryPresentacionTable).executeUpdate();

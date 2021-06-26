@@ -7,7 +7,10 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 public class PintarFilas extends DefaultTableCellRenderer
 {
-    @Override
+    private int columna;
+    
+    
+   
     public Component getTableCellRendererComponent(JTable table, Object value, 
                                                    boolean isSelected, 
                                                    boolean hasFocus, 
@@ -29,4 +32,7 @@ public class PintarFilas extends DefaultTableCellRenderer
  
         return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
     }
+    
+    
+    
 }

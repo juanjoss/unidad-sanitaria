@@ -23,6 +23,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
 import javax.swing.RowFilter;
 import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
@@ -49,6 +50,7 @@ import org.simplejavamail.api.mailer.config.TransportStrategy;
 import org.simplejavamail.email.EmailBuilder;
 import org.simplejavamail.mailer.MailerBuilder;
 import util.PintarFilas;
+import util.PintarLista;
 
 public class MainFrame extends javax.swing.JFrame {
 
@@ -224,6 +226,9 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         checkAlerts();
+        PintarLista pintarLista = new PintarLista();
+        missingsList.setCellRenderer(pintarLista);
+                
     }
 
     /**
@@ -276,6 +281,7 @@ public class MainFrame extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         emailComment = new javax.swing.JTextPane();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         pedidosPanel = new javax.swing.JPanel();
         listaPedidosLabel = new javax.swing.JLabel();
         detallesMedLabel = new javax.swing.JLabel();
@@ -683,17 +689,19 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
         jLabel2.setText("Comentario:");
 
+        jLabel3.setText("(*)Los medicamentos y equipos resaltados ya fueron pedidos recientemente y todavia no fueron entregados");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(39, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(mlLabel)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(addToSLBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(slLabel)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 619, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -704,7 +712,7 @@ public class MainFrame extends javax.swing.JFrame {
                         .addGap(47, 47, 47)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(toTFLabel)
-                            .addComponent(toTF)
+                            .addComponent(toTF, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
                             .addComponent(fromTFLabel)
                             .addComponent(fromTF)
                             .addComponent(jLabel1)
@@ -712,7 +720,7 @@ public class MainFrame extends javax.swing.JFrame {
                             .addComponent(jLabel2)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(sendSolBtn))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(35, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
@@ -720,6 +728,10 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap(901, Short.MAX_VALUE)
                 .addComponent(removeFromSTBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(359, 359, 359))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addComponent(jLabel3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -755,7 +767,7 @@ public class MainFrame extends javax.swing.JFrame {
                         .addGap(11, 11, 11)
                         .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addComponent(sendSolBtn))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -767,7 +779,9 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addToSLBtn)
                     .addComponent(removeFromSTBtn))
-                .addGap(253, 253, 253))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addGap(221, 221, 221))
         );
 
         jTabbedPane1.addTab("Solicitud de Medicamentos", jPanel1);
@@ -1453,7 +1467,7 @@ public class MainFrame extends javax.swing.JFrame {
                 medStockAlert.setDisabledTextColor(Color.red);
                 
                 medsWithLowStock.forEach(m -> {
-                    if(dpmDAO.selectMedDetalles(id_usuario, m.getId()) == null)
+                    
                         mlModel.addElement(m.getNombre() + " - " + m.getPresentacion() + " - " + m.getDosis());
                 });
             } else {
@@ -1468,7 +1482,7 @@ public class MainFrame extends javax.swing.JFrame {
                 medExpAlert.setDisabledTextColor(Color.red);
 
                 medsInExpRange.forEach(m -> {
-                    if (!medsWithLowStock.contains(m) && dpmDAO.selectMedDetalles(id_usuario, m.getId()) == null) {
+                    if (!medsWithLowStock.contains(m)) {
                         mlModel.addElement(m.getNombre() + " - " + m.getPresentacion() + " - " + m.getDosis());
                     }
                 });
@@ -1483,7 +1497,7 @@ public class MainFrame extends javax.swing.JFrame {
         if (medEqWithLowStock != null) {
             if (medEqWithLowStock.size() > 0) {
                 medEqWithLowStock.forEach(me -> {
-                    if(dpemDAO.selectEMDetalles(id_usuario, me.getId()) == null)
+                  
                         mlModel.addElement(me.getNombre());
                 });
             }
@@ -1661,6 +1675,7 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JLabel fromTFLabel;
     javax.swing.JLabel jLabel1;
     javax.swing.JLabel jLabel2;
+    javax.swing.JLabel jLabel3;
     javax.swing.JPanel jPanel1;
     javax.swing.JPanel jPanel2;
     javax.swing.JPanel jPanel3;

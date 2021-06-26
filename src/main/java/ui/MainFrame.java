@@ -49,7 +49,6 @@ import org.simplejavamail.api.mailer.Mailer;
 import org.simplejavamail.api.mailer.config.TransportStrategy;
 import org.simplejavamail.email.EmailBuilder;
 import org.simplejavamail.mailer.MailerBuilder;
-import util.PintarFilas;
 import util.PintarLista;
 
 public class MainFrame extends javax.swing.JFrame {

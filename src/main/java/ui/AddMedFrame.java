@@ -59,19 +59,26 @@ public class AddMedFrame extends javax.swing.JFrame {
 
         nombreLabel.setBackground(new java.awt.Color(0, 0, 0));
         nombreLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        nombreLabel.setForeground(new java.awt.Color(0, 0, 0));
         nombreLabel.setText("Nombre:");
 
         stockLabel.setBackground(new java.awt.Color(0, 0, 0));
         stockLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        stockLabel.setForeground(new java.awt.Color(0, 0, 0));
         stockLabel.setText("Stock:");
 
         fechaVLabel.setBackground(new java.awt.Color(0, 0, 0));
         fechaVLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        fechaVLabel.setForeground(new java.awt.Color(0, 0, 0));
         fechaVLabel.setText("Fecha de Vencimiento:");
 
+        nombreTextField.setForeground(new java.awt.Color(0, 0, 0));
+
+        stockTextField.setForeground(new java.awt.Color(0, 0, 0));
         stockTextField.setText("0");
 
         addBtn.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        addBtn.setForeground(new java.awt.Color(0, 0, 0));
         addBtn.setText("Agregar");
         addBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -80,6 +87,7 @@ public class AddMedFrame extends javax.swing.JFrame {
         });
 
         cancelarButton.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        cancelarButton.setForeground(new java.awt.Color(0, 0, 0));
         cancelarButton.setText("Cancelar");
         cancelarButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -88,21 +96,31 @@ public class AddMedFrame extends javax.swing.JFrame {
         });
 
         selectFechaV.setBackground(new java.awt.Color(255, 255, 204));
+        selectFechaV.setForeground(new java.awt.Color(0, 0, 0));
 
         laboratorioLabel.setBackground(new java.awt.Color(0, 0, 0));
         laboratorioLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        laboratorioLabel.setForeground(new java.awt.Color(0, 0, 0));
         laboratorioLabel.setText("Laboratorio:");
+
+        laboratorioTextField.setForeground(new java.awt.Color(0, 0, 0));
 
         dosisLabel.setBackground(new java.awt.Color(0, 0, 0));
         dosisLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        dosisLabel.setForeground(new java.awt.Color(0, 0, 0));
         dosisLabel.setText("Dosis:");
 
+        presentacionComboBox.setForeground(new java.awt.Color(0, 0, 0));
         presentacionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        dosisTextField.setForeground(new java.awt.Color(0, 0, 0));
 
         presentacionLabel.setBackground(new java.awt.Color(0, 0, 0));
         presentacionLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        presentacionLabel.setForeground(new java.awt.Color(0, 0, 0));
         presentacionLabel.setText("Presentación:");
 
+        jButton1.setForeground(new java.awt.Color(0, 0, 0));
         jButton1.setText("Nuevo");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -156,9 +174,6 @@ public class AddMedFrame extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addComponent(jLabel1))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(stockLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -169,7 +184,9 @@ public class AddMedFrame extends javax.swing.JFrame {
                             .addComponent(dosisLabel))
                         .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(84, 84, 84)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(addBtn)
                 .addGap(39, 39, 39)
                 .addComponent(cancelarButton)
@@ -210,10 +227,9 @@ public class AddMedFrame extends javax.swing.JFrame {
                 .addGap(38, 38, 38)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelarButton)
-                    .addComponent(addBtn))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1)
-                .addContainerGap(11, Short.MAX_VALUE))
+                    .addComponent(addBtn)
+                    .addComponent(jLabel1))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
 
         selectFechaV.setCalendar(new GregorianCalendar());
@@ -322,11 +338,7 @@ public class AddMedFrame extends javax.swing.JFrame {
      * @return {@code void}.
      */
     private void volverMain() {
-        MainFrame p = new MainFrame();
-        p.setVisible(true);
-        p.pack();
-        p.setLocationRelativeTo(null);
-        p.setDefaultCloseOperation(p.EXIT_ON_CLOSE);
+        this.mainFrame.resetMedTableModel();
         this.dispose();
     }
 

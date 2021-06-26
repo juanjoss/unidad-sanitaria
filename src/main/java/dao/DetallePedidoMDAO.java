@@ -4,24 +4,24 @@ import db.SQLiteDAO;
 import org.sql2o.Connection;
 import java.util.List;
 import model.*;
-import util.DateUtil;
 
 public class DetallePedidoMDAO {
     /**
-     * Retorna todos los Detalles de pedido medicamento.
+     * Retorna todos los detalles pedidos de medicamentos de un pedido.
      *
-     * @return A {@code List<Medicameto>}.
+     * @param pedido_id {@code Integer} ID del pedido.
+     * @return A {@code List<DetallePedidoM>}.
      */
-    public List<DetallePedidoM> selectAllxId(int pedido_id) {
-        String query = "SELECT detallePedidoM.descripcion, detallePedidoM.cantidad"
-        + " FROM detallePedidoM JOIN pedido ON pedido.id = detallePedidoM.pedido_id AND pedido.id = :pedido_id;";
+    public List<DetallePedidoM> selectXPedidoId(int pedido_id) {
+        String query = "SELECT detallePedidoM.descripcion, detallePedidoM.cantidad "
+                + "FROM detallePedidoM WHERE detallePedidoM.pedido_id = :pedido_id;";
 
         try (Connection con = SQLiteDAO.getConn().open()) {
-            List<DetallePedidoM> medicamentos = con
+            List<DetallePedidoM> detallesMed = con
                     .createQuery(query)
                     .addParameter("pedido_id", pedido_id)
                     .executeAndFetch(DetallePedidoM.class);
-            return medicamentos;
+            return detallesMed;
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -30,18 +30,49 @@ public class DetallePedidoMDAO {
     }
 
     /**
-    * Inserta un detalle pedido de un equipo médico en la BD.
-    *
-    * @param med A {@code Medicamento} el medicamento a insertar.
-    */
+     * Inserta un detalle pedido de un medicamento en la BD.
+     *
+     * @param detallePedidoM {@code DetallePedidoM} el detalle pedido a insertar.
+     */
     public void insert(DetallePedidoM detallePedidoM) {
-        String query = "INSERT INTO detallePedidoM (cantidad, descripcion, pedido_id, medicameto_id) "
-                + "VALUES (:cantidad, :descripcion, :pedido_id, :medicamento_id)";
+        String query = "INSERT INTO detallePedidoM (cantidad, descripcion, "
+                + "pedido_id, medicamento_id) VALUES (:cantidad, :descripcion, "
+                + ":pedido_id, :medicamento_id)";
 
         try (Connection con = SQLiteDAO.getConn().open()) {
             con.createQuery(query).bind(detallePedidoM).executeUpdate();
         } catch (Exception e) {
             System.out.println(e);
         }
+    }
+    
+    /**
+     * Retorna una lista de detalles de medicamentos que corresponden a un 
+     * pedido hecho por el usuario loggeado y que tiene el estado 'Enviado'
+     *
+     * @param id_usuario {@code Integer} ID del usuario.
+     * @param medicamento_id {@code Integer} ID del medicamento.
+     * @return A {@code List<DetallePedidoM>}.
+     */
+    public List<DetallePedidoM> selectMedDetalles(int id_usuario, int medicamento_id) {
+        String query = "SELECT pedido.id FROM detallePedidoM, pedido WHERE "
+                + "detallePedidoM.pedido_id = pedido.id AND "
+                + "pedido.idUsuario = :id_usuario AND "
+                + "detallePedidoM.medicamento_id = :medicamento_id "
+                + "AND UPPER(pedido.estado) LIKE 'ENVIADO';";
+
+        try (Connection con = SQLiteDAO.getConn().open()) {
+            List<DetallePedidoM> detallesMed = con
+                    .createQuery(query)
+                    .addParameter("id_usuario", id_usuario)
+                    .addParameter("medicamento_id", medicamento_id)
+                    .executeAndFetch(DetallePedidoM.class);
+            if (detallesMed.size() > 0)
+                return detallesMed;
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        
+        return null;
     }
 }

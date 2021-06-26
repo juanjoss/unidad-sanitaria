@@ -1,9 +1,8 @@
 package model;
 
 import lombok.Data;
-import lombok.AllArgsConstructor;
 
-@Data @AllArgsConstructor
+@Data
 public class Pedido {
 
     private int id;

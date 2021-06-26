@@ -10,12 +10,11 @@ public class SQLiteDAO {
         if (sql2o == null) {
             sql2o = new Sql2o("jdbc:sqlite:./unidad_sanitaria.db", null, null);
 
-            String queryEquipoTable = "CREATE TABLE IF NOT EXISTS equipoMedico("
-                    + "nombre	TEXT NOT NULL UNIQUE,"
-                    + "id	INTEGER NOT NULL,"
-                    + "stock	INTEGER NOT NULL,"
-                    + "PRIMARY KEY(id AUTOINCREMENT)"
-                    + ");";
+            String queryEquipoTable = "CREATE TABLE IF NOT EXISTS 'equipoMedico' ("
+                + "'nombre'	TEXT NOT NULL UNIQUE,"
+                + "'id'	INTEGER NOT NULL,"
+                + "'stock'	INTEGER NOT NULL,"
+                + "PRIMARY KEY('id' AUTOINCREMENT));";
 
             String queryPresentacionTable = "CREATE TABLE IF NOT EXISTS 'presentacion' ("
                     + "'id'	INTEGER NOT NULL,"
@@ -42,13 +41,13 @@ public class SQLiteDAO {
                     + "PRIMARY KEY('id' AUTOINCREMENT));";
 
             String queryPedidoTable = "CREATE TABLE IF NOT EXISTS 'pedido' ("
-                    + "'id'	INTEGER,"
-                    + "'idUsuario'	INTEGER NOT NULL,"
-                    + "'correoProveedor'	TEXT NOT NULL,"
-                    + "'fecha'	TEXT NOT NULL,"
-                    + "'estado'	TEXT NOT NULL,"
-                    + "FOREIGN KEY('idUsuario') REFERENCES 'usuario'('id'),"
-                    + "PRIMARY KEY('id'));";
+                + "'id'	INTEGER,"
+                + "'idUsuario'	INTEGER NOT NULL,"
+                + "'correoProveedor'	TEXT NOT NULL,"
+                + "'fecha'	TEXT NOT NULL,"
+                + "'estado'	TEXT NOT NULL,"
+                + "FOREIGN KEY('idUsuario') REFERENCES 'usuario'('id'),"
+                + "PRIMARY KEY('id' AUTOINCREMENT));";
 
             String queryDetallePedidoEMTable = "CREATE TABLE IF NOT EXISTS 'detallePedidoEM' ("
                     + "'id'	INTEGER,"

@@ -48,6 +48,7 @@ import org.simplejavamail.api.mailer.Mailer;
 import org.simplejavamail.api.mailer.config.TransportStrategy;
 import org.simplejavamail.email.EmailBuilder;
 import org.simplejavamail.mailer.MailerBuilder;
+import util.PintarFilas;
 
 public class MainFrame extends javax.swing.JFrame {
 
@@ -112,6 +113,8 @@ public class MainFrame extends javax.swing.JFrame {
                 
                 pedido.setEstado(estado);
                 pedDAO.update(pedido);
+                
+                checkAlerts();
             }
         });
         
@@ -1436,6 +1439,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         DefaultListModel mlModel = (DefaultListModel) missingsList.getModel();
         DefaultTableModel stModel = (DefaultTableModel) solicitudeTable.getModel();
+        
+        int id_usuario = SesionUsuario.getInstance().getLoggedUser().getId();
+        
+        DetallePedidoMDAO dpmDAO = new DetallePedidoMDAO();
+        DetallePedidoEMDAO dpemDAO = new DetallePedidoEMDAO();
 
         mlModel.removeAllElements();
 
@@ -1443,9 +1451,10 @@ public class MainFrame extends javax.swing.JFrame {
             if (medsWithLowStock.size() > 0) {
                 medStockAlert.setText("Hay medicamentos con poco stock!");
                 medStockAlert.setDisabledTextColor(Color.red);
-
+                
                 medsWithLowStock.forEach(m -> {
-                    mlModel.addElement(m.getNombre() + " - " + m.getPresentacion() + " - " + m.getDosis());
+                    if(dpmDAO.selectMedDetalles(id_usuario, m.getId()) == null)
+                        mlModel.addElement(m.getNombre() + " - " + m.getPresentacion() + " - " + m.getDosis());
                 });
             } else {
                 medStockAlert.setText("No hay medicamentos con poco stock");
@@ -1459,9 +1468,8 @@ public class MainFrame extends javax.swing.JFrame {
                 medExpAlert.setDisabledTextColor(Color.red);
 
                 medsInExpRange.forEach(m -> {
-                    if (!medsWithLowStock.contains(m)) {
+                    if (!medsWithLowStock.contains(m) && dpmDAO.selectMedDetalles(id_usuario, m.getId()) == null) {
                         mlModel.addElement(m.getNombre() + " - " + m.getPresentacion() + " - " + m.getDosis());
-                       
                     }
                 });
             } else {
@@ -1475,7 +1483,8 @@ public class MainFrame extends javax.swing.JFrame {
         if (medEqWithLowStock != null) {
             if (medEqWithLowStock.size() > 0) {
                 medEqWithLowStock.forEach(me -> {
-                    mlModel.addElement(me.getNombre());
+                    if(dpemDAO.selectEMDetalles(id_usuario, me.getId()) == null)
+                        mlModel.addElement(me.getNombre());
                 });
             }
         }
@@ -1492,6 +1501,9 @@ public class MainFrame extends javax.swing.JFrame {
                 mlModel.removeElement(e);
             }
         }
+        
+        //PintarFilas colorear = new PintarFilas(); //Para pintar
+        //missingsList.setDefaultRenderer(Object.class, colorear); //Para pintar
     }
 
     /**
@@ -1499,9 +1511,10 @@ public class MainFrame extends javax.swing.JFrame {
      */
     private void resetTableModel() {
         DefaultTableModel model = (DefaultTableModel) medTable.getModel();
+        
         MedicamentoDAO medDAO = new MedicamentoDAO();
         List<Medicamento> meds = medDAO.selectAll();
-
+        
         if (meds != null) {
             model.setNumRows(0);
 

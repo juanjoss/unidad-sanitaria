@@ -15,6 +15,11 @@ public class LoginPanel extends javax.swing.JPanel {
     public LoginPanel(MainFrame ventana) {
         initComponents();
         frame = ventana;
+
+        // Components names
+        usserTextField.setName("usserTextField");
+        passwordField.setName("passwordField");
+        loginInButton.setName("loginInButton");
     }
     
     @SuppressWarnings("unchecked")

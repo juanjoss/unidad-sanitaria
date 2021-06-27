@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ui.MainFrame;
+import util.SesionUsuario;
 
 
 public class GUITests {
@@ -35,8 +36,10 @@ public class GUITests {
             assertTrue(true);
         } catch (Exception e) {
             assertTrue(false);
+        } finally {
+            SesionUsuario.getInstance().setLoggedUser(null);
         }
-        
+
         /**
          * Con try-catch, porque si no hace match con un componente
          * tira una excepción.
@@ -59,8 +62,9 @@ public class GUITests {
             assertTrue(false);
         } catch (Exception e) {
             assertTrue(true);
+        } finally {
+            SesionUsuario.getInstance().setLoggedUser(null);
         }
-        window.cleanUp();
     }
 
     @After

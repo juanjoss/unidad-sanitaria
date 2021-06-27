@@ -1,3 +1,4 @@
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.assertj.swing.edt.GuiActionRunner;
@@ -15,6 +16,7 @@ public class GUITests {
 
     @Before
     public void setUp() {
+        SesionUsuario.getInstance().setLoggedUser(null);
         MainFrame frame = GuiActionRunner.execute(() -> new MainFrame());
         window = new FrameFixture(frame);
         window.show();
@@ -31,19 +33,8 @@ public class GUITests {
         window.button("loginInButton").click();
 
         // ASSERT
-        try {
-            window.textBox("searchBar").requireVisible();
-            assertTrue(true);
-        } catch (Exception e) {
-            assertTrue(false);
-        } finally {
-            SesionUsuario.getInstance().setLoggedUser(null);
-        }
 
-        /**
-         * Con try-catch, porque si no hace match con un componente
-         * tira una excepción.
-         */
+        assertEquals(true, SesionUsuario.getInstance().isLogged());
     }
 
     @Test
@@ -57,14 +48,7 @@ public class GUITests {
         window.button("loginInButton").click();
         
         // ASSERT
-        try {
-            window.textBox("searchBar").requireVisible();
-            assertTrue(false);
-        } catch (Exception e) {
-            assertTrue(true);
-        } finally {
-            SesionUsuario.getInstance().setLoggedUser(null);
-        }
+        assertEquals(false, SesionUsuario.getInstance().isLogged());
     }
 
     @After

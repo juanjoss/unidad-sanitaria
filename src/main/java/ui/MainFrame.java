@@ -54,21 +54,17 @@ import util.PintarLista;
 
 public class MainFrame extends javax.swing.JFrame {
 
-    TableRowSorter<TableModel> rowSorter;
-    TableRowSorter<TableModel> meRowSorter;
-    LoginPanel logP;
-
     public MainFrame() {
         SQLiteDAO.getConn();
 
-        if(SesionUsuario.getInstance().isLogged()) {
+        if (SesionUsuario.getInstance().isLogged()) {
             loggedIn(SesionUsuario.getInstance().getLoggedUser());
-        }
-        else {
+        } else {
             logP = new LoginPanel(this);
             this.add(logP);
         }
         
+        setTitle("Control de stock de farmacia - Unidad Sanitaria Colonia Seré");
         setMinimumSize(new java.awt.Dimension(1200, 600));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -78,11 +74,9 @@ public class MainFrame extends javax.swing.JFrame {
         
         remove(logP);
         
-        // Setear en sesion
         SesionUsuario sesion = SesionUsuario.getInstance();
         sesion.setLoggedUser(user);
 
-        // Iniciar componentes
         initComponents();
 
         DefaultTableModel medModel = (DefaultTableModel) medTable.getModel();
@@ -102,15 +96,10 @@ public class MainFrame extends javax.swing.JFrame {
         meEqTable.removeColumn(meEqTable.getColumnModel().getColumn(0));
 
         /**
-         * Se carga la tabla pedidos desde la BD.
-         */
-        resetTablePedidos();
-
-        /**
-         * Evento para la tabla de equipo medico la actualizacion de filas en la BD.
+         * Evento para la actualizacion de filas en la tabla de equipo médico en la BD.
          */
         meModel.addTableModelListener((TableModelEvent evt) -> {
-            if(evt.getType() == TableModelEvent.UPDATE && evt.getColumn() != TableModelEvent.ALL_COLUMNS) {
+            if (evt.getType() == TableModelEvent.UPDATE && evt.getColumn() != TableModelEvent.ALL_COLUMNS) {
                 int id = (int) meModel.getValueAt(evt.getFirstRow(), 0);
                 String name = (String) meModel.getValueAt(evt.getFirstRow(), 1);
                 int stock = (int) meModel.getValueAt(evt.getFirstRow(), 2);
@@ -119,7 +108,7 @@ public class MainFrame extends javax.swing.JFrame {
                 EquipoMedico me = meDAO.getMedEq(id);
                 boolean error = false;
                 
-                if(name.isEmpty()) {
+                if (name.isEmpty()) {
                     JOptionPane.showMessageDialog(
                             this,
                             "¡El campo Nombre está vacío!",
@@ -131,7 +120,7 @@ public class MainFrame extends javax.swing.JFrame {
                     error = true;
                 }
                 
-                if(stock < 0) {
+                if (stock < 0) {
                     JOptionPane.showMessageDialog(
                             this,
                             "¡El campo Stock no puede ser menor a cero!",
@@ -143,15 +132,14 @@ public class MainFrame extends javax.swing.JFrame {
                     error = true;
                 }
                 
-                if(!error) {
+                if (!error) {
                     String nameAux = me.getNombre();
                     me.setNombre(name);
                     me.setStock(stock);
                     
-                    if(meDAO.update(me)) {
+                    if (meDAO.update(me)) {
                         checkAlerts();
-                    }
-                    else {
+                    } else {
                         JOptionPane.showMessageDialog(
                                 this,
                                 "¡Ya existe un equipamiento con el mismo nombre!",
@@ -166,25 +154,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
         
         /**
-         * Evento para la actualizacion de filas de la tabla pedidos en la BD.
-         */
-        pModel.addTableModelListener((TableModelEvent evt) -> {
-            if (evt.getType() == TableModelEvent.UPDATE && evt.getColumn() != TableModelEvent.ALL_COLUMNS) {
-                
-                int idPedido = (int) pModel.getValueAt(evt.getFirstRow(), 0);
-                String estado = (String) pModel.getValueAt(evt.getFirstRow(), 3);
-                
-                Pedido pedido = pedDAO.getPedido(idPedido);
-                
-                pedido.setEstado(estado);
-                pedDAO.update(pedido);
-                
-                checkAlerts();
-            }
-        });
-        
-        /**
-         * Evento para la actualizacion de filas en la BD.
+         * Evento para la actualizacion de filas la tabla de medicamentos en la BD.
          */
         medModel.addTableModelListener((TableModelEvent evt) -> {  
             if (evt.getType() == TableModelEvent.UPDATE && evt.getColumn() != TableModelEvent.ALL_COLUMNS) {
@@ -288,16 +258,34 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
         
+        /**
+         * Se carga la tabla pedidos desde la BD.
+         */
+        resetTablePedidos();
+        
+        /**
+         * Evento para la actualizacion de filas de la tabla pedidos en la BD.
+         */
+        pModel.addTableModelListener((TableModelEvent evt) -> {
+            if (evt.getType() == TableModelEvent.UPDATE && evt.getColumn() != TableModelEvent.ALL_COLUMNS) {
+                
+                int idPedido = (int) pModel.getValueAt(evt.getFirstRow(), 0);
+                String estado = (String) pModel.getValueAt(evt.getFirstRow(), 3);
+                
+                Pedido pedido = pedDAO.getPedido(idPedido);
+                
+                pedido.setEstado(estado);
+                pedDAO.update(pedido);
+                
+                checkAlerts();
+            }
+        });
+        
         checkAlerts();
         PintarLista pintarLista = new PintarLista();
         missingsList.setCellRenderer(pintarLista); 
     }
-
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -354,6 +342,7 @@ public class MainFrame extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         emailComment = new javax.swing.JTextPane();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         pedidosPanel = new javax.swing.JPanel();
         listaPedidosLabel = new javax.swing.JLabel();
         detallesMedLabel = new javax.swing.JLabel();
@@ -366,6 +355,12 @@ public class MainFrame extends javax.swing.JFrame {
         detallesMedTable = new javax.swing.JTable();
         jScrollPane8 = new javax.swing.JScrollPane();
         detallesEMTable = new javax.swing.JTable();
+        changePassPanel = new javax.swing.JPanel();
+        newPassField = new javax.swing.JPasswordField();
+        repeatPassField = new javax.swing.JPasswordField();
+        newPassLabel = new javax.swing.JLabel();
+        repeatPassLabel = new javax.swing.JLabel();
+        changePassButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -386,11 +381,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         meStockAlert.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
         meStockAlert.setEnabled(false);
-        meStockAlert.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                meStockAlertActionPerformed(evt);
-            }
-        });
 
         medExpAlert.setFont(new java.awt.Font("Cascadia Code", 0, 12)); // NOI18N
         medExpAlert.setDisabledTextColor(new java.awt.Color(153, 255, 153));
@@ -853,7 +843,7 @@ public class MainFrame extends javax.swing.JFrame {
         mlLabel.setText("Medicamentos y Equipo Médico Faltante:");
 
         slLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
-        slLabel.setText("Lista de Pedidos:");
+        slLabel.setText("Lista de medicamentos y equipos médicos a pedir:");
 
         addToSLBtn.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
         addToSLBtn.setText("Agregar");
@@ -873,6 +863,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         toTF.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
         toTF.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        toTF.setText("Farmacia_garre@hotmail.com");
 
         toTFLabel.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
         toTFLabel.setText("Enviar a:");
@@ -939,6 +930,7 @@ public class MainFrame extends javax.swing.JFrame {
         }
 
         emailSubject.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
+        emailSubject.setText("Solicitud de stock");
 
         jLabel1.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
         jLabel1.setText("Asunto:");
@@ -950,6 +942,10 @@ public class MainFrame extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Cascadia Code", 0, 14)); // NOI18N
         jLabel2.setText("Comentario:");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 2, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel3.setText("(*) Los medicamentos o equipos médicos resaltados ya fueron pedidos, pero aún no han sido recibidos.");
 
         javax.swing.GroupLayout solicitudePanelLayout = new javax.swing.GroupLayout(solicitudePanel);
         solicitudePanel.setLayout(solicitudePanelLayout);
@@ -988,6 +984,10 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap(901, Short.MAX_VALUE)
                 .addComponent(removeFromSTBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(359, 359, 359))
+            .addGroup(solicitudePanelLayout.createSequentialGroup()
+                .addGap(46, 46, 46)
+                .addComponent(jLabel3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         solicitudePanelLayout.setVerticalGroup(
             solicitudePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1035,8 +1035,12 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(solicitudePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addToSLBtn)
                     .addComponent(removeFromSTBtn))
-                .addGap(253, 253, 253))
+                .addGap(27, 27, 27)
+                .addComponent(jLabel3)
+                .addGap(212, 212, 212))
         );
+
+        fromTF.setText(SesionUsuario.getInstance().getLoggedUser().getEmail());
 
         jTabbedPane1.addTab("Solicitud de Medicamentos", solicitudePanel);
 
@@ -1226,6 +1230,57 @@ public class MainFrame extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Historial de Pedidos", pedidosPanel);
 
+        changePassPanel.setBackground(new java.awt.Color(255, 255, 204));
+        changePassPanel.setLayout(new java.awt.GridBagLayout());
+
+        newPassField.setPreferredSize(new java.awt.Dimension(250, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 20, 10, 20);
+        changePassPanel.add(newPassField, gridBagConstraints);
+
+        repeatPassField.setPreferredSize(new java.awt.Dimension(250, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 20, 10, 20);
+        changePassPanel.add(repeatPassField, gridBagConstraints);
+
+        newPassLabel.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        newPassLabel.setText("Ingrese la nueva contraseña:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
+        changePassPanel.add(newPassLabel, gridBagConstraints);
+
+        repeatPassLabel.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        repeatPassLabel.setText("Confirme la nueva contraseña:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
+        changePassPanel.add(repeatPassLabel, gridBagConstraints);
+
+        changePassButton.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        changePassButton.setText("Cambiar");
+        changePassButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changePassButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
+        changePassPanel.add(changePassButton, gridBagConstraints);
+
+        jTabbedPane1.addTab("Cambiar contraseña", changePassPanel);
+
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.PAGE_START);
 
         pack();
@@ -1243,7 +1298,6 @@ public class MainFrame extends javax.swing.JFrame {
      * Evento para el boton de agregar medicamento.
      */
     private void addMedBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMedBtnActionPerformed
-        // TODO add your handling code here:
        AddMedFrame addFrame = new AddMedFrame(this);
        addFrame.setVisible(true);
        addFrame.pack();
@@ -1252,7 +1306,6 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_addMedBtnActionPerformed
 
     private void sendSolBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendSolBtnActionPerformed
-        // TODO add your handling code here:
         String toEmail = toTF.getText();
         String fromEmail = fromTF.getText();
         String emailSub = emailSubject.getText();
@@ -1388,7 +1441,6 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_sendSolBtnActionPerformed
 
     private void removeFromSTBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeFromSTBtnActionPerformed
-        // TODO add your handling code here:
         int[] selValues = solicitudeTable.getSelectedRows();
 
         if (selValues.length > 0) {
@@ -1405,7 +1457,6 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_removeFromSTBtnActionPerformed
 
     private void addToSLBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addToSLBtnActionPerformed
-        // TODO add your handling code here:
         List<String> selValues = missingsList.getSelectedValuesList();
 
         if (selValues.size() > 0) {
@@ -1425,7 +1476,6 @@ public class MainFrame extends javax.swing.JFrame {
      * Evento para el boton de eliminar medicamento.
      */
     private void borrarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarButtonActionPerformed
-        // TODO add your handling code here:
         if (medTable.getSelectedRow() != -1) {
             DefaultTableModel model = (DefaultTableModel) medTable.getModel();
 
@@ -1454,7 +1504,6 @@ public class MainFrame extends javax.swing.JFrame {
      * Checkbox para filtrar en la tabla solo vencimientos en rango de 15 dias.
      */
     private void cbExpDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbExpDateActionPerformed
-        // TODO add your handling code here:
         if (cbExpDate.isSelected()) {
             MedicamentoDAO medDAO = new MedicamentoDAO();
             List<Medicamento> meds = medDAO.medsInExpRange();
@@ -1482,13 +1531,12 @@ public class MainFrame extends javax.swing.JFrame {
 
                     cbLowStock.setSelected(false);
                 }
-            } else {
-                resetMedTableModel();
-            }
+        } else {
+            resetMedTableModel();
+        }
     }//GEN-LAST:event_cbExpDateActionPerformed
     
     private void cbLowStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbLowStockActionPerformed
-        // TODO add your handling code here:
         DefaultTableModel model = (DefaultTableModel) medTable.getModel();
         MedicamentoDAO medDAO = new MedicamentoDAO();
 
@@ -1517,120 +1565,32 @@ public class MainFrame extends javax.swing.JFrame {
 
                     cbExpDate.setSelected(false);
                 }
-            } else {
-                resetMedTableModel();
-            }
+        } else {
+            resetMedTableModel();
+        }
     }//GEN-LAST:event_cbLowStockActionPerformed
 
     /**
      * Botón para mostrar los detalles de un pedido.
-     * 
      */
     private void mostrarDetalleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mostrarDetalleButtonActionPerformed
         if (pedidoTable.getSelectedRow() != -1) {
             DefaultTableModel model = (DefaultTableModel) pedidoTable.getModel();
-            int col_idPedido = 0;
+            int columIdPedido = 0;
             int row = pedidoTable.getSelectedRow();
-            int idPedido = (int)model.getValueAt(row, col_idPedido);
+            int idPedido = (int)model.getValueAt(row, columIdPedido);
            
            resetTableDetallesEM(idPedido); 
            resetTableDetallesMed(idPedido);
         }
     }//GEN-LAST:event_mostrarDetalleButtonActionPerformed
     
-    /**
-     * Al enviarse la solicitud se crea el pedido.
-     * 
-     */
-    private void crearPedido() {
-        Date date = new Date();
-        DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String fecha_pedido = "" + dateFormat.format(date) + " - " + hourFormat.format(date);
-
-        int idUsuario = SesionUsuario.getInstance().getLoggedUser().getId();
-
-        Pedido pedido = new Pedido();
-        pedido.setIdUsuario(idUsuario);
-        pedido.setCorreoProveedor("Farmacia_garre@ejemplo.com");
-        pedido.setFecha(fecha_pedido);
-        pedido.setEstado("Enviado");
-
-        PedidoDAO pDAO = new PedidoDAO();
-        pDAO.insert(pedido);
-
-        resetTablePedidos();
-    }
-    
-    /**
-     * Se crean los detalles de un pedido.
-     * 
-     */
-    private void crearDetalles(int id_pedido) {
-        DefaultTableModel model = (DefaultTableModel) solicitudeTable.getModel();
-        
-        for (int r = 0; r < model.getRowCount(); ++r) {
-            String descripcion = "";
-            String[] partes = null;
-            String mg = "";
-            String comprimido = "";
-            int cantidad = 0;
-            
-            for (int c = 0; c < model.getColumnCount(); ++c) {
-                switch (c) {
-                    case 0:
-                        descripcion = model.getValueAt(r, c).toString();
-                        partes = descripcion.split("-");
-                        break;
-                    case 1:
-                        mg = model.getValueAt(r, c).toString();
-                        break;
-                    case 2:
-                        comprimido = model.getValueAt(r, c).toString();
-                        break;
-                    case 3:
-                        cantidad = Integer.parseInt(model.getValueAt(r, c).toString());
-                        break;
-                }
-            }
-            
-            EquipoMedicoDAO equipoMedicoDAO = new EquipoMedicoDAO();
-            MedicamentoDAO medicamentoDAO = new MedicamentoDAO();
-            
-            if(partes.length == 3) {  //Se controla si es un medicamento o un equipo médico
-                Medicamento m = medicamentoDAO.buscarPorNombrePresentacion(partes[0].trim(), partes[1].trim(), partes[2].trim());
-                
-                DetallePedidoM dpm = new DetallePedidoM();
-                dpm.setCantidad(cantidad);
-                dpm.setDescripcion(descripcion + " - mg:" + mg + " - Comprimido:" + comprimido);
-                dpm.setPedido_id(id_pedido);
-                dpm.setMedicamento_id(m.getId());
-                
-                DetallePedidoMDAO dpmDAO = new DetallePedidoMDAO();
-                dpmDAO.insert(dpm);
-            }
-            else
-            {
-                EquipoMedico em = equipoMedicoDAO.buscarPorNombre(partes[0].trim());
-                
-                DetallePedidoEM dpem = new DetallePedidoEM();
-                dpem.setCantidad(cantidad);
-                dpem.setDescripcion(descripcion);
-                dpem.setPedido_id(id_pedido);
-                dpem.setEquipoMedico_id(em.getId());
-                
-                DetallePedidoEMDAO dpemDAO = new DetallePedidoEMDAO();
-                dpemDAO.insert(dpem);
-            }   
-        }
-    }
     
     private void filterComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_filterComboBoxItemStateChanged
         filterTable();
     }//GEN-LAST:event_filterComboBoxItemStateChanged
 
     private void addMEBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMEBtnActionPerformed
-        // TODO add your handling code here:
         AddMEDialog dialog = new AddMEDialog(this, false);
         dialog.setVisible(true);
         dialog.pack();
@@ -1639,7 +1599,6 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_addMEBtnActionPerformed
 
     private void delMEBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delMEBtnActionPerformed
-        // TODO add your handling code here:
         if (meEqTable.getSelectedRow() != -1) {
             DefaultTableModel model = (DefaultTableModel) meEqTable.getModel();
 
@@ -1664,12 +1623,10 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_delMEBtnActionPerformed
 
     private void resetMeTableBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetMeTableBtnActionPerformed
-        // TODO add your handling code here:
         resetMeTableModel();
     }//GEN-LAST:event_resetMeTableBtnActionPerformed
 
     private void meCbLowStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_meCbLowStockActionPerformed
-        // TODO add your handling code here:
         DefaultTableModel model = (DefaultTableModel) meEqTable.getModel();
         EquipoMedicoDAO meDAO = new EquipoMedicoDAO();
 
@@ -1687,15 +1644,56 @@ public class MainFrame extends javax.swing.JFrame {
                             m.getStock()
                         });
                     });
-                }
-            } else {
-                resetMeTableModel();
             }
+        } else {
+            resetMeTableModel();
+        }
     }//GEN-LAST:event_meCbLowStockActionPerformed
 
-    private void meStockAlertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_meStockAlertActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_meStockAlertActionPerformed
+    /*
+    * Cambio de contraseña.
+    */
+    private void changePassButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePassButtonActionPerformed
+        String newPass = new String(newPassField.getPassword());
+        String repeatPass = new String(repeatPassField.getPassword());
+        
+        UsuarioDAO uDAO = new UsuarioDAO();
+        Usuario user = SesionUsuario.getInstance().getLoggedUser();
+        
+        if (!newPass.equals("") && !repeatPass.equals("")) {
+            if (newPass.equals(repeatPass)) {
+                uDAO.changePass(user.getId(), newPass);
+                user.setPass(newPass);
+                
+                JOptionPane.showMessageDialog(
+                        this,
+                        "¡La contraseña se cambió exitosamente!",
+                        "Éxito",
+                        JOptionPane.INFORMATION_MESSAGE
+                    );
+                
+                newPassField.setText("");
+                repeatPassField.setText("");
+            } else {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "¡Las contraseñas no coinciden! Intente de nuevo.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                    );
+                
+                newPassField.setText("");
+                repeatPassField.setText("");
+            }
+        } else {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "¡Los campos están vacíos! Por favor, ingrese la nueva contraseña.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+                );
+        }
+    }//GEN-LAST:event_changePassButtonActionPerformed
 
     /**
      * Transforma un @String de formato fecha fromFormat a toFormat.
@@ -1821,6 +1819,91 @@ public class MainFrame extends javax.swing.JFrame {
             }
         }
     }
+    
+    /**
+     * Al enviarse la solicitud se crea el pedido.
+     */
+    private void crearPedido() {
+        Date date = new Date();
+        DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String fecha_pedido = "" + dateFormat.format(date) + " - " + hourFormat.format(date);
+
+        int idUsuario = SesionUsuario.getInstance().getLoggedUser().getId();
+
+        Pedido pedido = new Pedido();
+        pedido.setIdUsuario(idUsuario);
+        pedido.setCorreoProveedor(toTF.getText());
+        pedido.setFecha(fecha_pedido);
+        pedido.setEstado("Enviado");
+
+        PedidoDAO pDAO = new PedidoDAO();
+        pDAO.insert(pedido);
+
+        resetTablePedidos();
+    }
+    
+    /**
+     * Se crean los detalles de un pedido.
+     * 
+     * @param idPedido {@code int} id del pedido.
+     */
+    private void crearDetalles(int idPedido) {
+        DefaultTableModel model = (DefaultTableModel) solicitudeTable.getModel();
+        
+        for (int r = 0; r < model.getRowCount(); ++r) {
+            String descripcion = "";
+            String[] partes = null;
+            String mg = "";
+            String comprimido = "";
+            int cantidad = 0;
+            
+            for (int c = 0; c < model.getColumnCount(); ++c) {
+                switch (c) {
+                    case 0:
+                        descripcion = model.getValueAt(r, c).toString();
+                        partes = descripcion.split("-");
+                        break;
+                    case 1:
+                        mg = model.getValueAt(r, c).toString();
+                        break;
+                    case 2:
+                        comprimido = model.getValueAt(r, c).toString();
+                        break;
+                    case 3:
+                        cantidad = Integer.parseInt(model.getValueAt(r, c).toString());
+                        break;
+                }
+            }
+            
+            EquipoMedicoDAO equipoMedicoDAO = new EquipoMedicoDAO();
+            MedicamentoDAO medicamentoDAO = new MedicamentoDAO();
+            
+            if (partes.length == 3) {  //Se controla si es un medicamento o un equipo médico
+                Medicamento m = medicamentoDAO.buscarPorNombrePresentacion(partes[0].trim(), partes[1].trim(), partes[2].trim());
+                
+                DetallePedidoM dpm = new DetallePedidoM();
+                dpm.setCantidad(cantidad);
+                dpm.setDescripcion(descripcion + " - mg:" + mg + " - Comprimido:" + comprimido);
+                dpm.setPedido_id(idPedido);
+                dpm.setMedicamento_id(m.getId());
+                
+                DetallePedidoMDAO dpmDAO = new DetallePedidoMDAO();
+                dpmDAO.insert(dpm);
+            } else {
+                EquipoMedico em = equipoMedicoDAO.buscarPorNombre(partes[0].trim());
+                
+                DetallePedidoEM dpem = new DetallePedidoEM();
+                dpem.setCantidad(cantidad);
+                dpem.setDescripcion(descripcion);
+                dpem.setPedido_id(idPedido);
+                dpem.setEquipoMedico_id(em.getId());
+                
+                DetallePedidoEMDAO dpemDAO = new DetallePedidoEMDAO();
+                dpemDAO.insert(dpem);
+            }   
+        }
+    }
 
     /**
      * Restaura la tabla de medicamentos.
@@ -1863,12 +1946,15 @@ public class MainFrame extends javax.swing.JFrame {
         checkAlerts();
     }
     
+    /**
+     * Restaura la tabla de equipos médicos.
+     */
     public void resetMeTableModel() {
         DefaultTableModel meModel = (DefaultTableModel) meEqTable.getModel();
         EquipoMedicoDAO meDAO = new EquipoMedicoDAO();
         List<EquipoMedico> me = meDAO.selectAll();
         
-        if(me != null) {
+        if (me != null) {
             meModel.setNumRows(0);
             
             me.forEach(elem -> {
@@ -1917,11 +2003,13 @@ public class MainFrame extends javax.swing.JFrame {
     
     /**
      * Restaura la tabla de los medicamentos que tiene un pedido.
+     * 
+     * @param pedidoId {@code int} id del pedido.
      */
-    private void resetTableDetallesMed(int pedido_id) {
+    private void resetTableDetallesMed(int pedidoId) {
         DefaultTableModel model = (DefaultTableModel) detallesMedTable.getModel();
         DetallePedidoMDAO dpmDAO = new DetallePedidoMDAO();
-        List<DetallePedidoM> detallesMed = dpmDAO.selectXPedidoId(pedido_id);
+        List<DetallePedidoM> detallesMed = dpmDAO.selectXPedidoId(pedidoId);
 
         if (detallesMed != null) {
             model.setNumRows(0);
@@ -1935,16 +2023,18 @@ public class MainFrame extends javax.swing.JFrame {
             });
         }
         
-        detallesMedLabel.setText("MEDICAMENTOS DEL PEDIDO #" + pedido_id);
+        detallesMedLabel.setText("MEDICAMENTOS DEL PEDIDO #" + pedidoId);
     }
     
     /**
      * Restaura la tabla de los equipos médicos que tiene un pedido.
+     * 
+     * @param pedidoId {@code int} id del pedido.
      */
-    private void resetTableDetallesEM(int pedido_id) {
+    private void resetTableDetallesEM(int pedidoId) {
         DefaultTableModel model = (DefaultTableModel) detallesEMTable.getModel();
         DetallePedidoEMDAO dpemDAO = new DetallePedidoEMDAO();
-        List<DetallePedidoEM> detallesEM = dpemDAO.selectXPedidoId(pedido_id);
+        List<DetallePedidoEM> detallesEM = dpemDAO.selectXPedidoId(pedidoId);
 
         if (detallesEM != null) {
             model.setNumRows(0);
@@ -1958,7 +2048,7 @@ public class MainFrame extends javax.swing.JFrame {
             });
         }
         
-        detallesEMLabel.setText("EQUIPOS MÉDICOS DEL PEDIDO #" + pedido_id);
+        detallesEMLabel.setText("EQUIPOS MÉDICOS DEL PEDIDO #" + pedidoId);
     }
 
     public static void main(String args[]) {
@@ -1985,9 +2075,6 @@ public class MainFrame extends javax.swing.JFrame {
         });
     }
 
-    private List<Medicamento> itemMedicamento = new ArrayList<>();
-    private List<EquipoMedico> itemEquipoM = new ArrayList<>();
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JButton addMEBtn;
     javax.swing.JButton addMedBtn;
@@ -1996,6 +2083,8 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JButton borrarButton;
     javax.swing.JCheckBox cbExpDate;
     javax.swing.JCheckBox cbLowStock;
+    javax.swing.JButton changePassButton;
+    javax.swing.JPanel changePassPanel;
     javax.swing.JButton delMEBtn;
     javax.swing.JLabel detallesEMLabel;
     javax.swing.JTable detallesEMTable;
@@ -2011,6 +2100,7 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JLabel fromTFLabel;
     javax.swing.JLabel jLabel1;
     javax.swing.JLabel jLabel2;
+    javax.swing.JLabel jLabel3;
     javax.swing.JScrollPane jScrollPane1;
     javax.swing.JScrollPane jScrollPane2;
     javax.swing.JScrollPane jScrollPane3;
@@ -2036,9 +2126,13 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JList<String> missingsList;
     javax.swing.JLabel mlLabel;
     javax.swing.JButton mostrarDetalleButton;
+    javax.swing.JPasswordField newPassField;
+    javax.swing.JLabel newPassLabel;
     javax.swing.JTable pedidoTable;
     javax.swing.JPanel pedidosPanel;
     javax.swing.JButton removeFromSTBtn;
+    javax.swing.JPasswordField repeatPassField;
+    javax.swing.JLabel repeatPassLabel;
     javax.swing.JButton resetMeTableBtn;
     javax.swing.JButton resetTableBtn;
     javax.swing.JScrollPane scrollPane;
@@ -2052,6 +2146,9 @@ public class MainFrame extends javax.swing.JFrame {
     javax.swing.JTextField toTF;
     javax.swing.JLabel toTFLabel;
     // End of variables declaration//GEN-END:variables
+    TableRowSorter<TableModel> rowSorter;
+    TableRowSorter<TableModel> meRowSorter;
+    LoginPanel logP;
 }
 
 

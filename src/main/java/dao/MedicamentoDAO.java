@@ -32,7 +32,7 @@ public class MedicamentoDAO {
     /**
      * Retorna un medicamento.
      *
-     * @param id A {@code int} el ID del medicamento.
+     * @param id {@code int} el ID del medicamento.
      * @return A {@code Medicameto}.
      */
     public Medicamento getMedicamento(int id) {
@@ -185,7 +185,9 @@ public class MedicamentoDAO {
      /**
      * Retorna un medicamento.
      *
-     * @param id A {@code int} el ID del medicamento.
+     * @param nombre {@code String} el nombre del medicamento.
+     * @param presentacion {@code String} la presentación del medicamento.
+     * @param dosis {@code String} la dosis del medicamento.
      * @return A {@code Medicameto}.
      */
     public Medicamento buscarPorNombrePresentacion(String nombre, String presentacion, String dosis) {

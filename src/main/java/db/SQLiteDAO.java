@@ -3,7 +3,7 @@ package db;
 import org.sql2o.Sql2o;
 
 public class SQLiteDAO {
-
+    
     private static Sql2o sql2o;
 
     public static Sql2o getConn() {

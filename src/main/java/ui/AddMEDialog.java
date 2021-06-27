@@ -15,7 +15,9 @@ public class AddMEDialog extends javax.swing.JDialog {
      */
     public AddMEDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        
         initComponents();
+        
         this.mainFrame = (MainFrame) parent;
     }
 
@@ -144,18 +146,17 @@ public class AddMEDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
-        // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_cancelBtnActionPerformed
 
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
-        // TODO add your handling code here:
         String name = nameTF.getText();
         int stock = 0;
+        
         try {
             stock = Integer.parseInt(stockTF.getText());
             
-            if(stock < 0) {
+            if (stock < 0) {
                 JOptionPane.showMessageDialog(
                         this,
                         "El campo stock debe ser mayor a cero.",
@@ -175,7 +176,7 @@ public class AddMEDialog extends javax.swing.JDialog {
             stockTF.setText("0");
         }
         
-        if(name.isEmpty()) {
+        if (name.isEmpty()) {
             JOptionPane.showMessageDialog(
                     this,
                     "El campo nombre está vacio.",
@@ -191,7 +192,7 @@ public class AddMEDialog extends javax.swing.JDialog {
             
             EquipoMedicoDAO meDAO = new EquipoMedicoDAO();
             
-            if(!meDAO.insert(newMe)) {
+            if (!meDAO.insert(newMe)) {
                 JOptionPane.showMessageDialog(
                         this,
                         "Ya existe un equipamiento con el nombre " + name,

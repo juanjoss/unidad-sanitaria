@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import dao.UsuarioDAO;
 import model.Usuario;
+
 public class LoginPanel extends javax.swing.JPanel {
     
     private MainFrame frame;
@@ -151,7 +152,13 @@ public class LoginPanel extends javax.swing.JPanel {
             emailPanel.add(new JLabel("Ingrese su correo electrónico: "));
             emailPanel.add(tf);
 
-            int ok1 = JOptionPane.showConfirmDialog(this, emailPanel, "Confirmación de seguridad", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE); 
+            int ok1 = JOptionPane.showConfirmDialog(
+                    this, 
+                    emailPanel, 
+                    "Confirmación de seguridad", 
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.PLAIN_MESSAGE);
+            
             if (ok1 == JOptionPane.OK_OPTION) {
                 String email = tf.getText();
                 UsuarioDAO uDAO = new UsuarioDAO();
@@ -165,22 +172,40 @@ public class LoginPanel extends javax.swing.JPanel {
                     passPanel.add(new JLabel("Ingrese la nueva contraseña: "));
                     passPanel.add(pf);
 
-                    int ok2 = JOptionPane.showConfirmDialog(this, passPanel, "Cambio de contraseña", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE); 
+                    int ok2 = JOptionPane.showConfirmDialog(
+                            this, 
+                            passPanel, 
+                            "Cambio de contraseña", 
+                            JOptionPane.OK_CANCEL_OPTION, 
+                            JOptionPane.PLAIN_MESSAGE);
+                    
                     if (ok2 == JOptionPane.OK_OPTION) { 
                         String newPass = new String(pf.getPassword());
                         uDAO.changePass(user.getId(), newPass);
                         user.setPass(newPass);
                         
-                        JOptionPane.showMessageDialog(this, "¡La contraseña se cambió exitosamente!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(
+                                this, 
+                                "¡La contraseña se cambió exitosamente!", 
+                                "Éxito", 
+                                JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
                 else {
-                    JOptionPane.showMessageDialog(this, "¡No existe un usuario con el correo ingresado!", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(
+                            this, 
+                            "¡No existe un usuario con el correo ingresado!",
+                            "Error", 
+                            JOptionPane.ERROR_MESSAGE);
                 }
             }
         }
         else {
-            JOptionPane.showMessageDialog(this, "¡Ingrese un usuario válido!", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(
+                    this, 
+                    "¡Ingrese un usuario válido!", 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_changePassButtonActionPerformed
 
@@ -209,7 +234,7 @@ public class LoginPanel extends javax.swing.JPanel {
         else {
             JOptionPane.showMessageDialog(
                                 this,
-                                "¡El correo o la contraseña son incorrectos!",
+                                "¡El usuario o la contraseña son incorrectos!",
                                 "Error",
                                 JOptionPane.ERROR_MESSAGE
                         );

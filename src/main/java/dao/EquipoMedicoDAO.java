@@ -6,10 +6,11 @@ import model.EquipoMedico;
 import org.sql2o.Connection;
 
 public class EquipoMedicoDAO {
+    
     /**
      * Retorna un equipo médico.
      *
-     * @param id A {@code string} el nombre del equipo médico.
+     * @param nombre {@code String} el nombre del equipo médico.
      * @return A {@code EquipoMedico}.
      */
     public EquipoMedico buscarPorNombre(String nombre) {
@@ -22,6 +23,7 @@ public class EquipoMedicoDAO {
                     .createQuery(query)
                     .addParameter("nombre", nombre)
                     .executeAndFetchFirst(EquipoMedico.class);
+            
             return em;
         } catch (Exception e) {
             System.out.println(e);
@@ -30,7 +32,7 @@ public class EquipoMedicoDAO {
         return null;
     }
     
-     /**
+    /**
      * Retorna todo el equipo medico.
      *
      * @return A {@code List<EquipoMedico>}.
@@ -53,9 +55,9 @@ public class EquipoMedicoDAO {
     }
     
     /**
-     * Retorna todo el equipo medico.
+     * Retorna un equipo médico.
      *
-     * @param id A {@code Integer} id del equipo medico a recuperar.
+     * @param id {@code Integer} id del equipo médico a recuperar.
      * @return A {@code EquipoMedico}.
      */
     public EquipoMedico getMedEq(int id) {
@@ -77,7 +79,7 @@ public class EquipoMedicoDAO {
     }
     
     /**
-     * Retorna todo el equipo medico con poco stock (5 unidades o menos).
+     * Retorna todo el equipo médico con poco stock (5 unidades o menos).
      *
      * @return A {@code List<EquipoMedico>}.
      */
@@ -100,7 +102,7 @@ public class EquipoMedicoDAO {
     /**
      * Inserta un equipo medico.
      *
-     * @param me A {@code EquipoMedico} el equipo medico a insertar.
+     * @param me {@code EquipoMedico} el equipo medico a insertar.
      * @return A {@code boolean} si se pudo insertar.
      */
     public boolean insert(EquipoMedico me) {
@@ -117,9 +119,9 @@ public class EquipoMedicoDAO {
     }
     
     /**
-     * Retorna todo el equipo medico.
+     * Retorna un equipo médico.
      *
-     * @param name A {@code String} nombre del equipo medico a recuperar.
+     * @param name {@code String} nombre del equipo médico a recuperar.
      * @return A {@code EquipoMedico}.
      */
     public EquipoMedico getMedEqByName(String name) {
@@ -141,9 +143,9 @@ public class EquipoMedicoDAO {
     }
     
     /**
-     * actualiza un equipo medico.
+     * Actualiza un equipo médico.
      *
-     * @param me A {@code EquipoMedico} el equipo medico a actualizar.
+     * @param me {@code EquipoMedico} el equipo médico a actualizar.
      * @return A {@code boolean} si se pudo actualizar.
      */
     public boolean update(EquipoMedico me) {
@@ -160,9 +162,9 @@ public class EquipoMedicoDAO {
     }
     
     /**
-     * Elimina un equipo medico.
+     * Elimina un equipo médico.
      *
-     * @param id A {@code Integer} el id del equipo medico a eliminar.
+     * @param id {@code Integer} el id del equipo médico a eliminar.
      * @return A {@code boolean} si se pudo eliminar.
      */
     public boolean delete(int id) {

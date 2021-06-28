@@ -17,6 +17,11 @@ public class AddMEDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.mainFrame = (MainFrame) parent;
+        
+        this.setName("AddMEDialog");
+        nameTF.setName("nameTF");
+        stockTF.setName("stockTF");
+        addBtn.setName("addBtn");
     }
 
     @SuppressWarnings("unchecked")

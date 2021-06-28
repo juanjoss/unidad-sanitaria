@@ -44,3 +44,4 @@ buildNumber.properties
 
 # Base de datos
 /unidad_sanitaria.db
+/nbproject/

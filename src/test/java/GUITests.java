@@ -1,5 +1,4 @@
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
@@ -24,25 +23,26 @@ public class GUITests {
 
     @Test
     public void LoginSuccessTest() {
-
+        // ARRANGE
         String usernameTest = "Administracion";
         String passTest = "admin";
-
+        
+        // ACT
         window.textBox("usserTextField").deleteText().enterText(usernameTest);
         window.textBox("passwordField").deleteText().enterText(passTest);
         window.button("loginInButton").click();
 
         // ASSERT
-
         assertEquals(true, SesionUsuario.getInstance().isLogged());
     }
 
     @Test
     public void LoginFailTest() {
-
+        // ARRANGE
         String usernameTest = "usuarioErroneo";
         String passTest = "contraseñaErronea";
-
+        
+        // ACT
         window.textBox("usserTextField").deleteText().enterText(usernameTest);
         window.textBox("passwordField").deleteText().enterText(passTest);
         window.button("loginInButton").click();

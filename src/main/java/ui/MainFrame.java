@@ -79,6 +79,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         initComponents();
 
+        // Components names
+        searchBar.setName("searchBar");
+        mainTabbedPane.setName("mainTabbedPane");
+        addMEBtn.setName("addMEBtn");        
+
         DefaultTableModel medModel = (DefaultTableModel) medTable.getModel();
         DefaultTableModel meModel = (DefaultTableModel) meEqTable.getModel();
         DefaultTableModel stModel = (DefaultTableModel) solicitudeTable.getModel();

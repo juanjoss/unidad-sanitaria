@@ -157,6 +157,7 @@ public class AddMEDialog extends javax.swing.JDialog {
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
         String name = nameTF.getText();
         int stock = 0;
+        boolean err = false;
         
         try {
             stock = Integer.parseInt(stockTF.getText());
@@ -169,6 +170,7 @@ public class AddMEDialog extends javax.swing.JDialog {
                         JOptionPane.ERROR_MESSAGE
                 );
                 stockTF.setText("0");
+                err = true;
             }
         }
         catch (Exception e) {
@@ -189,14 +191,16 @@ public class AddMEDialog extends javax.swing.JDialog {
                     JOptionPane.ERROR_MESSAGE
             );
             nameTF.setText("");
+            err = true;
         }
-        else {
+        
+        if(!err) {
             EquipoMedico newMe = new EquipoMedico();
             newMe.setNombre(name);
             newMe.setStock(stock);
-            
+
             EquipoMedicoDAO meDAO = new EquipoMedicoDAO();
-            
+
             if (!meDAO.insert(newMe)) {
                 JOptionPane.showMessageDialog(
                         this,

@@ -24,9 +24,9 @@ public class GUITests {
     @Test
     public void LoginSuccessTest() {
         // ARRANGE
-        String usernameTest = "Administracion";
+        String usernameTest = "Administrador";
         String passTest = "admin";
-        
+
         // ACT
         window.textBox("usserTextField").deleteText().enterText(usernameTest);
         window.textBox("passwordField").deleteText().enterText(passTest);
@@ -41,12 +41,12 @@ public class GUITests {
         // ARRANGE
         String usernameTest = "usuarioErroneo";
         String passTest = "contraseñaErronea";
-        
+
         // ACT
         window.textBox("usserTextField").deleteText().enterText(usernameTest);
         window.textBox("passwordField").deleteText().enterText(passTest);
         window.button("loginInButton").click();
-        
+
         // ASSERT
         assertEquals(false, SesionUsuario.getInstance().isLogged());
     }

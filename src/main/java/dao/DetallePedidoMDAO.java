@@ -20,7 +20,7 @@ public class DetallePedidoMDAO {
         try (Connection con = SQLiteDAO.getConn().open()) {
             List<DetallePedidoM> detallesMed = con
                     .createQuery(query)
-                    .addParameter("pedido_id", pedidoId)
+                    .addParameter("pedidoId", pedidoId)
                     .executeAndFetch(DetallePedidoM.class);
             
             return detallesMed;
